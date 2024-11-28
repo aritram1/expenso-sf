@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Last_Investment_Date__c</field>
+                <field>Investment_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -26,13 +26,12 @@
                 <behavior>Edit</behavior>
                 <field>External_Id__c</field>
             </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>OwnerId</field>
+                <behavior>Required</behavior>
+                <field>Finance_Account__c</field>
             </layoutItems>
         </layoutColumns>
+        <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
@@ -66,7 +65,7 @@
     <miniLayout>
         <fields>Invested_Amount__c</fields>
         <fields>Investment_Code__c</fields>
-        <fields>Last_Investment_Date__c</fields>
+        <fields>Investment_Date__c</fields>
     </miniLayout>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>

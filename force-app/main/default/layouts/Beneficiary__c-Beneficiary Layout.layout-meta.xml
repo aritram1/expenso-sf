@@ -7,7 +7,7 @@
         <label>Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
@@ -29,6 +29,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>External_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Total_Credit__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Total_Debit__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -89,6 +97,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Transaction__c.Related_Beneficiary__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Transaction__c.Beneficiary__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

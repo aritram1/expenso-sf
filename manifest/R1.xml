@@ -5,21 +5,28 @@
 		<name>ConnectedApp</name>
 	</types>
 	<types>
-		<members>Beneficiary__c</members>
 		<members>Finance_Account__c</members>
-		<members>Investment__c</members>
-		<members>SMS_Platform_Event__e</members>
-		<members>SMS__c</members>
-		<members>System_Log__c</members>
+		<members>Beneficiary__c</members>
 		<members>Transaction__c</members>
+		<members>Investment__c</members>
+		<members>SMS__c</members>
+		<members>SMS_Platform_Event__e</members>
+		<members>System_Log__c</members>
 		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Finance_Account_Record_Page</members>
+		<members>Investment_Record_Page</members>
+		<name>FlexiPage</name>
 	</types>
 	<types>
 		<members>Beneficiary__c</members>
 		<members>Finance_Account__c</members>
-		<members>Investment__c</members>
+		<members>Investment__c</members>	
 		<members>Transaction__c</members>
 		<members>SMS__c</members>
+		<members>Reminder__c</members>
+		<members>System_Log__c</members>
 		<name>CustomTab</name>
 	</types>
 	<types>

@@ -2,14 +2,13 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SA_Investable_Fund__c</fullName>
     <externalId>false</externalId>
-    <formula>IF( CONTAINS(Account_Code__c, &apos;-SA&apos;),
-  IF( 
-    SA_Last_Balance__c -  SA_Emergency_Fund__c &gt; 0, SA_Last_Balance__c -  
-     SA_Emergency_Fund__c, 0
-  ),
-0)</formula>
+    <formula>IF(
+ OR(NOT(CONTAINS(Account_Codes__c, &apos;-SA&apos;)), SA_Last_Balance__c &lt; SA_Emergency_Fund__c), 
+ 0, 
+ SA_Last_Balance__c - SA_Emergency_Fund__c
+)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Investable Fund</label>
+    <label>SA Investable Fund</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

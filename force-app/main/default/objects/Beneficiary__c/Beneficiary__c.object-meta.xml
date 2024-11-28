@@ -158,10 +158,9 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Beneficiary</label>
     <nameField>
-        <displayFormat>BEN-{000000}</displayFormat>
-        <label>Beneficiary Number</label>
+        <label>Beneficiary Name</label>
         <trackHistory>false</trackHistory>
-        <type>AutoNumber</type>
+        <type>Text</type>
     </nameField>
     <pluralLabel>Beneficiaries</pluralLabel>
     <searchLayouts></searchLayouts>
