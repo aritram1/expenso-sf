@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>*</members>
+		<name>ConnectedApp</name>
+	</types>
+	<types>
+		<members>Beneficiary__c</members>
+		<members>Finance_Account__c</members>
+		<members>Investment__c</members>
+		<members>SMS_Platform_Event__e</members>
+		<members>SMS__c</members>
+		<members>System_Log__c</members>
+		<members>Transaction__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Beneficiary__c</members>
+		<members>Finance_Account__c</members>
+		<members>Investment__c</members>
+		<members>Transaction__c</members>
+		<members>SMS__c</members>
+		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>Beneficiary__c-Beneficiary Layout</members>
+		<members>Finance_Account__c-Finance Account Layout</members>
+		<members>Investment__c-Investment Layout</members>
+		<members>SMS__c-SMS Layout</members>
+		<members>System_Log__c-System Log Layout</members>
+		<members>Transaction__c-Transaction Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>Beneficiary_Record_Page</members>
+		<members>SMS_Record_Page</members>
+		<members>Transaction_Record_Page</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Expenso_Admin_PS</members>
+		<name>PermissionSet</name>
+	</types>
+	<version>58.0</version>
+</Package>
