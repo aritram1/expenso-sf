@@ -17,6 +17,9 @@
 	<types>
 		<members>Finance_Account_Record_Page</members>
 		<members>Investment_Record_Page</members>
+		<members>SMS_Record_Page</members>
+		<members>Transaction_Record_Page</members>
+
 		<name>FlexiPage</name>
 	</types>
 	<types>

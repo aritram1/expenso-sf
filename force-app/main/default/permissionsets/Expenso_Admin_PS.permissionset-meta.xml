@@ -266,16 +266,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Transaction__c.Related_Asset__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Transaction__c.Related_Beneficiary__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Transaction__c.Related_Contact__c</field>
         <readable>true</readable>
     </fieldPermissions>

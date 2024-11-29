@@ -22,11 +22,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>SA_Total_Credit__c</field>
+                <field>Total_Credit__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>SA_Total_Debit__c</field>
+                <field>Total_Debit__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Related_Beneficiary__c</fullName>
+    <fullName>Investment__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>Related Beneficiary</label>
-    <referenceTo>Beneficiary__c</referenceTo>
+    <label>Investment</label>
+    <referenceTo>Investment__c</referenceTo>
     <relationshipLabel>Transactions</relationshipLabel>
     <relationshipName>Transactions</relationshipName>
     <required>false</required>

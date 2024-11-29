@@ -96,10 +96,6 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Transaction__c.Related_Beneficiary__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
         <relatedList>Transaction__c.Beneficiary__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

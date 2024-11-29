@@ -31,20 +31,20 @@
                 <field>Transaction_Date__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Related_Beneficiary__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Related_Asset__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>Beneficiary__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Finance_Account__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Investment__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>External_Id__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>

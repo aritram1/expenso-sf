@@ -126,6 +126,18 @@
                 <identifier>RecordBeneficiary_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Investment__c</fieldItem>
+                <identifier>RecordInvestment__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Id__c</fieldItem>
+                <identifier>RecordExternal_Id__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-3ddbb2bf-ec27-40c9-b295-43f47462cd8b</name>
         <type>Facet</type>
     </flexiPageRegions>
