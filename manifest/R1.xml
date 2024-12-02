@@ -5,6 +5,17 @@
 		<name>ConnectedApp</name>
 	</types>
 	<types>
+		<members>BeneficiaryHandler</members>
+		<members>FinPlanException</members>
+		<members>FinPlanLogger</members>
+		<members>SMSHandler</members>
+		<members>SMSHandlerBank</members>
+		<members>SMSHandlerInvestment</members>
+		<members>SMSHandlerOthers</members>
+		<members>Util</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
 		<members>Finance_Account__c</members>
 		<members>Beneficiary__c</members>
 		<members>Transaction__c</members>
@@ -12,6 +23,7 @@
 		<members>SMS__c</members>
 		<members>SMS_Platform_Event__e</members>
 		<members>System_Log__c</members>
+		<members>Reminder__c</members>
 		<name>CustomObject</name>
 	</types>
 	<types>

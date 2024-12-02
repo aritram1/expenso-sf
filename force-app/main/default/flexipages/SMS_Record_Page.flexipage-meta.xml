@@ -179,6 +179,12 @@
                 <identifier>RecordStatus__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.From_Account__c</fieldItem>
+                <identifier>RecordFrom_Account__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
         <type>Facet</type>
     </flexiPageRegions>

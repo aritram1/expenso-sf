@@ -38,6 +38,10 @@
                 <behavior>Readonly</behavior>
                 <field>Total_Debit__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Other_Names__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

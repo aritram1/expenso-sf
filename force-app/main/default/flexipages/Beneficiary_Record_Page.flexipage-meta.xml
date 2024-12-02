@@ -150,6 +150,12 @@
                 <identifier>RecordTotal_Debit__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Other_Names__c</fieldItem>
+                <identifier>RecordOther_Names__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-7073bd61-f460-4da1-9f78-b52532dd9ea5</name>
         <type>Facet</type>
     </flexiPageRegions>

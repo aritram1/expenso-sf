@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Masked_Content__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>From_Account__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
