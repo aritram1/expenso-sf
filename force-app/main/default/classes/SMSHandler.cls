@@ -20,11 +20,11 @@ public with sharing class SMSHandler {
     public static List<SMS__c> listOfRejectedRecords = new List<SMS__c>();
     public static List<SMS__c> listOfAllowedRecords = new List<SMS__c>();
     
-    public static void getAllBankAccountsAndBeneficiaries(){
-        for(Finance_Account__c ba : [SELECT Id, Active__c, Account_Codes__c, 
+    public static void getAllBankAccounts(){
+        for(Finance_Account__c ba : [SELECT Id, Name, Type__c, Active__c, Account_Codes__c, 
                                          SA_Last_Balance__c, CC_Available_Limit__c, 
-                                         CC_Max_Limit__c, Name FROM Finance_Account__c]){
-            allBankAccountsMap.put(ba.Account_Codes__c, ba);
+                                         CC_Max_Limit__c FROM Finance_Account__c]){
+            allBankAccountsMap.put(ba.name, ba);
             lastBalanceBankAccountsMap.put(ba.id, ba);
         }
 
@@ -47,24 +47,17 @@ public with sharing class SMSHandler {
         // initiate variables
         processedMessages = new List<SMS__c>();
         lastBalanceUpdateSMSList = new List<SMS__c>();
-        getAllBankAccountsAndBeneficiaries();
+        getAllBankAccounts();
 
         // The main loop starts
         for(SMS__c sms : allMessages){
             try{
+                
                 // set the date;
-                String rawDateString = sms.Received_At__c?.split(' ')[0];
-                if(rawDateString?.contains('-')){
-                    Integer yyyy = Integer.valueOf(rawDateString.split('-')[0]);
-                    Integer mm = Integer.valueOf(rawDateString.split('-')[1]);
-                    Integer dd = Integer.valueOf(rawDateString.split('-')[2]);
-                    sms.Transaction_Date__c = Date.newInstance(yyyy, mm, dd);
-                }
-                else{ 
-                    // Convert String -> Long -> DateTime -> Date
-                    sms.Transaction_Date__c = Date.valueOf(DateTime.newInstance(Long.valueOf(rawDateString))); 
-                }
-
+                sms = Util.populateTransactionDate(sms);
+                
+                // set the type
+                
                 // Personal
                 if(sms.sender__c.startsWith('+')){  // set personal type
                     sms.type__c = 'personal';   
@@ -74,36 +67,52 @@ public with sharing class SMSHandler {
                     sms.Type__c = 'otp';
                 }
                 // Credit / Debit / Balance Update
-                else{ 
-
+                else{
                     // Case 1 : HDFC  SA
-                    if(sms.Sender__c.contains('HDFC')){ // TBC Urgent Implementation  BANK_SMS_SENDERS.contains(sms.Sender__c)){
-                        sms = FinplanSMSHandlerBank.processForBanks(sms, allBankAccountsMap, 'HDFC-SA');
+                    if(sms.Masked_Content__c.contains('HDFC BANK A/C *9560') || sms.Masked_Content__c.contains('HDFC BANK A/c XX9560')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('HDFC SA');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForHDFCBankSA(sms, fa);
                     }
                     // Case 2 : ICICI SA
-                    else if(sms.Sender__c.contains('ICICI')){
-                        sms = FinplanSMSHandlerBank.processForBanks(sms, allBankAccountsMap, 'ICICI-SA');
+                    else if(sms.Masked_Content__c.contains('ICICI BANK ACCT XX360 DEBITED') || sms.Masked_Content__c.contains('ICICI BANK ACCT XXX360 DEBITED')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('ICICI SA');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForICICIBankSA(sms, fa);
                     }
                     // Case 3 : SBI SA
-                    else if(sms.Sender__c.contains('SBI') && !sms.content__c.contains(PPF_4DIGITS)){
-                        sms = SMSHandlerBank.processForBanks(sms, allBankAccountsMap, 'SBI-SA');
+                    else if(sms.Masked_Content__c.contains('WITHDRAWN AT SBI ATM') || sms.Masked_Content__c.contains('6414')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('SBI SA');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForSBIBankSA(sms, fa);
                     }
-                    // Case 4 : SBI PPF
-                    else if(sms.Sender__c.contains('SBI') && sms.content__c.contains(PPF_4DIGITS)){
-                        // sms.Investment_Type__c = 'PPF';
-                        // sms.Related_To_Investment__c = true;
-                        sms = SMSHandlerInvestment.processForInvestments(sms, allInvestmentsMap, 'PPF');
+                    // Case 4 : ICICI CC
+                    else if(sms.Masked_Content__c.contains('ICICI BANK CARD XX9006') || sms.Masked_Content__c.contains('9006')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('ICICI CC');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForICICIBankCC(sms, fa);
                     }
-                    // Case 5 : NPS
-                    else if(sms.Sender__c.contains('NPS')){
-                        // sms.Investment_Type__c = 'NPS';
-                        // sms.Related_To_Investment__c = true;
-                        sms = SMSHandlerInvestment.processForInvestments(sms, allInvestmentsMap, 'NPS'); 
+                    // Case 5 : ICICI APAY CC
+                    else if(sms.Masked_Content__c.contains('ICICI BANK CARD XX7005') || sms.Masked_Content__c.contains('7005')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('ICICI AMAZON CC');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForICICIBankAmazonCC(sms, fa);
                     }
-                    // Other Types (like wallets for Amazon, Paytm, phonePe etc)
-                    else{
-                        sms = SMSHandlerOthers.processForOthers(sms, allBankAccountsMap);
+                    // Case 6 : HDFC Rupay CC
+                    else if(sms.Masked_Content__c.contains('HDFC BANK CARD 2004')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('HDFC Rupay CC');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForHDFCBankRupayCC(sms, fa);
                     }
+                    // Case 7 : Amazon Wallet
+                    else if(sms.Masked_Content__c.contains('USING AMAZON PAY BALANCE')){ 
+                        Finance_Account__c fa = allBankAccountsMap.get('Amazon Wallet');
+                        sms.Finance_Account__c = fa.Id;
+                        sms = SMSHandlerBank.processForAmazonWallet(sms, fa);
+                    }
+                    // TBD Later
+                    // Other Types (like wallets for Paytm, phonePe etc)
+                    
                 }
                 
                 ////////////////////////////////////////////////////////////////////////////////////////
