@@ -121,11 +121,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>SMS__c.Beneficiary_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>SMS__c.Beneficiary_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -167,11 +162,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>SMS__c.Finance_Account__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>SMS__c.Formula_Amount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

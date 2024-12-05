@@ -145,6 +145,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Name</fieldItem>
+                <identifier>RecordNameField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Sender__c</fieldItem>
                 <identifier>RecordSender_cField</identifier>
             </fieldInstance>
@@ -165,24 +175,14 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Device__c</fieldItem>
-                <identifier>RecordDevice_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Status__c</fieldItem>
                 <identifier>RecordStatus__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.From_Account__c</fieldItem>
-                <identifier>RecordFrom_Account__cField</identifier>
+                <fieldItem>Record.Original_Content__c</fieldItem>
+                <identifier>RecordOriginal_Content__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
@@ -205,8 +205,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Masked_Content__c</fieldItem>
-                <identifier>RecordMasked_Content_cField</identifier>
+                <fieldItem>Record.Device__c</fieldItem>
+                <identifier>RecordDevice_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -217,6 +217,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Created_From__c</fieldItem>
                 <identifier>RecordCreated_From_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.External_Id__c</fieldItem>
+                <identifier>RecordExternal_Id_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-05c5d51f-27e2-4f4e-892b-964cec8aa3f4</name>
@@ -244,54 +254,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-7b03df5a-e77a-44cd-9f4a-6eab3c396b87</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Amount__c</fieldItem>
-                <identifier>RecordAmount__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Beneficiary_Name__c</fieldItem>
-                <identifier>RecordBeneficiary_Name__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.External_Id__c</fieldItem>
-                <identifier>RecordExternal_Id_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-90c9c79e-1682-4b19-92b1-969c69037f6c</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-90c9c79e-1682-4b19-92b1-969c69037f6c</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column5</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-f6de308b-e86e-4005-a357-0d24af0a22ad</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -363,24 +325,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-f6de308b-e86e-4005-a357-0d24af0a22ad</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Enriched Section</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection3</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -464,6 +408,132 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Amount_Value__c</fieldItem>
+                <identifier>RecordAmount_Value_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Finance_Account__c</fieldItem>
+                <identifier>RecordFinance_Account_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Beneficiary__c</fieldItem>
+                <identifier>RecordBeneficiary_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Masked_Content__c</fieldItem>
+                <identifier>RecordMasked_Content_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Type__c</fieldItem>
+                <identifier>RecordType_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Create_Transaction__c</fieldItem>
+                <identifier>RecordCreate_Transaction_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Balance_Update__c</fieldItem>
+                <identifier>RecordBalance_Update_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SA_Available_Balance__c</fieldItem>
+                <identifier>RecordSA_Available_Balance_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CC_Available_Balance__c</fieldItem>
+                <identifier>RecordCC_Available_Balance_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-90c9c79e-1682-4b19-92b1-969c69037f6c</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-90c9c79e-1682-4b19-92b1-969c69037f6c</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column5</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-f6de308b-e86e-4005-a357-0d24af0a22ad</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-f6de308b-e86e-4005-a357-0d24af0a22ad</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Enriched Section</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection3</identifier>
+            </componentInstance>
+        </itemInstances>
         <mode>Replace</mode>
         <name>sidebar</name>
         <type>Region</type>
