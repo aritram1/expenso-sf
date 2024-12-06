@@ -16,12 +16,25 @@
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>Expenso_1_Create_SMS_from_SMS_PE</members>
+		<members>Expenso_2_Create_Transaction_PE_From_SMS</members>
+		<members>Expenso_3_Create_Transaction_From_Transaction_PE</members>
+		<members>Expenso_4_Update_Financial_Account_Balance_from_Financial_Account_PE</members>
+		<!-- TBD if the followings are required -->
+		<members>Expenso_Subflow_Enrich_From_Information</members>
+		<members>Expenso_Subflow_Enrich_Other_Information</members>
+		<members>Expenso_Subflow_Enrich_To_Information</members>
+		<name>Flow</name>
+	</types>
+	<types>
 		<members>Finance_Account__c</members>
 		<members>Beneficiary__c</members>
 		<members>Transaction__c</members>
 		<members>Investment__c</members>
 		<members>SMS__c</members>
 		<members>SMS_Platform_Event__e</members>
+		<members>Transaction_Platform_Event__e</members>
+		<members>Finance_Account_Platform_Event__e</members>
 		<members>System_Log__c</members>
 		<members>Reminder__c</members>
 		<name>CustomObject</name>
