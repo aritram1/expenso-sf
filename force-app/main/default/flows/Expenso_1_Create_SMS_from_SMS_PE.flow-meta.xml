@@ -45,6 +45,20 @@
             <targetReference>Update_SMS_Record</targetReference>
         </connector>
     </assignments>
+    <constants>
+        <name>Const_CREDIT_REGEX</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>.*(credit|credited|amt received|money received|deposited).*</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>Const_DEBIT_REGEX</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>.*(debit|debited|money transfer|amt sent|money sent|withdrawn|spent|from hdfc bank a/c).*</stringValue>
+        </value>
+    </constants>
     <decisions>
         <name>SMS_Exists</name>
         <label>SMS Exists?</label>
@@ -89,10 +103,10 @@
         <name>CreditOrDebitFormula</name>
         <dataType>String</dataType>
         <expression>IF(
-    REGEX(LOWER({!$Record.Content__c}), &quot;.*(credit|credited|money received|deposited).*&quot;),
+    REGEX(LOWER({!$Record.Content__c}), {!Const_CREDIT_REGEX}),
     &apos;Credit&apos;,
     IF(
-        REGEX(LOWER({!$Record.Content__c}), &quot;.*(debit|debited|money sent|withdrawn|spent).*&quot;),
+        REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
         &apos;Debit&apos;,
         &apos;Unknown&apos;
     )

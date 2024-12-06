@@ -20,10 +20,12 @@
 		<members>Expenso_2_Create_Transaction_PE_From_SMS</members>
 		<members>Expenso_3_Create_Transaction_From_Transaction_PE</members>
 		<members>Expenso_4_Update_Financial_Account_Balance_from_Financial_Account_PE</members>
-		<!-- TBD if the followings are required -->
+		<!-- 
+		TBD if the followings are required 
 		<members>Expenso_Subflow_Enrich_From_Information</members>
 		<members>Expenso_Subflow_Enrich_Other_Information</members>
 		<members>Expenso_Subflow_Enrich_To_Information</members>
+		-->
 		<name>Flow</name>
 	</types>
 	<types>
