@@ -2,8 +2,8 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Credit_Debit_Balance_Update_Info</name>
-        <label>Assign Credit, Debit, Balance Update Info</label>
+        <name>Assign_Credit_Debit_Balance_Update_financial_account_Info</name>
+        <label>Assign Credit, Debit, Balance Update, financial account Info</label>
         <locationX>50</locationX>
         <locationY>494</locationY>
         <assignmentItems>
@@ -79,7 +79,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_Credit_Debit_Balance_Update_Info</targetReference>
+                <targetReference>Assign_Credit_Debit_Balance_Update_financial_account_Info</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -108,7 +108,7 @@
     IF(
         REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
         &apos;Debit&apos;,
-        &apos;Unknown&apos;
+        &apos;Promotional&apos;
     )
 )</expression>
     </formulas>
@@ -194,12 +194,6 @@
             <field>Create_Transaction__c</field>
             <value>
                 <elementReference>createTransactionFormula</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Created_From__c</field>
-            <value>
-                <stringValue>SMS</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>

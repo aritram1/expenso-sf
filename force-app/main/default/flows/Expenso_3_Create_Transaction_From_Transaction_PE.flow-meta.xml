@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Extract_the_Amount_and_Beneficiary</name>
+        <label>Extract the Amount and Beneficiary</label>
+        <locationX>176</locationX>
+        <locationY>170</locationY>
+        <actionName>InvocableSMSHandler</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Get_Transaction_Record</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>txnPEList</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>InvocableSMSHandler</nameSegment>
+        <outputParameters>
+            <assignToReference>$Record</assignToReference>
+            <name>output</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
     <apiVersion>62.0</apiVersion>
     <decisions>
         <name>Record_Found</name>
         <label>Record Found?</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>386</locationY>
         <defaultConnector>
             <targetReference>Create_Transaction</targetReference>
         </defaultConnector>
@@ -24,6 +48,12 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>formulaAmount</name>
+        <dataType>Number</dataType>
+        <expression>VALUE({!$Record.Amount__c})</expression>
+        <scale>2</scale>
+    </formulas>
     <interviewLabel>Expenso - 3. Create Transaction From Transaction PE {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Expenso - 3. Create Transaction From Transaction PE</label>
     <processMetadataValues>
@@ -49,17 +79,17 @@
         <name>Create_Transaction</name>
         <label>Create Transaction</label>
         <locationX>308</locationX>
-        <locationY>386</locationY>
+        <locationY>494</locationY>
         <inputAssignments>
             <field>Amount__c</field>
             <value>
-                <numberValue>100.0</numberValue>
+                <elementReference>formulaAmount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Beneficiary__c</field>
             <value>
-                <stringValue>a01Qy00000ewqAVIAY</stringValue>
+                <elementReference>$Record.Beneficiary__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -105,7 +135,7 @@
         <name>Get_Transaction_Record</name>
         <label>Get Transaction Record</label>
         <locationX>176</locationX>
-        <locationY>170</locationY>
+        <locationY>278</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Record_Found</targetReference>
@@ -126,7 +156,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Transaction_Record</targetReference>
+            <targetReference>Extract_the_Amount_and_Beneficiary</targetReference>
         </connector>
         <object>Transaction_Platform_Event__e</object>
         <triggerType>PlatformEvent</triggerType>

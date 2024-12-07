@@ -145,8 +145,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.External_Id__c</fieldItem>
-                <identifier>RecordExternal_Id_cField</identifier>
+                <fieldItem>Record.Content__c</fieldItem>
+                <identifier>RecordContent_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -165,8 +165,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Content__c</fieldItem>
-                <identifier>RecordContent_cField</identifier>
+                <fieldItem>Record.Received_At__c</fieldItem>
+                <identifier>RecordReceived_At_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
@@ -179,8 +179,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Received_At__c</fieldItem>
-                <identifier>RecordReceived_At_cField</identifier>
+                <fieldItem>Record.External_Id__c</fieldItem>
+                <identifier>RecordExternal_Id_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -191,16 +191,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Device__c</fieldItem>
                 <identifier>RecordDevice_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Created_From__c</fieldItem>
-                <identifier>RecordCreated_From_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-05c5d51f-27e2-4f4e-892b-964cec8aa3f4</name>

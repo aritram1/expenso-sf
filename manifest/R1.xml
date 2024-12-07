@@ -10,9 +10,11 @@
 		<members>FinPlanLogger</members>
 		<members>SMSHandler</members>
 		<members>SMSHandlerBank</members>
+		<members>SMSHandlerBank2</members>
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
 		<members>Util</members>
+		<members>InvocableSMSHandler</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
