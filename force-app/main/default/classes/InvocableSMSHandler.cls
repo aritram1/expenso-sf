@@ -23,49 +23,47 @@ public with sharing class InvocableSMSHandler {
                 Transaction_Platform_Event__e txnPE1 = new Transaction_Platform_Event__e();
 
                 if(accountName == 'HDFC SA'){
-                    txnPE1 = SMSHandlerBank2.processForHDFCBankSA(txnPE);
+                    txnPE1 = SMSHandlerBank.processForHDFCBankSA(txnPE);
                 }
                 else if(accountName == 'ICICI SA'){
-                    txnPE1 = SMSHandlerBank2.processForICICIBankSA(txnPE);
+                    txnPE1 = SMSHandlerBank.processForICICIBankSA(txnPE);
                 }
                 else if(accountName == 'SBI SA'){
-                    txnPE1 = SMSHandlerBank2.processForSBIBankSA(txnPE);
+                    txnPE1 = SMSHandlerBank.processForSBIBankSA(txnPE);
                 }
                 else if(accountName == 'ICICI CC'){
-                    txnPE1 = SMSHandlerBank2.processForICICIBankCC(txnPE);   
+                    txnPE1 = SMSHandlerBank.processForICICIBankCC(txnPE);   
                 }
                 else if(accountName == 'ICICI AMAZON CC'){
-                    txnPE1 = SMSHandlerBank2.processForICICIBankAmazonCC(txnPE);
+                    txnPE1 = SMSHandlerBank.processForICICIBankAmazonCC(txnPE);
                 }
                 else if(accountName == 'HDFC Rupay CC'){
-                    txnPE1 = SMSHandlerBank2.processForHDFCBankRupayCC(txnPE);
+                    txnPE1 = SMSHandlerBank.processForHDFCBankRupayCC(txnPE);
                 }
                 else if(accountName == 'Amazon Wallet'){
-                    txnPE1 = SMSHandlerBank2.processForAmazonWallet(txnPE);
+                    txnPE1 = SMSHandlerBank.processForAmazonWallet(txnPE);
                 }
                 // else if(accountName == 'Kuvera'){
-                //     txnPE = SMSHandlerBank2.processForAmazonWallet(txnPE);
+                //     txnPE = SMSHandlerBank.processForAmazonWallet(txnPE);
                 // }
                 // else if(accountName == 'Coin'){
-                //     txnPE = SMSHandlerBank2.processForAmazonWallet(txnPE);
+                //     txnPE = SMSHandlerBank.processForAmazonWallet(txnPE);
                 // }
                 // else if(accountName == 'Zerodha'){
-                //     txnPE = SMSHandlerBank2.processForAmazonWallet(txnPE);
+                //     txnPE = SMSHandlerBank.processForAmazonWallet(txnPE);
                 // }
                 // else if(accountName == 'Smallcase'){
-                //     txnPE = SMSHandlerBank2.processForAmazonWallet(txnPE);
+                //     txnPE = SMSHandlerBank.processForAmazonWallet(txnPE);
                 // }
                 outputList.add(txnPE1);
             }
+
+            // Also update the beneficiary Name with beneficiary Id
+            outputList = BeneficiaryHandler.updateBeneficiary(outputList);
+
         }
         catch(Exception e){
-            System_Log__c log = new System_Log__c();
-            log.related_to__c = 'InvocableSMSHandler';
-            log.type__c = 'Error';
-            log.message__c = e.getLineNumber().toString();
-            log.stack_trace__c = e.getStackTraceString();
-            insert log;
-            
+            FinPlanLogger.logError('extractBeneficiaryAndAccount', e);
         }
         return outputList;
     }

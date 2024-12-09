@@ -4,12 +4,15 @@
         <name>Extract_the_Amount_and_Beneficiary</name>
         <label>Extract the Amount and Beneficiary</label>
         <locationX>176</locationX>
-        <locationY>170</locationY>
+        <locationY>278</locationY>
         <actionName>InvocableSMSHandler</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Get_Transaction_Record</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Create_Log</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>txnPEList</name>
@@ -19,7 +22,7 @@
         </inputParameters>
         <nameSegment>InvocableSMSHandler</nameSegment>
         <outputParameters>
-            <assignToReference>$Record</assignToReference>
+            <assignToReference>outputTransactionEvent</assignToReference>
             <name>output</name>
         </outputParameters>
         <versionSegment>1</versionSegment>
@@ -29,7 +32,7 @@
         <name>Record_Found</name>
         <label>Record Found?</label>
         <locationX>176</locationX>
-        <locationY>386</locationY>
+        <locationY>494</locationY>
         <defaultConnector>
             <targetReference>Create_Transaction</targetReference>
         </defaultConnector>
@@ -51,7 +54,7 @@
     <formulas>
         <name>formulaAmount</name>
         <dataType>Number</dataType>
-        <expression>VALUE({!$Record.Amount__c})</expression>
+        <expression>VALUE({!outputTransactionEvent.Amount__c})</expression>
         <scale>2</scale>
     </formulas>
     <interviewLabel>Expenso - 3. Create Transaction From Transaction PE {!$Flow.CurrentDateTime}</interviewLabel>
@@ -76,10 +79,47 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Copy_1_of_Create_Log</name>
+        <label>Copy 1 of Create Log</label>
+        <locationX>176</locationX>
+        <locationY>170</locationY>
+        <connector>
+            <targetReference>Extract_the_Amount_and_Beneficiary</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <stringValue>I am here too!!</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Log</name>
+        <label>Create Log</label>
+        <locationX>572</locationX>
+        <locationY>386</locationY>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <stringValue>Expenso - 3. Create Transaction From Transaction PE</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <object>System_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Transaction</name>
         <label>Create Transaction</label>
         <locationX>308</locationX>
-        <locationY>494</locationY>
+        <locationY>602</locationY>
         <inputAssignments>
             <field>Amount__c</field>
             <value>
@@ -87,9 +127,15 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Beneficiary_Name__c</field>
+            <value>
+                <elementReference>outputTransactionEvent.Beneficiary__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Beneficiary__c</field>
             <value>
-                <elementReference>$Record.Beneficiary__c</elementReference>
+                <stringValue>a01Qy00000ewqAVIAY</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -135,7 +181,7 @@
         <name>Get_Transaction_Record</name>
         <label>Get Transaction Record</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>386</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Record_Found</targetReference>
@@ -156,12 +202,20 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Extract_the_Amount_and_Beneficiary</targetReference>
+            <targetReference>Copy_1_of_Create_Log</targetReference>
         </connector>
         <object>Transaction_Platform_Event__e</object>
         <triggerType>PlatformEvent</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>outputTransactionEvent</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Transaction_Platform_Event__e</objectType>
+    </variables>
     <variables>
         <name>transactionRecord</name>
         <dataType>SObject</dataType>

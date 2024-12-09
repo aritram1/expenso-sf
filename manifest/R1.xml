@@ -5,16 +5,19 @@
 		<name>ConnectedApp</name>
 	</types>
 	<types>
-		<members>BeneficiaryHandler</members>
+		<!-- global classes -->
 		<members>FinPlanException</members>
 		<members>FinPlanLogger</members>
-		<members>SMSHandler</members>
+		<members>Util</members>
+		<!-- flow classes -->
+		<members>InvocableSMSHandler</members>
 		<members>SMSHandlerBank</members>
-		<members>SMSHandlerBank2</members>
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
-		<members>Util</members>
-		<members>InvocableSMSHandler</members>
+		<members>BeneficiaryHandler</members>
+		<!-- May not be required -->
+		<members>SMSHandler</members>
+		<members>SMSHandlerBank2</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

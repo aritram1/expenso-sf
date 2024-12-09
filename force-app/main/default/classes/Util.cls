@@ -47,5 +47,23 @@ public with sharing class Util {
             
         }
     }
+
+
+    // Utility method : Clone a record of Transaction_Platform_Event__e
+    public static Transaction_Platform_Event__e clone(Transaction_Platform_Event__e source) {
+        // Create a new writable instance of the platform event
+        Transaction_Platform_Event__e target = new Transaction_Platform_Event__e();
+
+        // Explicitly copy fields
+        target.Balance_Update__c = source.Balance_Update__c;
+        target.External_Id__c = source.External_Id__c;
+        target.Finance_Account__c = source.Finance_Account__c;
+        target.SMS_Content__c = source.SMS_Content__c;
+        target.SMS_Id__c = source.SMS_Id__c;
+        target.Transaction_Date__c = source.Transaction_Date__c;
+        target.Type__c = source.Type__c;
+
+        return target;
+    }
      
 }

@@ -331,6 +331,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Beneficiary_Name__c</fieldItem>
+                <identifier>RecordBeneficiary_Name__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Finance_Account__c</fieldItem>
                 <identifier>RecordFinance_Account_cField</identifier>
             </fieldInstance>

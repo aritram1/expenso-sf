@@ -6,7 +6,7 @@
         <name>Balance_Update_Required</name>
         <label>Balance Update Required?</label>
         <locationX>182</locationX>
-        <locationY>623</locationY>
+        <locationY>731</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_1</name>
@@ -86,10 +86,27 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Create_Log</name>
+        <label>Create Log</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Balance_Update_Required</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <stringValue>I am here!</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Generate_Financial_Account_Platform_Event</name>
         <label>Generate Financial Account Platform Event</label>
         <locationX>50</locationX>
-        <locationY>731</locationY>
+        <locationY>839</locationY>
         <inputAssignments>
             <field>Account_Id__c</field>
             <value>
@@ -117,7 +134,7 @@
         <locationX>50</locationX>
         <locationY>431</locationY>
         <connector>
-            <targetReference>Balance_Update_Required</targetReference>
+            <targetReference>Create_Log</targetReference>
         </connector>
         <inputAssignments>
             <field>Balance_Update__c</field>

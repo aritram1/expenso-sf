@@ -56,7 +56,7 @@
         <name>Const_DEBIT_REGEX</name>
         <dataType>String</dataType>
         <value>
-            <stringValue>.*(debit|debited|money transfer|amt sent|money sent|withdrawn|spent|from hdfc bank a/c).*</stringValue>
+            <stringValue>.*(debit|debited|money transfer|amt sent|money sent|withdrawn|spent|from hdfc bank a/c|on hdfc bank card 2004).*</stringValue>
         </value>
     </constants>
     <decisions>
