@@ -4,6 +4,7 @@
 List<String> objectApiNames = new List<String>{
     'SMS__c',
     'Transaction__c',
+    'Beneficiary__c',
     'FlowInterview'
 };
 

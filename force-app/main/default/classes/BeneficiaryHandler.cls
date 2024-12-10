@@ -7,22 +7,36 @@ public with sharing class BeneficiaryHandler {
 
         List<String> allBeneficiaryNames = new List<String>();
         for(Transaction_Platform_Event__e txnPE : outputList){
-            allBeneficiaryNames.add(txnPE.beneficiary__c);
+            // allBeneficiaryNames.add(txnPE.beneficiary_c);
+            if(String.isNotEmpty(txnPE.Beneficiary_name__c) && String.isNotBlank(txnPE.Beneficiary_name__c)){
+                String beneficiaryNameUpperCase = txnPE.Beneficiary_name__c.toUpperCase();
+                allBeneficiaryNames.add(beneficiaryNameUpperCase);            
+            }
         }
         List<Beneficiary__c> allBeneficiaries = [SELECT Id, Name from Beneficiary__c where name in :allBeneficiaryNames];
         Map<String, Beneficiary__c> allBeneficiariesMap = new Map<String, Beneficiary__c>();
+        
+        for(Beneficiary__c b : allBeneficiaries){
+            // String beneficiaryNameUpperCase = b.name.toUpperCase();
+            allBeneficiariesMap.put(b.name.toUpperCase(), b);
+        }
+        
+        
         for(Transaction_Platform_Event__e txnPE : outputList){
-            if(allBeneficiariesMap.containsKey(txnPE.Beneficiary__c)){
-                Beneficiary__c existing = allBeneficiariesMap.get(txnPE.Beneficiary__c);
-                txnPE.Beneficiary__c = existing.Id;
-            }
-            else{
-                Beneficiary__c newBeneficiary = new Beneficiary__c();
-                newBeneficiary.Name = txnPE.beneficiary_name__c;
-                insert newBeneficiary;
-                txnPE.Beneficiary__c = newBeneficiary.Id;
-                // TB done later - Optimization - 1
-                // insertBeneficiaryList.add(newBeneficiary);
+            if(String.isNotEmpty(txnPE.Beneficiary_name__c) && String.isNotBlank(txnPE.Beneficiary_name__c)){
+                String beneficiaryNameUpperCase = txnPE.Beneficiary_name__c.toUpperCase();
+                if(allBeneficiariesMap.containsKey(beneficiaryNameUpperCase)){
+                    Beneficiary__c existing = allBeneficiariesMap.get(beneficiaryNameUpperCase);
+                    txnPE.Beneficiary__c = existing.Id;
+                }
+                else{
+                    Beneficiary__c newBeneficiary = new Beneficiary__c();
+                    newBeneficiary.Name = txnPE.beneficiary_name__c;
+                    insert newBeneficiary;
+                    txnPE.Beneficiary__c = newBeneficiary.Id;
+                    // TB done later - Optimization - 1
+                    // insertBeneficiaryList.add(newBeneficiary);
+                }
             }
         }
         // TB done later - Optimization - 2
