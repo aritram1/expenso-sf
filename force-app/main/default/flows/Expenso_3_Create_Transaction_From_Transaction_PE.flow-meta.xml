@@ -151,6 +151,18 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Payment_Reference__c</field>
+            <value>
+                <elementReference>outputTransactionEvent.Payment_Reference__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Payment_Via__c</field>
+            <value>
+                <elementReference>outputTransactionEvent.Payment_Via__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>SMS_Content__c</field>
             <value>
                 <elementReference>$Record.SMS_Content__c</elementReference>

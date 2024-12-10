@@ -116,6 +116,16 @@
                 <identifier>RecordType_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Payment_Via__c</fieldItem>
+                <identifier>RecordPayment_Via__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-3ddbb2bf-ec27-40c9-b295-43f47462cd8b</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -138,6 +148,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Transaction_Date__c</fieldItem>
                 <identifier>RecordTransaction_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Payment_Reference__c</fieldItem>
+                <identifier>RecordPayment_Reference_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-b7500786-a8e5-4b8c-b79c-00820a24f3cd</name>

@@ -254,11 +254,6 @@
         <field>Transaction__c.Related_Contact__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Transaction__c.Related_Financial_Account__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Expenso Admin PS</label>
     <objectPermissions>

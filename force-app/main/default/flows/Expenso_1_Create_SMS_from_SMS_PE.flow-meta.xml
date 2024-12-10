@@ -125,7 +125,7 @@
     REGEX(LOWER({!$Record.Content__c}), &quot;.*(6414|a/cx6414|xx6414).*&quot;),
     &quot;SBI-SA&quot;,
     IF(
-        REGEX(LOWER({!$Record.Content__c}), &quot;.*(xx360|a/cx360).*&quot;),
+        REGEX(LOWER({!$Record.Content__c}), &quot;.*(XXX360|XXX360 debited|ICICI Bank Acct XXX360|xx360|a/cx360).*&quot;),
         &quot;ICICI-SA&quot;,
         IF(
             REGEX(LOWER({!$Record.Content__c}), &quot;.*(9560|x9560|\\*9560|xxxx9560|hdfc bank a/c).*&quot;),

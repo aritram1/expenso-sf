@@ -20,10 +20,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Related_Financial_Account__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Related_Contact__c</field>
             </layoutItems>
             <layoutItems>
@@ -57,6 +53,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Beneficiary_Name__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Payment_Via__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Payment_Reference__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
