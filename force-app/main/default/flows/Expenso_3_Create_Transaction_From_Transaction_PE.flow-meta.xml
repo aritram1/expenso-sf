@@ -129,13 +129,13 @@
         <inputAssignments>
             <field>Beneficiary_Name__c</field>
             <value>
-                <elementReference>outputTransactionEvent.Beneficiary__c</elementReference>
+                <elementReference>outputTransactionEvent.Beneficiary_Name__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Beneficiary__c</field>
             <value>
-                <stringValue>a01Qy00000ewqAVIAY</stringValue>
+                <elementReference>outputTransactionEvent.Beneficiary__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

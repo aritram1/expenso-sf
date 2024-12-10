@@ -6,11 +6,6 @@
     </applicationVisibilities>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Beneficiary__c.Display_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Beneficiary__c.External_Id__c</field>
         <readable>true</readable>
     </fieldPermissions>

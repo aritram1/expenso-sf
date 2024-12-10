@@ -666,10 +666,10 @@
                             <value>NAME</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Beneficiary__c.Display_Name__c</value>
+                            <value>Beneficiary__c.Type__c</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Beneficiary__c.Type__c</value>
+                            <value>Type__c</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Amount__c</value>

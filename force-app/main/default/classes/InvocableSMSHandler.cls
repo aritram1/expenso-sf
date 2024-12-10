@@ -56,10 +56,16 @@ public with sharing class InvocableSMSHandler {
                 // else if(accountName == 'Smallcase'){
                 //     txnPE = SMSHandlerBank.processForAmazonWallet(txnPE);
                 // }
+
+                // Fix the minor name differences for beneficiaries
+                // This method does not have any DML, so we can use within a loop
+                txnPE1 = BeneficiaryHandler.fixBeneficiaryName(txnPE1);
+
                 outputList.add(txnPE1);
             }
 
             // Also update the beneficiary Name with beneficiary Id
+            // This method contains a DML so we have to use it outside loop
             outputList = BeneficiaryHandler.updateBeneficiary(outputList);
 
         }
