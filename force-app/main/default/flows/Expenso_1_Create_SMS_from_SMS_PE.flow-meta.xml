@@ -2,8 +2,147 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Credit_Debit_Balance_Update_financial_account_Info</name>
-        <label>Assign Credit, Debit, Balance Update, financial account Info</label>
+        <name>Assign_External_Id</name>
+        <label>Assign External Id</label>
+        <locationX>314</locationX>
+        <locationY>602</locationY>
+        <assignmentItems>
+            <assignToReference>SMSRecord.External_Id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.External_Id__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_SMS_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Id</name>
+        <label>Assign Id</label>
+        <locationX>50</locationX>
+        <locationY>602</locationY>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_SMS.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_SMS_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Other_Info_For_Create</name>
+        <label>Assign Other Info</label>
+        <locationX>314</locationX>
+        <locationY>494</locationY>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Type__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CreditOrDebitFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>balanceUpdateFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Finance_Account__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Finance_Account.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>createTransactionFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Transaction_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>transactionDateFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>balanceUpdateFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Content__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Content__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>createTransactionFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Created_From__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Created_From__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Device__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Device__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Finance_Account__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Finance_Account.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Original_Content__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Original_Content__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Received_At__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Received_At__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Sender__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Sender__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_External_Id</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Other_Info_For_Update</name>
+        <label>Assign Other Info</label>
         <locationX>50</locationX>
         <locationY>494</locationY>
         <assignmentItems>
@@ -41,8 +180,71 @@
                 <elementReference>transactionDateFormula</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>balanceUpdateFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Content__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Content__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>createTransactionFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Created_From__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Created_From__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Device__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Device__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Finance_Account__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Finance_Account.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Original_Content__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Original_Content__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Received_At__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Received_At__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SMSRecord.Sender__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Sender__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>Update_SMS_Record</targetReference>
+            <targetReference>Assign_Id</targetReference>
         </connector>
     </assignments>
     <constants>
@@ -65,21 +267,21 @@
         <locationX>182</locationX>
         <locationY>386</locationY>
         <defaultConnector>
-            <targetReference>Create_SMS_Record</targetReference>
+            <targetReference>Assign_Other_Info_For_Create</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>SMSRecord</leftValueReference>
+                <leftValueReference>Get_SMS.Id</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_Credit_Debit_Balance_Update_financial_account_Info</targetReference>
+                <targetReference>Assign_Other_Info_For_Update</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -178,75 +380,8 @@
         <name>Create_SMS_Record</name>
         <label>Create SMS Record</label>
         <locationX>314</locationX>
-        <locationY>494</locationY>
-        <inputAssignments>
-            <field>Balance_Update__c</field>
-            <value>
-                <elementReference>balanceUpdateFormula</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Content__c</field>
-            <value>
-                <elementReference>$Record.Content__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Create_Transaction__c</field>
-            <value>
-                <elementReference>createTransactionFormula</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Device__c</field>
-            <value>
-                <elementReference>$Record.Device__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>External_Id__c</field>
-            <value>
-                <elementReference>$Record.External_Id__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Finance_Account__c</field>
-            <value>
-                <elementReference>Get_Finance_Account.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Original_Content__c</field>
-            <value>
-                <elementReference>$Record.Original_Content__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Received_At__c</field>
-            <value>
-                <elementReference>$Record.Received_At__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Sender__c</field>
-            <value>
-                <elementReference>$Record.Sender__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Transaction_Date__c</field>
-            <value>
-                <elementReference>transactionDateFormula</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Type__c</field>
-            <value>
-                <elementReference>CreditOrDebitFormula</elementReference>
-            </value>
-        </inputAssignments>
-        <object>SMS__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <locationY>710</locationY>
+        <inputReference>SMSRecord</inputReference>
     </recordCreates>
     <recordLookups>
         <name>Get_Finance_Account</name>
@@ -274,7 +409,7 @@
         <label>Get SMS</label>
         <locationX>182</locationX>
         <locationY>278</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>SMS_Exists</targetReference>
         </connector>
@@ -286,15 +421,15 @@
                 <elementReference>$Record.External_Id__c</elementReference>
             </value>
         </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>SMS__c</object>
-        <outputReference>SMSRecord</outputReference>
-        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
         <name>Update_SMS_Record</name>
         <label>Update SMS Record</label>
         <locationX>50</locationX>
-        <locationY>602</locationY>
+        <locationY>710</locationY>
         <inputReference>SMSRecord</inputReference>
     </recordUpdates>
     <start>
