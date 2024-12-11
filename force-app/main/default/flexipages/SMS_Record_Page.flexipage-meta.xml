@@ -391,6 +391,26 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.SA_Available_Balance__c</fieldItem>
+                <identifier>RecordSA_Available_Balance_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CC_Available_Balance__c</fieldItem>
+                <identifier>RecordCC_Available_Balance_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Status__c</fieldItem>
                 <identifier>RecordStatus__cField</identifier>
             </fieldInstance>

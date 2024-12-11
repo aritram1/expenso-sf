@@ -16,11 +16,6 @@
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
 		<members>BeneficiaryHandler</members>
-		
-		<!-- May not be required -->
-		<members>SMSHandler</members>
-		<members>SMSHandlerBank2</members>
-		<!-- May not be required -->
 		<name>ApexClass</name>
 	</types>
 	<types>

@@ -90,6 +90,7 @@
         <dataType>Boolean</dataType>
         <expression>OR(
     CONTAINS(LOWER({!$Record.Content__c}), &quot;balance&quot;),
+    CONTAINS(LOWER({!$Record.Content__c}), &quot;avl limit&quot;),
     CONTAINS(LOWER({!$Record.Content__c}), &quot;avl bal&quot;),
     CONTAINS(LOWER({!$Record.Content__c}), &quot;available bal&quot;)
 )</expression>
@@ -103,11 +104,11 @@
         <name>CreditOrDebitFormula</name>
         <dataType>String</dataType>
         <expression>IF(
-    REGEX(LOWER({!$Record.Content__c}), {!Const_CREDIT_REGEX}),
-    &apos;Credit&apos;,
+    REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
+    &apos;Debit&apos;,
     IF(
-        REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
-        &apos;Debit&apos;,
+        REGEX(LOWER({!$Record.Content__c}), {!Const_CREDIT_REGEX}),
+        &apos;Credit&apos;,
         &apos;Promotional&apos;
     )
 )</expression>
@@ -125,7 +126,7 @@
     REGEX(LOWER({!$Record.Content__c}), &quot;.*(6414|a/cx6414|xx6414).*&quot;),
     &quot;SBI-SA&quot;,
     IF(
-        REGEX(LOWER({!$Record.Content__c}), &quot;.*(XXX360|XXX360 debited|ICICI Bank Acct XXX360|xx360|a/cx360).*&quot;),
+        REGEX(LOWER({!$Record.Content__c}), &quot;.*(xxx360|xx360|a/cx360).*&quot;),
         &quot;ICICI-SA&quot;,
         IF(
             REGEX(LOWER({!$Record.Content__c}), &quot;.*(9560|x9560|\\*9560|xxxx9560|hdfc bank a/c).*&quot;),

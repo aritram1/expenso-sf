@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Extract_Balance_Information</name>
+        <label>Extract Balance Information</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <actionName>InvocableBalanceUpdateHandler</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Update_Balance_Information_in_SMS_Record</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>smsList</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>InvocableBalanceUpdateHandler</nameSegment>
+        <outputParameters>
+            <assignToReference>outputSMS</assignToReference>
+            <name>output</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
     <apiVersion>62.0</apiVersion>
     <decisions>
         <description>Check if balance update is true and finance account is present</description>
         <name>Balance_Update_Required</name>
         <label>Balance Update Required?</label>
         <locationX>182</locationX>
-        <locationY>731</locationY>
+        <locationY>623</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_1</name>
@@ -26,7 +50,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Generate_Financial_Account_Platform_Event</targetReference>
+                <targetReference>Extract_Balance_Information</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -86,27 +110,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
-        <name>Create_Log</name>
-        <label>Create Log</label>
-        <locationX>50</locationX>
-        <locationY>539</locationY>
-        <connector>
-            <targetReference>Balance_Update_Required</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Message__c</field>
-            <value>
-                <stringValue>I am here!</stringValue>
-            </value>
-        </inputAssignments>
-        <object>System_Log__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
         <name>Generate_Financial_Account_Platform_Event</name>
         <label>Generate Financial Account Platform Event</label>
         <locationX>50</locationX>
-        <locationY>839</locationY>
+        <locationY>947</locationY>
         <inputAssignments>
             <field>Account_Id__c</field>
             <value>
@@ -116,13 +123,13 @@
         <inputAssignments>
             <field>CC_Available_Balance__c</field>
             <value>
-                <elementReference>$Record.CC_Available_Balance__c</elementReference>
+                <elementReference>outputSMS.CC_Available_Balance__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>SA_Balance__c</field>
             <value>
-                <elementReference>$Record.SA_Available_Balance__c</elementReference>
+                <elementReference>outputSMS.SA_Available_Balance__c</elementReference>
             </value>
         </inputAssignments>
         <object>Finance_Account_Platform_Event__e</object>
@@ -134,7 +141,7 @@
         <locationX>50</locationX>
         <locationY>431</locationY>
         <connector>
-            <targetReference>Create_Log</targetReference>
+            <targetReference>Balance_Update_Required</targetReference>
         </connector>
         <inputAssignments>
             <field>Balance_Update__c</field>
@@ -181,6 +188,29 @@
         <object>Transaction_Platform_Event__e</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordUpdates>
+        <description>Update Balance Information in SMS Record</description>
+        <name>Update_Balance_Information_in_SMS_Record</name>
+        <label>Update Balance Information in SMS Record</label>
+        <locationX>50</locationX>
+        <locationY>839</locationY>
+        <connector>
+            <targetReference>Generate_Financial_Account_Platform_Event</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>CC_Available_Balance__c</field>
+            <value>
+                <elementReference>outputSMS.CC_Available_Balance__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SA_Available_Balance__c</field>
+            <value>
+                <elementReference>outputSMS.SA_Available_Balance__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
@@ -192,4 +222,12 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>outputSMS</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>SMS__c</objectType>
+    </variables>
 </Flow>
