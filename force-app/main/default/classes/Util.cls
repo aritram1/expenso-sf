@@ -50,7 +50,7 @@ public with sharing class Util {
 
 
     // Utility method : Clone a record of Transaction_Platform_Event__e
-    public static Transaction_Platform_Event__e clone(Transaction_Platform_Event__e source) {
+    public static Transaction_Platform_Event__e cloneTransactionPE(Transaction_Platform_Event__e source) {
         // Create a new writable instance of the platform event
         Transaction_Platform_Event__e target = new Transaction_Platform_Event__e();
 

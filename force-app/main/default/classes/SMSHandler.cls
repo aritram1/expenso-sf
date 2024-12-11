@@ -148,7 +148,7 @@ public with sharing class SMSHandler {
     //             // Get the detail error Info and Log the error
     //             String errorMessage = FinPlanLogger.getDetailedErrorMessage(e);
     //             String smsContent = sms.content__c + ' || Sender : ' + sms.sender__c + ' || Received At: ' + sms.Received_At__c;
-    //             FinPlanLogger.logError(new FinPlanException(errorMessage), TAG, smsContent);
+    //             FinPlanLogger.logError(CLASS_NAME + new FinPlanException(errorMessage), TAG, smsContent);
     //         }
 
     //         processedMessages.add(sms);
@@ -159,6 +159,7 @@ public with sharing class SMSHandler {
     //     return processedMessages;
     // }
 
+    // Deprecated method, only kept for archival reference
     // // This method updates the balance for savings account or credit card account from the last balanace update sms
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // public static String handleBankAccountBalanceUpdate(List<SMS__c> inputSMSList){
@@ -241,11 +242,11 @@ public with sharing class SMSHandler {
     //     catch(Exception e){
     //         // Get the detail error Info and Log the error
     //         String errorMessage = FinPlanLogger.getDetailedErrorMessage(e);
-    //         FinPlanLogger.logError(new FinPlanException(errorMessage), TAG);
+    //         FinPlanLogger.logError(CLASS_NAME + new FinPlanException(errorMessage), TAG);
     //         balanceUpdateResponse = 'Error occurred inside handleBankAccountBalanceUpdate : ' + errorMessage;
     //     }
     //     return balanceUpdateResponse;
     // }
-    // // End method
+    // End method
 
 }

@@ -1,9 +1,11 @@
 public with sharing class InvocableSMSHandler {
 
+    public static final String CLASS_NAME = 'InvocableSMSHandler';
+
     // Invocable method that Flow or Process Builder can call
     @InvocableMethod(label='Update Beneficiary and Amount from SMS' description='Processes SMS records and delegates to SMSHandlerBank.')
     public static List<Transaction_Platform_Event__e> extractBeneficiaryAndAccount(List<Transaction_Platform_Event__e> txnPEList) {
-        
+
         List<Transaction_Platform_Event__e> outputList = new List<Transaction_Platform_Event__e>();
 
         try{
@@ -70,7 +72,7 @@ public with sharing class InvocableSMSHandler {
 
         }
         catch(Exception e){
-            FinPlanLogger.logError('extractBeneficiaryAndAccount', e);
+            FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAccount', e);
         }
         return outputList;
     }

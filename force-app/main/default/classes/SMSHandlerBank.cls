@@ -1,9 +1,11 @@
 public with sharing class SMSHandlerBank {
 
+    public static final String CLASS_NAME = 'SMSHandlerBank';
+
     public static Transaction_Platform_Event__e processForICICIBankAmazonCC(Transaction_Platform_Event__e txnPE1){
        
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1); 
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1); 
         
         try{
 
@@ -22,7 +24,7 @@ public with sharing class SMSHandlerBank {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError('processForICICIBankAmazonCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
         }
 
         return txnPE;
@@ -31,7 +33,7 @@ public with sharing class SMSHandlerBank {
     public static Transaction_Platform_Event__e processForHDFCBankRupayCC(Transaction_Platform_Event__e txnPE1){
         
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1);    
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1);    
         
         try{
 
@@ -49,7 +51,7 @@ public with sharing class SMSHandlerBank {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError('processForHDFCBankRupayCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankRupayCC', e);
         }
         return txnPE;
     }
@@ -63,7 +65,7 @@ public with sharing class SMSHandlerBank {
     public static Transaction_Platform_Event__e processForHDFCBankSA(Transaction_Platform_Event__e txnPE1){
         
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1);    
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1);    
         
         try{
 
@@ -241,7 +243,7 @@ public with sharing class SMSHandlerBank {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError('processForHDFCBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e);
         }
         return txnPE;
     }
@@ -252,7 +254,7 @@ public with sharing class SMSHandlerBank {
     public static Transaction_Platform_Event__e processForSBIBankSA(Transaction_Platform_Event__e txnPE1){
         
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1);
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1);
         
         try{
 
@@ -334,7 +336,7 @@ public with sharing class SMSHandlerBank {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError('processForHDFCBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e);
         }
         return txnPE;
     }
@@ -343,7 +345,7 @@ public with sharing class SMSHandlerBank {
     public static Transaction_Platform_Event__e processForICICIBankCC(Transaction_Platform_Event__e txnPE1){
         
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1);
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1);
         
         List<String> contentArray = new List<String>();
         contentArray = txnPE.SMS_Content__c?.split(' ');
@@ -376,7 +378,7 @@ public with sharing class SMSHandlerBank {
     public static Transaction_Platform_Event__e processForICICIBankSA(Transaction_Platform_Event__e txnPE1){
         
         // Create a new writable instance of the platform event
-        Transaction_Platform_Event__e txnPE = Util.clone(txnPE1);
+        Transaction_Platform_Event__e txnPE = Util.cloneTransactionPE(txnPE1);
         
         try{
         
@@ -385,7 +387,26 @@ public with sharing class SMSHandlerBank {
         
         // Savings account block
         // Credit
-        if(txnPE.SMS_Content__c.startsWith('ICICI Bank Account XX360 credited')){
+        if(txnPE.SMS_Content__c.startsWith('Dear Customer, Acct XX360 is credited')){
+            // Regex to extract the name
+            Pattern nameRegex = Pattern.compile('Acct .* credited with Rs .* from ([\\w\\s]+)\\.');
+            Matcher nameMatcher = nameRegex.matcher(txnPE.SMS_Content__c);
+            if (nameMatcher.find()) {
+                String name = nameMatcher.group(1);
+                txnPE.beneficiary_name__c = Util.toCamelCase(name); // convert to camel case for better readability
+                System.debug('Extracted Name: ' + txnPE.beneficiary_name__c);
+            }
+
+            // Regex to extract the amount
+            Pattern amountRegex = Pattern.compile('credited with Rs ([\\d\\.]+)');
+            Matcher amountMatcher = amountRegex.matcher(txnPE.SMS_Content__c);
+            if (amountMatcher.find()) {
+                String amount = amountMatcher.group(1);
+                txnPE.Amount__c = amount;
+                System.debug('Extracted Amount: ' + txnPE.Amount__c);
+            }
+        }
+        else if(txnPE.SMS_Content__c.startsWith('ICICI Bank Account XX360 credited')){
             
             // txnPE.type__c = 'Credit';
             txnPE.amount__c = contentArray[5].replace(',' , '');
@@ -459,20 +480,30 @@ public with sharing class SMSHandlerBank {
         // debit 4 (ICICI bank latest message changes)
         else if(txnPE.SMS_Content__c.startsWith('ICICI Bank Acct XX360 debited for')){
             
-            txnPE.amount__c = contentArray[7].replace(',' , '');
-            // txnPE.SA_Available_Balance__c = txnPE.SMS_Content__c.split('. Available bal: Rs. ')[1].split('. For dispute call')[0].replace(',','');
+            // Regex to extract the full name
+            Pattern nameRegex = Pattern.compile('; ([A-Za-z\\s]+) credited\\.');
+            Matcher nameMatcher = nameRegex.matcher(txnPE.SMS_Content__c);
+            if (nameMatcher.find()) {
+                String name = nameMatcher.group(1).trim();
+                txnPE.beneficiary_name__c = name;
+                System.debug('Extracted Name: ' + name);
+            }
+
+            // Regex to extract the amount
+            Pattern amountRegex = Pattern.compile('debited for Rs ([\\d\\.]+)');
+            Matcher amountMatcher = amountRegex.matcher(txnPE.SMS_Content__c);
+            if (amountMatcher.find()) {
+                String amount = amountMatcher.group(1).trim();
+                txnPE.amount__c = amount;
+                System.debug('Extracted Amount: ' + amount);
+            }
             if(txnPE.SMS_Content__c.toUpperCase().contains('UPI:')){
                 txnPE.Payment_Via__c = 'UPI';
-            }
-            // txnPE.type__c = 'Debit';
-            txnPE.beneficiary_name__c = txnPE.SMS_Content__c.split(';')[1].split('credited')[0].trim();
-            if(String.isNotBlank(txnPE.beneficiary_name__c)){
-                txnPE.beneficiary_name__c = Util.toCamelCase(txnPE.beneficiary_name__c);
             }
         }
     }
     catch(Exception e){
-        FinPlanLogger.logError('processForICICIBankAmazonCC', e);
+        FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
     }
         return txnPE;
     }

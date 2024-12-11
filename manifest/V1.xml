@@ -12,6 +12,7 @@
 		<!-- flow classes -->
 		<members>InvocableSMSHandler</members>
 		<members>SMSHandlerBank</members>
+		<members>InvocableBalanceUpdateHandler</members>
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
 		<members>BeneficiaryHandler</members>

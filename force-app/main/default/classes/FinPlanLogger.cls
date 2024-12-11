@@ -40,10 +40,10 @@ public with sharing class FinPlanLogger {
 
 
     // Centralized error logging
-    public static void logError(String methodName, Exception e) {
+    public static void logError(String className, String methodName, Exception e) {
         try {
             System_Log__c log = new System_Log__c();
-            log.related_to__c = 'SMSHandlerBank2 - ' + methodName;
+            log.related_to__c = className + '.' + methodName;
             log.type__c = 'Error';
             log.message__c = 'Line: ' + e.getLineNumber();
             log.stack_trace__c = e.getStackTraceString();

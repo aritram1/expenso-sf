@@ -1,11 +1,13 @@
+
 // delete script    
 
 // List of object API names
 List<String> objectApiNames = new List<String>{
     'SMS__c',
     'Transaction__c',
-    'Beneficiary__c',
-    'FlowInterview'
+    'Beneficiary__c',	
+    'FlowInterview',
+    'System_Log__c'
 };
 
 // Loop through the objects, query and delete records
