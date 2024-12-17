@@ -65,5 +65,47 @@ public with sharing class Util {
 
         return target;
     }
+
+    // Method to convert from SMS__c to Transaction_Platform_Event__e
+    public static List<Transaction_Platform_Event__e> convertToTransactionPE(List<SMS__c> smsList) {
+        List<Transaction_Platform_Event__e> transactionPEList = new List<Transaction_Platform_Event__e>();
+        
+        for (SMS__c sms : smsList) {
+            Transaction_Platform_Event__e txnPE = new Transaction_Platform_Event__e(
+                SMS_Content__c = sms.Content__c
+            );
+            transactionPEList.add(txnPE);
+        }
+        return transactionPEList;
+    }
+
+    // Method to convert from Transaction_Platform_Event__e to SMS_Platform_Event__e
+    public static List<SMS__c> convertToSMSList(List<Transaction_Platform_Event__e> transactionPEList) {
+        
+        List<SMS__c> smsList = new List<SMS__c>();
+        
+        for (Transaction_Platform_Event__e txnPE : transactionPEList) {
+            SMS__c sms = new SMS__c(
+                Amount__c = Decimal.valueof(txnPE.Amount__c),
+                Payment_Via__c = txnPE.Payment_Via__c,
+                beneficiary_name__c = txnPE.beneficiary_name__c,
+                Payment_Reference__c = txnPE.Payment_Reference__c,
+                Transaction_Date__c = txnPE.Transaction_Date__c
+
+                // Content__c = txnPE.SMS_Content__c,
+                // Sender__c = txnPE.Sender__c,
+                // Received_At__c = txnPE.Received_At__c,
+                // Finance_Account__c = txnPE.Finance_Account__c,
+                // External_Id__c = txnPE.External_Id__c,
+                // Device__c = txnPE.Device__c,
+                // Transaction_Date__c = txnPE.Transaction_Date__c,
+                // SMS_Id__c = txnPE.SMS_Id__c,
+                // Type__c = txnPE.Type__c,
+                // Balance_Update__c = txnPE.Balance_Update__c
+            );
+            smsList.add(sms);
+        }
+        return smsList;
+    }
      
 }

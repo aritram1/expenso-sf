@@ -4,15 +4,14 @@ public with sharing class InvocableSMSHandler {
 
     // Invocable method that Flow or Process Builder can call
     @InvocableMethod(label='Update Beneficiary and Amount from SMS' description='Processes SMS records and delegates to SMSHandlerBank.')
-    public static List<Transaction_Platform_Event__e> extractBeneficiaryAndAccount(List<Transaction_Platform_Event__e> txnPEList) {
+    public static List<Transaction_Platform_Event__e> extractBeneficiaryAndAmountFromTransactionPE(List<Transaction_Platform_Event__e> txnPEList) {
 
         List<Transaction_Platform_Event__e> outputList = new List<Transaction_Platform_Event__e>();
 
         try{
 
-        Map<String, Finance_Account__c> mapAccounts = new Map<String, Finance_Account__c>();
-            
-            mapAccounts = getAccounts(txnPEList);
+            Map<String, Finance_Account__c> mapAccounts = getAccounts(txnPEList);
+
             
             // Ensure the list is not null or empty
             if (txnPEList == null || txnPEList.isEmpty()) {
@@ -77,12 +76,12 @@ public with sharing class InvocableSMSHandler {
         return outputList;
     }
 
-    public static Map<String, Finance_Account__c> getAccounts(List<Transaction_Platform_Event__e> txnPEList) {
+    public static Map<String, Finance_Account__c> getAccounts(List<SMS__c> smsList) {
         Map<String, Finance_Account__c> allAccountsMap = new Map<String, Finance_Account__c>();
         List<String> allAccountIds = new List<String>();
-        for(Transaction_Platform_Event__e pe : txnPEList) {
-            if(pe.Finance_Account__c != null){
-                allAccountIds.add(pe.Finance_Account__c);
+        for(SMS__c sms : smsList) {
+            if(sms.Finance_Account__c != null){
+                allAccountIds.add(sms.Finance_Account__c);
             }
         }
         List<Finance_Account__c> allAccounts = [SELECT id, name from Finance_Account__c where id in :allAccountIds];
