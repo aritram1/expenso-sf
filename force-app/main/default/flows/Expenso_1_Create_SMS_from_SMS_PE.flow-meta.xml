@@ -261,6 +261,13 @@
             <stringValue>.*(debit|debited|money transfer|amt sent|money sent|withdrawn|spent|from hdfc bank a/c|on hdfc bank card 2004).*</stringValue>
         </value>
     </constants>
+    <constants>
+        <name>Const_INR_OR_RS_REGEX</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>rs\\.?|inr</stringValue>
+        </value>
+    </constants>
     <decisions>
         <name>SMS_Exists</name>
         <label>SMS Exists?</label>
@@ -294,7 +301,8 @@
     CONTAINS(LOWER({!$Record.Content__c}), &quot;balance&quot;),
     CONTAINS(LOWER({!$Record.Content__c}), &quot;avl limit&quot;),
     CONTAINS(LOWER({!$Record.Content__c}), &quot;avl bal&quot;),
-    CONTAINS(LOWER({!$Record.Content__c}), &quot;available bal&quot;)
+    CONTAINS(LOWER({!$Record.Content__c}), &quot;available bal&quot;),
+    CONTAINS(LOWER({!$Record.Content__c}), &quot;has been received on your icici bank credit card account&quot;) 
 )</expression>
     </formulas>
     <formulas>

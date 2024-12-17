@@ -4,7 +4,7 @@
     <assignments>
         <name>Update_CC_Balance</name>
         <label>Update CC Balance</label>
-        <locationX>314</locationX>
+        <locationX>490</locationX>
         <locationY>494</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.CC_Available_Limit__c</assignToReference>
@@ -14,19 +14,58 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Update_Fin_Account_s_Last_Update_Time</targetReference>
+            <targetReference>Update_CC_Last_Paid_Amount_and_Date</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_CC_Last_Paid_Amount_and_Date</name>
+        <label>Update CC Last Paid Amount and Date</label>
+        <locationX>490</locationX>
+        <locationY>602</locationY>
+        <assignmentItems>
+            <assignToReference>financeAccountRecord.CC_Last_Paid_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CCLastPaidAmountFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>financeAccountRecord.CC_Last_Bill_Paid_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CCLastPaidDateFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Fin_Account_s_Last_Update_Time_1</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Update_Fin_Account_s_Last_Update_Time</name>
         <label>Update Fin Account&apos;s Last Update Time</label>
-        <locationX>446</locationX>
-        <locationY>686</locationY>
+        <locationX>50</locationX>
+        <locationY>602</locationY>
         <assignmentItems>
-            <assignToReference>financeAccountRecord.CC_Available_Limit__c</assignToReference>
+            <assignToReference>financeAccountRecord.Balance_Last_Updated_At__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CCAvailableBalanceFormula</elementReference>
+                <elementReference>$Record.SMS_Received_At__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Financial_Account</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Fin_Account_s_Last_Update_Time_1</name>
+        <label>Update Fin Account&apos;s Last Update Time</label>
+        <locationX>490</locationX>
+        <locationY>710</locationY>
+        <assignmentItems>
+            <assignToReference>financeAccountRecord.Balance_Last_Updated_At__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.SMS_Received_At__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -52,8 +91,8 @@
     <decisions>
         <name>Account_Type</name>
         <label>Account Type?</label>
-        <locationX>446</locationX>
-        <locationY>386</locationY>
+        <locationX>688</locationX>
+        <locationY>278</locationY>
         <defaultConnectorLabel>Unknown</defaultConnectorLabel>
         <rules>
             <name>Savings</name>
@@ -66,7 +105,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_SA_Balance</targetReference>
+                <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time</targetReference>
             </connector>
             <label>Savings</label>
         </rules>
@@ -81,7 +120,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_CC_Balance</targetReference>
+                <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time_1</targetReference>
             </connector>
             <label>Credit</label>
         </rules>
@@ -101,8 +140,11 @@
     <decisions>
         <name>SMS_Received_Time_Fin_Account_s_Last_Update_Time</name>
         <label>SMS Received Time &gt; Fin Account&apos;s Last Update Time</label>
-        <locationX>776</locationX>
-        <locationY>278</locationY>
+        <locationX>182</locationX>
+        <locationY>386</locationY>
+        <defaultConnector>
+            <targetReference>Update_Financial_Account</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
@@ -115,7 +157,32 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Account_Type</targetReference>
+                <targetReference>Update_SA_Balance</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>SMS_Received_Time_Fin_Account_s_Last_Update_Time_1</name>
+        <label>SMS Received Time &gt; Fin Account&apos;s Last Update Time</label>
+        <locationX>622</locationX>
+        <locationY>386</locationY>
+        <defaultConnector>
+            <targetReference>Update_Financial_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SMS_Received_At__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>financeAccountRecord.Balance_Last_Updated_At__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_CC_Balance</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -126,6 +193,17 @@
         <dataType>Number</dataType>
         <expression>Value({!$Record.CC_Available_Balance__c})</expression>
         <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>CCLastPaidAmountFormula</name>
+        <dataType>Number</dataType>
+        <expression>Value({!$Record.CC_Last_Payment__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>CCLastPaidDateFormula</name>
+        <dataType>Date</dataType>
+        <expression>DATEVALUE({!$Record.SMS_Received_At__c})</expression>
     </formulas>
     <formulas>
         <name>SALastBalanceFormula</name>
@@ -157,11 +235,11 @@
     <recordLookups>
         <name>Get_Financial_Account</name>
         <label>Get Financial Account</label>
-        <locationX>776</locationX>
+        <locationX>688</locationX>
         <locationY>170</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time</targetReference>
+            <targetReference>Account_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -177,16 +255,18 @@
         <queriedFields>SA_Last_Balance__c</queriedFields>
         <queriedFields>CC_Available_Limit__c</queriedFields>
         <queriedFields>Type__c</queriedFields>
+        <queriedFields>Balance_Last_Updated_At__c</queriedFields>
+        <queriedFields>CC_Last_Paid_Amount__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Update_Financial_Account</name>
         <label>Update Financial Account</label>
-        <locationX>446</locationX>
-        <locationY>794</locationY>
+        <locationX>688</locationX>
+        <locationY>986</locationY>
         <inputReference>financeAccountRecord</inputReference>
     </recordUpdates>
     <start>
-        <locationX>650</locationX>
+        <locationX>562</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Financial_Account</targetReference>

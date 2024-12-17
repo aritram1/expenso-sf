@@ -75,6 +75,13 @@
                 <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>outputSMS.Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OutputFromAction_BalanceUpdate.Amount__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Generate_Financial_Account_Platform_Event</targetReference>
         </connector>
@@ -278,6 +285,12 @@
             <field>CC_Available_Balance__c</field>
             <value>
                 <elementReference>outputSMS.CC_Available_Balance__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CC_Last_Payment__c</field>
+            <value>
+                <elementReference>outputSMS.Amount__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
