@@ -3,7 +3,7 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
     public static final String CLASS_NAME = 'InvocableBeneficiaryAmountUpdateHandler';
 
     // Invocable method that Flow or Process Builder can call
-    @InvocableMethod(label='Update Beneficiary and Amount from SMS' description='Processes SMS records and delegates to SMSHandlerBank.')
+    @InvocableMethod(label='Update Beneficiary and Amount from SMS' description='Processes SMS records and delegates to SMSProcessor.')
     public static List<SMS__c> extractBeneficiaryAndAmountFromSMS(List<SMS__c> smsList) {
 
         List<SMS__c> result = new List<SMS__c>();
@@ -17,24 +17,37 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
             Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
 
             for (SMS__c sms : smsList) {
-                String accountName = mapAccounts.get(sms.Finance_Account__c).Name;
+                String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
                 SMS__c processedSMS = new SMS__c();
 
                 if (accountName == 'HDFC SA') {
-                    processedSMS = SMSHandlerBank.processForHDFCBankSA(sms);
+                    processedSMS = SMSProcessor.processForHDFCBankSA(sms);
                 } else if (accountName == 'ICICI SA') {
-                    processedSMS = SMSHandlerBank.processForICICIBankSA(sms);
+                    processedSMS = SMSProcessor.processForICICIBankSA(sms);
                 } else if (accountName == 'SBI SA') {
-                    processedSMS = SMSHandlerBank.processForSBIBankSA(sms);
+                    processedSMS = SMSProcessor.processForSBIBankSA(sms);
                 } else if (accountName == 'ICICI CC') {
-                    processedSMS = SMSHandlerBank.processForICICIBankCC(sms);
+                    processedSMS = SMSProcessor.processForICICIBankCC(sms);
                 } else if (accountName == 'ICICI AMAZON CC') {
-                    processedSMS = SMSHandlerBank.processForICICIBankAmazonCC(sms);
+                    processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
                 } else if (accountName == 'HDFC Rupay CC') {
-                    processedSMS = SMSHandlerBank.processForHDFCBankRupayCC(sms);
+                    processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
                 } else if (accountName == 'Amazon Wallet') {
-                    processedSMS = SMSHandlerBank.processForAmazonWallet(sms);
+                    processedSMS = SMSProcessor.processForAmazonWallet(sms);
                 }
+                // To be implemented, if required
+                // else if(accountName == 'Kuvera'){
+                //     processedSMS = SMSProcessor.processFor***(sms);
+                // }
+                // else if(accountName == 'Coin'){
+                //     processedSMS = SMSProcessor.processFor***(sms);
+                // }
+                // else if(accountName == 'Zerodha'){
+                //     processedSMS = SMSProcessor.processFor***(sms);
+                // }
+                // else if(accountName == 'Smallcase'){
+                //     processedSMS = SMSProcessor.processFor***(sms);
+                // }
 
                 // Fix the minor name differences for beneficiaries
                 // This method does not have any DML, so we can use it within a loop

@@ -9,8 +9,8 @@ Transaction_Platform_Event__e txnPE = new Transaction_Platform_Event__e(
     Type__c = 'Debit'
 );
 
-// Call the SMSHandlerBank method
-Transaction_Platform_Event__e updatedTxnPE = SMSHandlerBank.processForHDFCBankSA(txnPE);
+// Call the SMSProcessor method
+Transaction_Platform_Event__e updatedTxnPE = SMSProcessor.processForHDFCBankSA(txnPE);
 
 // Debug the output
 System.debug('Updated Transaction Platform Event: ' + updatedTxnPE);

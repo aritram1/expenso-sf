@@ -1,6 +1,6 @@
-public with sharing class SMSHandlerBank {
+public with sharing class SMSProcessor {
 
-    public static final String CLASS_NAME = 'SMSHandlerBank';
+    public static final String CLASS_NAME = 'SMSProcessor';
 
     public static SMS__c processForICICIBankAmazonCC(SMS__c inputSMS){
        
@@ -514,5 +514,153 @@ public with sharing class SMSHandlerBank {
         return sms;
     }
     // End method
+
+
+    // Balance Update methods
+    // To be merged with above methods as part of #optimization
+    // Processes SMS for ICICI Bank Amazon Credit Card
+    public static SMS__c processForICICIBankAmazonCC_BalanceUpdate(SMS__c sms) {
+        SMS__c smsOutput = new SMS__c();
+
+        try {
+            if (sms.Content__c.contains('spent using ICICI Bank Card XX7005')) {
+                smsOutput.CC_Available_Balance__c = sms.Content__c.split('Avl Limit: INR')[1].split('If not you')[0];
+                smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.replace(' ', '').replace('INR', '').replace(',', '');
+                if (smsOutput.CC_Available_Balance__c.endsWith('.')) {
+                    smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.substring(0, smsOutput.CC_Available_Balance__c.length() - 1);
+                }
+            }
+        } catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
+        }
+
+        return smsOutput;
+    }
+
+    // Processes SMS for HDFC Bank Savings Account
+    public static SMS__c processForHDFCBankSA_BalanceUpdate(SMS__c sms) {
+        SMS__c smsOutput = new SMS__c();
+
+        try {
+            if (sms.Content__c.contains('deposited')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('.Avl bal INR ')[1].split('. Cheque deposits')[0];
+            } else if (sms.Content__c.startsWith('Money Received')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: INR')[1];
+            } else if (sms.Content__c.contains('debited from HDFC Bank XX9560')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].replace(',', '');
+            } else if (sms.Content__c.startsWith('Money Transferred - ')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
+            } else if (sms.Content__c.contains('spent Rs')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
+            } else if (sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560 as on')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('INR ')[1].split(' on')[0];
+            } else if(sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560 on')){
+                List<String> contentArray = sms.Content__c.split(' ');
+                smsOutput.SA_available_balance__c = contentArray[10].substring(0, contentArray[10].length()-1);
+                smsOutput.SA_available_balance__c =  smsOutput.SA_available_balance__c.replace('.Cheque', ''); // further check added
+            } else if(sms.Content__c.startswith('Alert!') && sms.Content__c.contains('spent Rs')){
+                smsOutput.SA_Available_Balance__c = smsOutput.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
+            } 
+            else if(smsOutput.Content__c.startsWith('Money Transferred - ')){
+                smsOutput.SA_available_balance__c = smsOutput.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
+            }
+        } catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForHDFCBankSA', e);
+        }
+
+        return smsOutput;
+    }
+
+    // Processes SMS for SBI Bank Savings Account
+    public static SMS__c processForSBIBankSA_BalanceUpdate(SMS__c sms) {
+        SMS__c smsOutput = new SMS__c();
+
+        try {
+            if (sms.Content__c.contains('Your a/c no. XXXXXXXX6414 is credited by')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs ')[1].split('.-')[0].replace(',', '');
+            } else if (sms.Content__c.startsWith('Dear Customer, Your A/C XXXXX816414 has a debit')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs ')[1].split('.-')[0].replace(',', '');
+            } else if(sms.Content__c.startsWith('Your A/C XXXXX816414 has credit')){
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs ')[1].split('.-')[0].replace(',' ,'');
+            } else if(sms.Content__c.startsWith('Dear Customer, Your A/C XXXXX816414 has a debit')){
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs ')[1].split('.-')[0].replace(',', '');
+            } else if(sms.Content__c.contains('Your A/C XXXXX816414 Debited INR')){
+                smsOutput.SA_available_balance__c = sms.Content__c.split('Avl Balance INR')[1].split('-')[0].replace(',', '');
+
+            } else if(sms.Content__c.contains('withdrawn at SBI ATM')){
+                smsOutput.SA_available_balance__c = sms.Content__c.split(' ')[18].replace('Rs.', '');
+                if(smsOutput.SA_available_balance__c.endsWith('.')){
+                    smsOutput.SA_available_balance__c = smsOutput.SA_available_balance__c.substring(0, smsOutput.SA_available_balance__c.length()-1);
+                }
+            }
+        } catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForSBIBankSA', e);
+        }
+
+        return smsOutput;
+    }
+
+    // Processes SMS for ICICI Bank Credit Card
+    public static SMS__c processForICICIBankCC_BalanceUpdate(SMS__c sms) {
+        SMS__c smsOutput = new SMS__c();
+
+        try {
+            if (sms.Content__c.contains('spent on ICICI Bank Card XX9006')) {
+                smsOutput.CC_Available_Balance__c = sms.Content__c.split('Avl Lmt: INR')[1].split('. To dispute')[0];
+            }
+            else if (sms.Content__c.contains('spent using ICICI Bank Card XX9006')) {
+                smsOutput.CC_Available_Balance__c = sms.Content__c.split('Avl Limit')[1].split('If not you')[0].trim();
+                if(smsOutput.CC_Available_Balance__c.endsWith('.')){
+                    smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.substring(0, smsOutput.CC_Available_Balance__c.length() - 1);    
+                }
+                smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.replace('INR', '').replace(':', '').trim().replace(',', '');
+                
+            }
+        } catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankCC', e);
+        }
+
+        return smsOutput;
+    }
+
+    // Processes SMS for ICICI Bank Savings Account
+    public static SMS__c processForICICIBankSA_BalanceUpdate(SMS__c sms) {
+        SMS__c smsOutput = new SMS__c();
+
+        try { 
+            if (sms.Content__c.startsWith('ICICI Bank Account XX360 credited')){
+                Pattern regex = Pattern.compile('Available Balance is Rs\\. ([\\d,]+\\.\\d{2})');
+                Matcher matcher = regex.matcher(sms.Content__c);
+                if (matcher.find()) {
+                    String availableBalance = matcher.group(1);
+                    smsOutput.SA_Available_Balance__c = availableBalance;
+                    System.debug('Extracted Available Balance: ' + availableBalance);
+                }
+            } 
+            else if (sms.Content__c.startsWith('ICICI Bank Acct XX360 debited Rs.')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs. ')[1].split('To dispute call')[0].replace(',', '');
+            }
+            else if(sms.Content__c.startsWith('ICICI Bank Acc XX360 debited Rs.')){
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl Bal Rs. ')[1].split('To dispute call')[0].replace(',', '').trim();
+                if(smsOutput.SA_Available_Balance__c.endsWith('.')){
+                    smsOutput.SA_Available_Balance__c = smsOutput.SA_Available_Balance__c.substring(0, smsOutput.SA_Available_Balance__c.length()-1);
+                } 
+            }
+            else if(sms.Content__c.startsWith('ICICI Bank Acc XX360 is debited with')){
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('. Available bal: Rs. ')[1].split('. For dispute call')[0].replace(',','');
+            }
+
+            if(smsOutput.SA_Available_Balance__c.endsWith('.')){
+                smsOutput.SA_Available_Balance__c = smsOutput.SA_Available_Balance__c.substring(0, smsOutput.SA_Available_Balance__c.length() - 1);
+            }
+            smsOutput.SA_Available_Balance__c = smsOutput.SA_Available_Balance__c.replace(',', '');
+
+        } 
+        catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForICICIBankSA', e);
+        }
+
+        return smsOutput;
+    }
 
 }

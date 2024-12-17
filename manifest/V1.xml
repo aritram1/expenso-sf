@@ -11,14 +11,14 @@
 		<members>Util</members>
 		<!-- flow classes -->
 		<members>InvocableBeneficiaryAmountUpdateHandler</members>
-		<members>SMSHandlerBank</members>
-		<members>BeneficiaryHandler</members>
 		<members>InvocableBalanceUpdateHandler</members>
+		<members>SMSProcessor</members>
+		<members>BeneficiaryHandler</members>
+		<!-- API Classes -->
 		<members>SychronizeMessagesAPI</members>
 		<!-- To be Implemented -->
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
-		<members>InvocableSMSHandler</members> <!-- not required ? -->
 		<name>ApexClass</name>
 	</types>
 	<types>
@@ -29,6 +29,7 @@
 		<name>Flow</name>
 	</types>
 	<types>
+		<!-- Custom Objects -->
 		<members>Finance_Account__c</members>
 		<members>Beneficiary__c</members>
 		<members>Transaction__c</members>
@@ -36,6 +37,7 @@
 		<members>SMS__c</members>
 		<members>System_Log__c</members>
 		<members>Reminder__c</members>
+		<!-- Platform Events -->
 		<members>SMS_Platform_Event__e</members>
 		<members>Transaction_Platform_Event__e</members>
 		<members>Finance_Account_Platform_Event__e</members>
@@ -80,11 +82,6 @@
 		<members>Expenso_Admin_PS</members>
 		<name>PermissionSet</name>
 	</types>
-	<!-- Not to be sent via package.xml
-	<types>
-		<members>*</members>
-		<name>ConnectedApp</name>
-	</types>
-	-->
+	<!-- ConnectedApp => Not to be sent via package.xml -->
 	<version>58.0</version>
 </Package>
