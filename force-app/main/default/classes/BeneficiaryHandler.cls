@@ -67,7 +67,7 @@ public with sharing class BeneficiaryHandler {
                 beneficiaryName = 'Transferwise';
             }
 
-            if(beneficiaryName.toUpperCase().contains('AMAZON') || beneficiaryName.toUpperCase().contains('Amaz')){
+            if(beneficiaryName.toUpperCase().contains('AMAZON') || beneficiaryName.toUpperCase().contains('AMAZ')){
                 beneficiaryName = 'Amazon';
             }
             
