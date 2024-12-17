@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
-        <application>aritra</application>
+        <application>Expenso</application>
         <visible>true</visible>
     </applicationVisibilities>
     <fieldPermissions>
@@ -117,11 +117,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>SMS__c.Beneficiary_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>SMS__c.Beneficiary__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

@@ -10,6 +10,7 @@
     <columns>External_Id__c</columns>
     <columns>Received_At__c</columns>
     <columns>Content__c</columns>
+    <columns>Created_From__c</columns>
     <filterScope>Everything</filterScope>
     <label>Expenso SMS List</label>
 </ListView>

@@ -40,6 +40,10 @@
                 <behavior>Readonly</behavior>
                 <field>Transaction_Count__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Balance_Last_Updated_At__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

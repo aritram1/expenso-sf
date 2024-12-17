@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>*</members>
-		<name>ConnectedApp</name>
-	</types>
+        <members>Expenso</members>
+        <name>CustomApplication</name>
+    </types>
 	<types>
 		<!-- global classes -->
 		<members>FinPlanException</members>
 		<members>FinPlanLogger</members>
 		<members>Util</members>
 		<!-- flow classes -->
-		<members>InvocableSMSHandler</members>
+		<members>InvocableBeneficiaryAmountUpdateHandler</members>
 		<members>SMSHandlerBank</members>
+		<members>BeneficiaryHandler</members>
 		<members>InvocableBalanceUpdateHandler</members>
+		<members>SychronizeMessagesAPI</members>
+		<!-- To be Implemented -->
 		<members>SMSHandlerInvestment</members>
 		<members>SMSHandlerOthers</members>
-		<members>BeneficiaryHandler</members>
+		<members>InvocableSMSHandler</members> <!-- not required ? -->
 		<name>ApexClass</name>
 	</types>
 	<types>
@@ -23,12 +26,6 @@
 		<members>Expenso_2_Create_Transaction_PE_From_SMS</members>
 		<members>Expenso_3_Create_Transaction_From_Transaction_PE</members>
 		<members>Expenso_4_Update_Financial_Account_Balance_from_Financial_Account_PE</members>
-		<!-- 
-		TBD if the followings are required 
-		<members>Expenso_Subflow_Enrich_From_Information</members>
-		<members>Expenso_Subflow_Enrich_Other_Information</members>
-		<members>Expenso_Subflow_Enrich_To_Information</members>
-		-->
 		<name>Flow</name>
 	</types>
 	<types>
@@ -37,11 +34,11 @@
 		<members>Transaction__c</members>
 		<members>Investment__c</members>
 		<members>SMS__c</members>
+		<members>System_Log__c</members>
+		<members>Reminder__c</members>
 		<members>SMS_Platform_Event__e</members>
 		<members>Transaction_Platform_Event__e</members>
 		<members>Finance_Account_Platform_Event__e</members>
-		<members>System_Log__c</members>
-		<members>Reminder__c</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
@@ -75,11 +72,19 @@
 		<members>Beneficiary_Record_Page</members>
 		<members>SMS_Record_Page</members>
 		<members>Transaction_Record_Page</members>
+		<members>Finance_Account_Record_Page</members>
+		<members>System_Log_Record_Page</members>
 		<name>FlexiPage</name>
 	</types>
 	<types>
 		<members>Expenso_Admin_PS</members>
 		<name>PermissionSet</name>
 	</types>
+	<!-- Not to be sent via package.xml
+	<types>
+		<members>*</members>
+		<name>ConnectedApp</name>
+	</types>
+	-->
 	<version>58.0</version>
 </Package>

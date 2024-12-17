@@ -9,7 +9,7 @@ public with sharing class InvocableBalanceUpdateHandler {
         List<SMS__c> outputList = new List<SMS__c>();
 
         try {
-            Map<String, Finance_Account__c> mapAccounts = getAccounts(smsList);
+            Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
 
             // Ensure the list is not null or empty
             if (smsList == null || smsList.isEmpty()) {
@@ -39,24 +39,6 @@ public with sharing class InvocableBalanceUpdateHandler {
             FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e);
         }
         return outputList;
-    }
-
-    public static Map<String, Finance_Account__c> getAccounts(List<SMS__c> smsList) {
-        Map<String, Finance_Account__c> allAccountsMap = new Map<String, Finance_Account__c>();
-        List<String> allAccountIds = new List<String>();
-
-        for (SMS__c sms1 : smsList) {
-            if (sms1.Finance_Account__c != null) {
-                allAccountIds.add(sms1.Finance_Account__c);
-            }
-        }
-
-        List<Finance_Account__c> allAccounts = [SELECT Id, Name FROM Finance_Account__c WHERE Id IN :allAccountIds];
-
-        for (Finance_Account__c fa : allAccounts) {
-            allAccountsMap.put(fa.Id, fa);
-        }
-        return allAccountsMap;
     }
 
     // Processes SMS for ICICI Bank Amazon Credit Card

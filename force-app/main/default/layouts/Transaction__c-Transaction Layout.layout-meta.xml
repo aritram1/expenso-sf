@@ -62,6 +62,10 @@
                 <behavior>Edit</behavior>
                 <field>Payment_Reference__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Is_current_month_trasnaction__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>

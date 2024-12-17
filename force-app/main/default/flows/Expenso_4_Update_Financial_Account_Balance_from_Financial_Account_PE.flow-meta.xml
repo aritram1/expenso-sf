@@ -2,10 +2,26 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Update_CC_Available_Balance</name>
-        <label>Update CC Available Balance</label>
+        <name>Update_CC_Balance</name>
+        <label>Update CC Balance</label>
         <locationX>314</locationX>
-        <locationY>386</locationY>
+        <locationY>494</locationY>
+        <assignmentItems>
+            <assignToReference>financeAccountRecord.CC_Available_Limit__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CCAvailableBalanceFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Fin_Account_s_Last_Update_Time</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Fin_Account_s_Last_Update_Time</name>
+        <label>Update Fin Account&apos;s Last Update Time</label>
+        <locationX>446</locationX>
+        <locationY>686</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.CC_Available_Limit__c</assignToReference>
             <operator>Assign</operator>
@@ -21,7 +37,7 @@
         <name>Update_SA_Balance</name>
         <label>Update SA Balance</label>
         <locationX>50</locationX>
-        <locationY>386</locationY>
+        <locationY>494</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.SA_Last_Balance__c</assignToReference>
             <operator>Assign</operator>
@@ -30,14 +46,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Update_Financial_Account</targetReference>
+            <targetReference>Update_Fin_Account_s_Last_Update_Time</targetReference>
         </connector>
     </assignments>
     <decisions>
         <name>Account_Type</name>
         <label>Account Type?</label>
         <locationX>446</locationX>
-        <locationY>278</locationY>
+        <locationY>386</locationY>
         <defaultConnectorLabel>Unknown</defaultConnectorLabel>
         <rules>
             <name>Savings</name>
@@ -65,7 +81,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_CC_Available_Balance</targetReference>
+                <targetReference>Update_CC_Balance</targetReference>
             </connector>
             <label>Credit</label>
         </rules>
@@ -80,6 +96,28 @@
                 </rightValue>
             </conditions>
             <label>Investment</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>SMS_Received_Time_Fin_Account_s_Last_Update_Time</name>
+        <label>SMS Received Time &gt; Fin Account&apos;s Last Update Time</label>
+        <locationX>776</locationX>
+        <locationY>278</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SMS_Received_At__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>financeAccountRecord.Balance_Last_Updated_At__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Account_Type</targetReference>
+            </connector>
+            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -119,11 +157,11 @@
     <recordLookups>
         <name>Get_Financial_Account</name>
         <label>Get Financial Account</label>
-        <locationX>446</locationX>
+        <locationX>776</locationX>
         <locationY>170</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Account_Type</targetReference>
+            <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -144,11 +182,11 @@
         <name>Update_Financial_Account</name>
         <label>Update Financial Account</label>
         <locationX>446</locationX>
-        <locationY>578</locationY>
+        <locationY>794</locationY>
         <inputReference>financeAccountRecord</inputReference>
     </recordUpdates>
     <start>
-        <locationX>320</locationX>
+        <locationX>650</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Financial_Account</targetReference>

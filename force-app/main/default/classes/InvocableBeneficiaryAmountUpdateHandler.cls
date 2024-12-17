@@ -14,7 +14,7 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
                 return null;
             }
 
-            Map<String, Finance_Account__c> mapAccounts = getAccounts(smsList);
+            Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
 
             for (SMS__c sms : smsList) {
                 String accountName = mapAccounts.get(sms.Finance_Account__c).Name;
@@ -52,26 +52,5 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
         }
         return result;
     }
-
-    public static Map<String, Finance_Account__c> getAccounts(List<SMS__c> smsList) {
-        Map<String, Finance_Account__c> allAccountsMap = new Map<String, Finance_Account__c>();
-        List<String> allAccountIds = new List<String>();
-
-        for (SMS__c sms : smsList) {
-            if (sms.Finance_Account__c != null) {
-                allAccountIds.add(sms.Finance_Account__c);
-            }
-        }
-
-        List<Finance_Account__c> allAccounts = [
-            SELECT Id, Name
-            FROM Finance_Account__c
-            WHERE Id IN :allAccountIds
-        ];
-
-        for (Finance_Account__c fa : allAccounts) {
-            allAccountsMap.put(fa.Id, fa);
-        }
-        return allAccountsMap;
-    }
+    
 }

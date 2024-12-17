@@ -85,6 +85,12 @@
                 <identifier>RecordAccount_Code_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Balance_Last_Updated_At__c</fieldItem>
+                <identifier>RecordBalance_Last_Updated_At__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-87e2ee0b-3b1a-47e4-b084-1f4127b93de4</name>
         <type>Facet</type>
     </flexiPageRegions>

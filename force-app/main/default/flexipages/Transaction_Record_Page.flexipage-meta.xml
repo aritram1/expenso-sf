@@ -126,6 +126,12 @@
                 <identifier>RecordPayment_Via__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Is_current_month_trasnaction__c</fieldItem>
+                <identifier>RecordIs_current_month_trasnaction__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-3ddbb2bf-ec27-40c9-b295-43f47462cd8b</name>
         <type>Facet</type>
     </flexiPageRegions>

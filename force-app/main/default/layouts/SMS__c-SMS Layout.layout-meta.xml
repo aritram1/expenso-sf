@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Original_Content__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Beneficiary__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
