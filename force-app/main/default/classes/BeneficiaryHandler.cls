@@ -59,7 +59,7 @@ public with sharing class BeneficiaryHandler {
         
         if(String.isNotEmpty(beneficiaryName) && String.isNotBlank(beneficiaryName)){ // may be we are overchecking here :P
 
-            if(beneficiaryName.toUpperCase().equalsIgnoreCase('CONCEN')){
+            if(beneficiaryName.toUpperCase().contains('CONCEN')){
                 beneficiaryName = 'Concentrix';
             }
             
@@ -73,6 +73,10 @@ public with sharing class BeneficiaryHandler {
             
             if(beneficiaryName.toUpperCase().contains('ZOMATO')){
                 beneficiaryName = 'Zomato';
+            }
+
+            if(beneficiaryName.toUpperCase().contains('BLINKIT')){
+                beneficiaryName = 'BlinkIt';
             }
             
             if(beneficiaryName.toUpperCase().contains('VODAFONE')){

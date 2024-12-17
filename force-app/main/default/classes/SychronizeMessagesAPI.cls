@@ -2,6 +2,8 @@
 
 global with sharing class SychronizeMessagesAPI {
 
+    public static String className = 'SychronizeMessagesAPI';
+
     @HttpPost
     global static void sychronizeMessages() {
         try {
@@ -32,19 +34,20 @@ global with sharing class SychronizeMessagesAPI {
                     External_Id__c = sms.External_Id__c,
                     Created_From__c = 'Sync'
                 );
-                EventBus.publish(platformEvent); // firing the events from within the loop (done to maintain the order)
-                // eventsToPublish.add(platformEvent);
+                // EventBus.publish(platformEvent); // firing the events from within the loop (done to maintain the order)
+                eventsToPublish.add(platformEvent);
             }
 
             // Publish the platform events
-            // if (!eventsToPublish.isEmpty()) {
-            //     EventBus.publish(eventsToPublish);
-            // }
+            if (!eventsToPublish.isEmpty()) {
+                EventBus.publish(eventsToPublish);
+            }
 
             // Set a successful response
             res.statusCode = 200;
             res.responseBody = Blob.valueOf('Successfully published ' + eventsToPublish.size() + ' platform events.');
         } catch (Exception e) {
+            FinPlanLogger.logError(className, 'sychronizeMessages', e);
             RestContext.response.statusCode = 500;
             RestContext.response.responseBody = Blob.valueOf('Error processing SMS records: ' + e.getMessage());
         }

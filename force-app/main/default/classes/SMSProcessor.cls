@@ -18,6 +18,45 @@ public with sharing class SMSProcessor {
                 sms.amount__c = Decimal.valueOf(amount ?? '0');
                 sms.beneficiary_name__c = sms.Content__c.split('on')[2].split('Avl Limit')[0];
             }
+
+            // credit 1
+            // Payment received SMS
+            else if(sms.Content__c.contains('received on your ICICI Bank Credit Card Account')){
+
+                // Regex for INR value
+                Pattern inrRegex = Pattern.compile('INR ([\\d,]+\\.\\d+)');
+
+                // Match the INR value
+                Matcher inrMatcher = inrRegex.matcher(sms.Content__c);
+                String inrValue = '';
+
+                if (inrMatcher.find()) {
+                    inrValue = inrMatcher.group(1); // Extract the INR value
+                }
+
+                String amount =  inrValue;
+                sms.amount__c = Decimal.valueOf(amount ?? '0');
+            }
+
+            // // credit 1
+            // // Payment received SMS
+            // else if(sms.Content__c.contains('(?=.*Payment)(?=.*received)(?=.*7005)')){
+            //     // Regex for INR value
+            //     Pattern inrRegex = Pattern.compile('INR ([\\d,]+\\.\\d+)');
+
+            //     // Match the INR value
+            //     Matcher inrMatcher = inrRegex.matcher(sms.Content__c);
+            //     String inrValue = '';
+
+            //     if (inrMatcher.find()) {
+            //         inrValue = inrMatcher.group(1); // Extract the INR value
+            //     }
+
+            //     String amount =  inrValue;
+            //     sms.amount__c = Decimal.valueOf(amount ?? '0');
+            //     sms.Balance_Update__c = true;
+            // }
+
         }
         catch(Exception e){
             FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
@@ -123,6 +162,42 @@ public with sharing class SMSProcessor {
                 sms.Payment_Via__c = 'UPI';
                 String beneficiary = sms.Content__c.split(' by ')[1].split('UPI Ref No')[0];
                 sms.beneficiary_name__c = beneficiary.substring(0, beneficiary.length()-2);
+            }
+            // credit 4 
+            else if(sms.Content__c.contains('credited to HDFC Bank A/c xx9560')){
+
+                String content = sms.Content__c;
+
+                Pattern amountRegex = Pattern.compile('Rs\\.([\\d,]+(?:\\.\\d{1,2})?)');
+                Pattern beneficiaryRegex = Pattern.compile('VPA\\s([\\w@.]+)');
+                Pattern upiReferenceRegex = Pattern.compile('UPI\\s([\\d]+)');
+
+                // Match amount
+                Matcher amountMatcher = amountRegex.matcher(content);
+                String amount = '';
+                if (amountMatcher.find()) {
+                    amount = amountMatcher.group(1);
+                }
+                sms.amount__c = Decimal.valueOf(amount ?? '0');
+
+
+                // Match beneficiary
+                Matcher beneficiaryMatcher = beneficiaryRegex.matcher(content);
+                String beneficiary = '';
+                if (beneficiaryMatcher.find()) {
+                    beneficiary = beneficiaryMatcher.group(1);
+                }
+                sms.beneficiary_name__c = beneficiary;
+
+
+                // Match Reference Number
+                Matcher referenceMatcher = upiReferenceRegex.matcher(content);
+                String referenceNumber = '';
+                if (referenceMatcher.find()) {
+                    referenceNumber = referenceMatcher.group(1);
+                }
+                sms.Payment_Via__c = 'UPI';
+                sms.Payment_Reference__c = referenceNumber;
             }
             // debit1 bank transfer
             else if(sms.Content__c.contains('debited from a/c **9560') && sms.Content__c.contains('UPI')){
@@ -364,12 +439,26 @@ public with sharing class SMSProcessor {
         contentArray = sms.Content__c?.split(' ');
         
         // Credit card blocks
-        if(sms.Content__c.contains('spent on ICICI Bank Card XX9006')){
+        if(sms.Content__c.contains('ICICI Bank Card XX9006')){
+
+            Pattern inrRegex = Pattern.compile('INR ([\\d,]+\\.\\d{2})');
+            Pattern beneficiaryNameRegex = Pattern.compile('(?:.*?)on .*? on (.*?)\\.');            
             
-            sms.beneficiary_name__c = sms.Content__c.split(' at ')[1].split('. Avl Lmt')[0];
-            sms.beneficiary_name__c = Util.toCamelCase(sms.beneficiary_name__c); // convert to camel case for better readability
-            String amount =  contentArray[1].replace(',' , '');
+            // Update the amount
+            List<String> inrValues = new List<String>();
+            Matcher inrMatcher = inrRegex.matcher(sms.Content__c);
+            while (inrMatcher.find()) {
+                inrValues.add(inrMatcher.group(1).replace(',', '')); // Add each INR value to the list
+            }
+            String amount = inrValues[0];
             sms.Amount__c = Decimal.valueOf(amount ?? '0');
+            
+            Matcher infoMatcher = beneficiaryNameRegex.matcher(sms.Content__c);
+            String info = '';
+            if (infoMatcher.find()) {
+                info = infoMatcher.group(1); // Extract the text between 'on' and '.'
+            }
+            sms.beneficiary_name__c = info;
         }
         return sms;
         
@@ -602,21 +691,22 @@ public with sharing class SMSProcessor {
 
     // Processes SMS for ICICI Bank Credit Card
     public static SMS__c processForICICIBankCC_BalanceUpdate(SMS__c sms) {
+        
         SMS__c smsOutput = new SMS__c();
 
-        try {
-            if (sms.Content__c.contains('spent on ICICI Bank Card XX9006')) {
-                smsOutput.CC_Available_Balance__c = sms.Content__c.split('Avl Lmt: INR')[1].split('. To dispute')[0];
-            }
-            else if (sms.Content__c.contains('spent using ICICI Bank Card XX9006')) {
-                smsOutput.CC_Available_Balance__c = sms.Content__c.split('Avl Limit')[1].split('If not you')[0].trim();
-                if(smsOutput.CC_Available_Balance__c.endsWith('.')){
-                    smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.substring(0, smsOutput.CC_Available_Balance__c.length() - 1);    
+        try{
+            if(sms.Content__c.contains('ICICI Bank Card XX9006')){
+                Pattern inrRegex = Pattern.compile('INR ([\\d,]+\\.\\d{2})');
+                // Pattern infoRegex = Pattern.compile('on (.*?)\\.');
+                Matcher inrMatcher = inrRegex.matcher(sms.Content__c);
+                List<String> inrValues = new List<String>();
+                while (inrMatcher.find()) {
+                    inrValues.add(inrMatcher.group(1).replace(',', '')); // Add each INR value to the list, replacing the comma
                 }
-                smsOutput.CC_Available_Balance__c = smsOutput.CC_Available_Balance__c.replace('INR', '').replace(':', '').trim().replace(',', '');
-                
+                smsOutput.CC_Available_Balance__c = inrValues[1];
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankCC', e);
         }
 
