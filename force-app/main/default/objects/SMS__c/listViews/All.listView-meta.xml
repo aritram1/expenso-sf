@@ -9,6 +9,7 @@
     <columns>External_Id__c</columns>
     <columns>Sender__c</columns>
     <columns>Status__c</columns>
+    <columns>LAST_UPDATE</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

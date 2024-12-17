@@ -1,0 +1,1 @@
+sfdx force:apex:log:tail | grep <MATCHING_TEXT>

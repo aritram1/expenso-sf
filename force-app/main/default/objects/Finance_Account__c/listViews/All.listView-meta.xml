@@ -12,6 +12,7 @@
     <columns>Investment_Count__c</columns>
     <columns>Active__c</columns>
     <columns>Account_Codes__c</columns>
+    <columns>Balance_Last_Updated_At__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

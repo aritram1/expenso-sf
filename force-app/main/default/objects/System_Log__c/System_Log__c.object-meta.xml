@@ -161,8 +161,9 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>System Log</label>
     <nameField>
+        <displayFormat>Log-{000000}</displayFormat>
         <label>System Log Name</label>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>System Logs</pluralLabel>
     <searchLayouts></searchLayouts>
