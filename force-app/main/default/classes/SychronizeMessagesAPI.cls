@@ -7,6 +7,10 @@ global with sharing class SychronizeMessagesAPI {
     @HttpPost
     global static void sychronizeMessages() {
         try {
+            
+            // Delete the existing records
+            deleteExistingRecords();
+
             // Parse the incoming JSON body into a list of SMS__c records
             RestRequest req = RestContext.request;
             RestResponse res = RestContext.response;
@@ -51,5 +55,28 @@ global with sharing class SychronizeMessagesAPI {
             RestContext.response.statusCode = 500;
             RestContext.response.responseBody = Blob.valueOf('Error processing SMS records: ' + e.getMessage());
         }
+    }
+
+
+    global static void deleteExistingRecords() {
+        
+        // List of object API names
+        List<String> objectApiNames = new List<String>{
+            'SMS__c',
+            'Transaction__c',
+            'Beneficiary__c',	
+            'FlowInterview',
+            'System_Log__c'
+        };
+
+        // Loop through the objects, query and delete records
+        for (String objectApiName : objectApiNames) {
+            List<SObject> records = Database.query('SELECT Id FROM ' + objectApiName);
+            if (!records.isEmpty()) {
+                delete records;
+                Database.emptyRecycleBin(records);
+            }
+        }
+
     }
 }
