@@ -41,6 +41,7 @@
 		<members>SMS_Platform_Event__e</members>
 		<members>Transaction_Platform_Event__e</members>
 		<members>Finance_Account_Platform_Event__e</members>
+		<members>Error_Log_Platform_Event__e</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
