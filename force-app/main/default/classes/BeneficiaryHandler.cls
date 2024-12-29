@@ -62,6 +62,10 @@ public with sharing class BeneficiaryHandler {
             if(beneficiaryName.toUpperCase().contains('CONCEN')){
                 beneficiaryName = 'Concentrix';
             }
+
+            if(beneficiaryName.toUpperCase().contains('LICIOUS')){
+                beneficiaryName = 'Licious';
+            }
             
             if(beneficiaryName.toUpperCase().contains('YESB0000001')){
                 beneficiaryName = 'Transferwise';

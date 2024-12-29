@@ -4,7 +4,7 @@
     <decisions>
         <name>Record_Found</name>
         <label>Record Found?</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>278</locationY>
         <defaultConnector>
             <targetReference>Create_Transaction</targetReference>
@@ -14,12 +14,15 @@
             <name>Yes_1</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>transactionRecord.Id</leftValueReference>
+                <leftValueReference>Get_Transaction_Record.Id</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Update_Transactions</targetReference>
+            </connector>
             <label>Yes</label>
         </rules>
     </decisions>
@@ -54,7 +57,7 @@
     <recordCreates>
         <name>Create_Transaction</name>
         <label>Create Transaction</label>
-        <locationX>308</locationX>
+        <locationX>314</locationX>
         <locationY>386</locationY>
         <inputAssignments>
             <field>Amount__c</field>
@@ -128,7 +131,7 @@
     <recordLookups>
         <name>Get_Transaction_Record</name>
         <label>Get Transaction Record</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>170</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -142,16 +145,56 @@
                 <elementReference>$Record.External_Id__c</elementReference>
             </value>
         </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Transaction__c</object>
-        <outputReference>transactionRecord</outputReference>
-        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <start>
+    <recordUpdates>
+        <name>Update_Transactions</name>
+        <label>Update Transactions</label>
         <locationX>50</locationX>
+        <locationY>386</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Transaction_Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Amount__c</field>
+            <value>
+                <elementReference>formulaAmount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Beneficiary_Name__c</field>
+            <value>
+                <elementReference>$Record.Beneficiary_Name__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Payment_Reference__c</field>
+            <value>
+                <elementReference>$Record.Payment_Reference__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Payment_Via__c</field>
+            <value>
+                <elementReference>$Record.Payment_Via__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Transaction__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Transaction_Record</targetReference>
         </connector>
+        <flowRunAsUser>TriggeringUser</flowRunAsUser>
         <object>Transaction_Platform_Event__e</object>
         <triggerType>PlatformEvent</triggerType>
     </start>

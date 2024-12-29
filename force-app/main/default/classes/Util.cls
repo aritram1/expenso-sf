@@ -63,6 +63,22 @@ public with sharing class Util {
         }
         return allAccountsMap;
     }
+
+    public static String sanitizeNumber(String str){
+        String strUpperCase = str.toUpperCase().trim();
+        strUpperCase = strUpperCase
+                        .replace('INR', '')
+                        .replace('RS', '')
+                        .replace(',', '')
+                        .trim();
+        if(strUpperCase.endsWith('.')){
+            strUpperCase = strUpperCase.substring(0, strUpperCase.length()-1);
+        }
+        if(strUpperCase.startsWith('.')){
+            strUpperCase = strUpperCase.substring(1, strUpperCase.length());
+        }
+        return strUpperCase;
+    }
     
     // // Utility method : Clone a record of Transaction_Platform_Event__e
     // public static Transaction_Platform_Event__e cloneTransactionPE(Transaction_Platform_Event__e source) {

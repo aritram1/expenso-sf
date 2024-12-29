@@ -238,6 +238,37 @@ public with sharing class SMSProcessor {
                 sms.beneficiary_name__c = Util.toCamelCase(sms.beneficiary_name__c); // convert to camel case for better readability
                 
             }
+            // debit3.1 UPI where sms starts like 
+            else if(sms.Content__c.contains('debited from HDFC Bank A/c **9560')){
+                
+                String content = sms.Content__c;
+                
+                // Regular expressions
+                String amountPattern = 'Rs\\.\\s*([\\d.,]+)';
+                String toInfoPattern = 'to\\s+(A/c\\s+\\*\\*\\d+)';
+                String refNoPattern = 'Ref No\\s+(\\d+)';
+
+                // Extract amount
+                Pattern amountRegex = Pattern.compile(amountPattern);
+                Matcher amountMatcher = amountRegex.matcher(content);
+                String amount = amountMatcher.find() ? amountMatcher.group(1) : null;
+
+                // Extract 'To' information
+                Pattern toInfoRegex = Pattern.compile(toInfoPattern);
+                Matcher toInfoMatcher = toInfoRegex.matcher(content);
+                String toInfo = toInfoMatcher.find() ? toInfoMatcher.group(1) : null;
+
+                // Extract reference number
+                Pattern refNoRegex = Pattern.compile(refNoPattern);
+                Matcher refNoMatcher = refNoRegex.matcher(content);
+                String refNo = refNoMatcher.find() ? refNoMatcher.group(1) : null;
+
+                sms.amount__c = Decimal.valueOf(amount ?? '0');
+                sms.Beneficiary_Name__c = Util.toCamelCase(toInfo);
+                sms.Payment_Reference__c = refNo;
+                sms.Payment_Via__c = 'UPI';
+        
+            }
             // debit4 via NEFT/IMPS 
             // where sms starts like "Thanks for paying ..."
             else if(sms.Content__c.startswith('Thanks for paying Rs.')){
@@ -322,16 +353,38 @@ public with sharing class SMSProcessor {
                 }
 
             }
-                
-            // debit 8 - ATM withdrawal
-            // where sms starts like "You've withdrawn Rs."
-            else if(sms.Content__c.contains('ve withdrawn Rs.')){
-                String amount =  contentArray[2].replace(',' , '').replace('Rs.', '');
-                sms.Amount__c = Decimal.valueOf(amount ?? '0');
 
+            // debit 8 - ATM withdrawal
+            else if(sms.Content__c.contains('withdrawn from')){
+                
+                String content = sms.Content__c;
+                
+                String amountPattern = 'Rs\\.([\\d]+)'; // Matches "Rs." followed by digits (the amount)
+                String toInfoPattern = 'at\\s+(.+?)\\s+on'; // Matches text after "at" and before "on"
+                String avlBalPattern = 'Avl bal:\\s*([\\d]+(?:\\.\\d{1,2})?)\\b'; // Matches "Avl bal:" followed by digits and decimal point
+
+                // Extract amount
+                Pattern amountRegex = Pattern.compile(amountPattern);
+                Matcher amountMatcher = amountRegex.matcher(content);
+                String amount = amountMatcher.find() ? amountMatcher.group(1) : null;
+                amount = amount.replace(',', '');
+
+                amount = sms.Content__c.split(' ')[0].replace('Rs.', '');
+
+                // Extract 'To' information
+                Pattern toInfoRegex = Pattern.compile(toInfoPattern);
+                Matcher toInfoMatcher = toInfoRegex.matcher(content);
+                String toInfo = toInfoMatcher.find() ? toInfoMatcher.group(1) : null;
+
+                // Extract available balance
+                Pattern avlBalRegex = Pattern.compile(avlBalPattern);
+                Matcher avlBalMatcher = avlBalRegex.matcher(content);
+                String avlBalance = avlBalMatcher.find() ? avlBalMatcher.group(1) : null;
+
+                sms.Amount__c = Decimal.valueOf(amount ?? '0');
+                sms.beneficiary_name__c = 'Self Transfer';
                 sms.Payment_Via__c = 'ATM';
-                sms.beneficiary_name__c = 'HDFC ATM withdrawal';
-                sms.beneficiary_name__c = Util.toCamelCase(sms.beneficiary_name__c);
+                sms.SA_Available_Balance__c = avlBalance;
             }
         }
         catch(Exception e){
@@ -641,13 +694,11 @@ public with sharing class SMSProcessor {
                 smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
             } else if (sms.Content__c.contains('spent Rs')) {
                 smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
-            } else if (sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560 as on')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('INR ')[1].split(' on')[0];
-            } else if(sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560 on')){
-                List<String> contentArray = sms.Content__c.split(' ');
-                smsOutput.SA_available_balance__c = contentArray[10].substring(0, contentArray[10].length()-1);
-                smsOutput.SA_available_balance__c =  smsOutput.SA_available_balance__c.replace('.Cheque', ''); // further check added
-            } else if(sms.Content__c.startswith('Alert!') && sms.Content__c.contains('spent Rs')){
+            } else if (sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560')) {
+                smsOutput.SA_Available_Balance__c = sms.Content__c.split('INR ')[1].split('Cheques')[0];
+                smsOutput.SA_Available_Balance__c = Util.sanitizeNumber(smsOutput.SA_Available_Balance__c);
+            } 
+            else if(sms.Content__c.startswith('Alert!') && sms.Content__c.contains('spent Rs')){
                 smsOutput.SA_Available_Balance__c = smsOutput.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
             } 
             else if(smsOutput.Content__c.startsWith('Money Transferred - ')){
