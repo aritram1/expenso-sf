@@ -14,7 +14,7 @@ public with sharing class SMSProcessor {
 
             // debit 1
             if(sms.Content__c.contains('spent using ICICI Bank Card XX7005')){
-                String amount =  contentArray[1];
+                String amount =  contentArray[1].replace(',', '');
                 sms.amount__c = Decimal.valueOf(amount ?? '0');
                 sms.beneficiary_name__c = sms.Content__c.split('on')[2].split('Avl Limit')[0];
             }
