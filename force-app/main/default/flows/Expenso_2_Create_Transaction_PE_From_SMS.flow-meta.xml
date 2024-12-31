@@ -4,12 +4,15 @@
         <name>Extract_Balance_Information</name>
         <label>Extract Balance Information</label>
         <locationX>50</locationX>
-        <locationY>1055</locationY>
+        <locationY>1079</locationY>
         <actionName>InvocableBalanceUpdateHandler</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Assign_Balance_Information_in_SMS_Record</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Generate_Log_1</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>smsList</name>
@@ -34,6 +37,9 @@
         <connector>
             <targetReference>Assign_Beneficiary_and_amount_information_in_SMS_Record</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Generate_Log</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>smsList</name>
@@ -53,7 +59,7 @@
         <name>Assign_Balance_Information_in_SMS_Record</name>
         <label>Assign Balance Information in SMS Record</label>
         <locationX>50</locationX>
-        <locationY>1163</locationY>
+        <locationY>1187</locationY>
         <assignmentItems>
             <assignToReference>outputSMS.SA_Available_Balance__c</assignToReference>
             <operator>Assign</operator>
@@ -73,13 +79,6 @@
             <operator>Assign</operator>
             <value>
                 <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>outputSMS.Amount__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>OutputFromAction_BalanceUpdate.Amount__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -140,7 +139,7 @@
     <assignments>
         <name>Populate_Output_SMS</name>
         <label>Populate Output SMS</label>
-        <locationX>182</locationX>
+        <locationX>314</locationX>
         <locationY>323</locationY>
         <assignmentItems>
             <assignToReference>outputSMS</assignToReference>
@@ -153,12 +152,19 @@
             <targetReference>Create_Transaction</targetReference>
         </connector>
     </assignments>
+    <constants>
+        <name>FLOW_NAME</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Expenso - 2. Create Transaction PE From SMS</stringValue>
+        </value>
+    </constants>
     <decisions>
         <description>Check if balance update is true and finance account is present</description>
         <name>Balance_Update_Required</name>
         <label>Balance Update Required?</label>
-        <locationX>182</locationX>
-        <locationY>947</locationY>
+        <locationX>314</locationX>
+        <locationY>971</locationY>
         <defaultConnector>
             <targetReference>Update_SMS</targetReference>
         </defaultConnector>
@@ -189,7 +195,7 @@
     <decisions>
         <name>Create_Transaction</name>
         <label>Create Transaction?</label>
-        <locationX>182</locationX>
+        <locationX>314</locationX>
         <locationY>431</locationY>
         <defaultConnector>
             <targetReference>Balance_Update_Required</targetReference>
@@ -221,8 +227,8 @@
     <decisions>
         <name>Update_SMS</name>
         <label>Update SMS?</label>
-        <locationX>182</locationX>
-        <locationY>1463</locationY>
+        <locationX>314</locationX>
+        <locationY>1511</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_3</name>
@@ -271,7 +277,7 @@
         <name>Generate_Financial_Account_Platform_Event</name>
         <label>Generate Financial Account Platform Event</label>
         <locationX>50</locationX>
-        <locationY>1271</locationY>
+        <locationY>1295</locationY>
         <connector>
             <targetReference>Update_SMS</targetReference>
         </connector>
@@ -309,6 +315,120 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Generate_Log</name>
+        <label>Generate Log</label>
+        <locationX>314</locationX>
+        <locationY>647</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <stringValue>Error occurred while extracting beneficiary and amount</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_Component__c</field>
+            <value>
+                <elementReference>FLOW_NAME</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <elementReference>outputSMS.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log_Platform_Event__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Generate_Log_1</name>
+        <label>Generate Log</label>
+        <locationX>314</locationX>
+        <locationY>1187</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <stringValue>Error occurred while extracting balance</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_Component__c</field>
+            <value>
+                <elementReference>FLOW_NAME</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <elementReference>outputSMS.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log_Platform_Event__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Generate_Log_2</name>
+        <label>Generate Log</label>
+        <locationX>314</locationX>
+        <locationY>1727</locationY>
+        <inputAssignments>
+            <field>Component_Name__c</field>
+            <value>
+                <elementReference>FLOW_NAME</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <stringValue>Error occurred while updatign the SMS from transaction flow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <elementReference>outputSMS.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Generate_Transaction_Platform_Event</name>
         <label>Generate Transaction Platform Event</label>
         <locationX>50</locationX>
@@ -319,7 +439,7 @@
         <inputAssignments>
             <field>Amount__c</field>
             <value>
-                <elementReference>OutputFromAction_BeneficiaryAmount.Amount__c</elementReference>
+                <elementReference>outputSMS.Amount__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -331,13 +451,13 @@
         <inputAssignments>
             <field>Beneficiary_Name__c</field>
             <value>
-                <elementReference>OutputFromAction_BeneficiaryAmount.Beneficiary_Name__c</elementReference>
+                <elementReference>outputSMS.Beneficiary_Name__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Beneficiary__c</field>
             <value>
-                <elementReference>OutputFromAction_BeneficiaryAmount.Beneficiary__c</elementReference>
+                <elementReference>outputSMS.Beneficiary__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -355,13 +475,13 @@
         <inputAssignments>
             <field>Payment_Reference__c</field>
             <value>
-                <elementReference>OutputFromAction_BeneficiaryAmount.Payment_Reference__c</elementReference>
+                <elementReference>outputSMS.Payment_Reference__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Payment_Via__c</field>
             <value>
-                <elementReference>OutputFromAction_BeneficiaryAmount.Payment_Via__c</elementReference>
+                <elementReference>outputSMS.Payment_Via__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -395,11 +515,14 @@
         <name>Update_The_SMS_Record</name>
         <label>Update The SMS Record</label>
         <locationX>50</locationX>
-        <locationY>1571</locationY>
+        <locationY>1619</locationY>
+        <faultConnector>
+            <targetReference>Generate_Log_2</targetReference>
+        </faultConnector>
         <inputReference>outputSMS</inputReference>
     </recordUpdates>
     <start>
-        <locationX>56</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Populate_Output_SMS</targetReference>

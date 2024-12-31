@@ -4,7 +4,7 @@
     <assignments>
         <name>Assign_External_Id</name>
         <label>Assign External Id</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>602</locationY>
         <assignmentItems>
             <assignToReference>SMSRecord.External_Id__c</assignToReference>
@@ -36,7 +36,7 @@
     <assignments>
         <name>Assign_Other_Info_For_Create</name>
         <label>Assign Other Info</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>494</locationY>
         <assignmentItems>
             <assignToReference>SMSRecord.Type__c</assignToReference>
@@ -268,10 +268,17 @@
             <stringValue>rs\\.?|inr</stringValue>
         </value>
     </constants>
+    <constants>
+        <name>FLOW_NAME</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Expenso - 1. Create SMS from SMS PE</stringValue>
+        </value>
+    </constants>
     <decisions>
         <name>SMS_Exists</name>
         <label>SMS Exists?</label>
-        <locationX>182</locationX>
+        <locationX>314</locationX>
         <locationY>386</locationY>
         <defaultConnector>
             <targetReference>Assign_Other_Info_For_Create</targetReference>
@@ -339,7 +346,7 @@
         REGEX(LOWER({!$Record.Content__c}), &quot;.*(xxx360|xx360|a/cx360).*&quot;),
         &quot;ICICI-SA&quot;,
         IF(
-            REGEX(LOWER({!$Record.Content__c}), &quot;.*(9560|x9560|\\*9560|xxxx9560|hdfc bank a/c).*&quot;),
+            REGEX(LOWER({!$Record.Content__c}), &quot;.*(9560|x9560|\\*9560|xxxx9560|hdfc bank a/c|7164).*&quot;),
             &quot;HDFC-SA&quot;,
             IF(
                 REGEX(LOWER({!$Record.Content__c}), &quot;.*(9006|x9006).*&quot;),
@@ -387,14 +394,93 @@
     <recordCreates>
         <name>Create_SMS_Record</name>
         <label>Create SMS Record</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>710</locationY>
+        <faultConnector>
+            <targetReference>Generate_Log</targetReference>
+        </faultConnector>
         <inputReference>SMSRecord</inputReference>
+    </recordCreates>
+    <recordCreates>
+        <name>Generate_Log</name>
+        <label>Generate Log</label>
+        <locationX>842</locationX>
+        <locationY>818</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_Component__c</field>
+            <value>
+                <elementReference>FLOW_NAME</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <elementReference>SMSRecord.External_Id__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log_Platform_Event__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Generate_Log_1</name>
+        <label>Generate Log</label>
+        <locationX>314</locationX>
+        <locationY>818</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_Component__c</field>
+            <value>
+                <elementReference>FLOW_NAME</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Related_To__c</field>
+            <value>
+                <stringValue>{!Get_SMS.Id}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Stack_Trace__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <object>System_Log_Platform_Event__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
         <name>Get_Finance_Account</name>
         <label>Get Finance Account</label>
-        <locationX>182</locationX>
+        <locationX>314</locationX>
         <locationY>170</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -415,7 +501,7 @@
     <recordLookups>
         <name>Get_SMS</name>
         <label>Get SMS</label>
-        <locationX>182</locationX>
+        <locationX>314</locationX>
         <locationY>278</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -438,10 +524,13 @@
         <label>Update SMS Record</label>
         <locationX>50</locationX>
         <locationY>710</locationY>
+        <faultConnector>
+            <targetReference>Generate_Log_1</targetReference>
+        </faultConnector>
         <inputReference>SMSRecord</inputReference>
     </recordUpdates>
     <start>
-        <locationX>56</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Finance_Account</targetReference>

@@ -9,6 +9,7 @@
 		<members>FinPlanException</members>
 		<members>FinPlanLogger</members>
 		<members>Util</members>
+		<members>GlobalConstants</members>
 		<!-- flow classes -->
 		<members>InvocableBeneficiaryAmountUpdateHandler</members>
 		<members>InvocableBalanceUpdateHandler</members>
@@ -41,7 +42,7 @@
 		<members>SMS_Platform_Event__e</members>
 		<members>Transaction_Platform_Event__e</members>
 		<members>Finance_Account_Platform_Event__e</members>
-		<members>Error_Log_Platform_Event__e</members>
+		<members>System_Log_Platform_Event__e</members>
 		<name>CustomObject</name>
 	</types>
 	<types>

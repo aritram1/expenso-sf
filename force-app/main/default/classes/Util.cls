@@ -36,6 +36,10 @@ public with sharing class Util {
                     modifiedWords.add(word.toUpperCase());  // if there is only one character in the word
                 }
                 else if(word.length() > 1){ // if there are atleast 2 characters in a word
+                    if (GlobalConstants.ALL_CAPS_NAMES.contains(word.toUpperCase())){ // Do not convert the bank names to camel case as they are named in the system
+                        modifiedWords.add(word.toUpperCase());
+                        continue;
+                    }
                     String firstAlphabet = word.substring(0, 1).toUpperCase();
                     String rest = word.substring(1, word.length()).toLowerCase();
                     modifiedWords.add(firstAlphabet + rest);

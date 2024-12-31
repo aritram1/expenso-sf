@@ -136,6 +136,24 @@
                 <identifier>RecordSender_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Beneficiary_Processed__c</fieldItem>
+                <identifier>RecordBeneficiary_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Amount_Processed__c</fieldItem>
+                <identifier>RecordAmount_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Payment_Info_Processed__c</fieldItem>
+                <identifier>RecordPayment_Info_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -343,6 +361,26 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Finance_Account__c</fieldItem>
                 <identifier>RecordFinance_Account_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Payment_Via__c</fieldItem>
+                <identifier>RecordPayment_Via_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Payment_Reference__c</fieldItem>
+                <identifier>RecordPayment_Reference_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>

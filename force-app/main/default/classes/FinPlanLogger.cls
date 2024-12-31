@@ -41,16 +41,17 @@ public with sharing class FinPlanLogger {
 
     // Centralized error logging
     public static void logError(String className, String methodName, Exception e) {
-        try {
-            System_Log__c log = new System_Log__c();
-            log.related_to__c = className + '.' + methodName;
-            log.type__c = 'Error';
-            log.message__c = 'Line: ' + e.getLineNumber();
-            log.stack_trace__c = e.getStackTraceString();
-            insert log;
-        } catch (Exception loggingException) {
-            System.debug('Error during error logging: ' + loggingException.getMessage());
-        }
+        throw e;
+        // try {
+        //     System_Log__c log = new System_Log__c();
+        //     log.related_to__c = className + '.' + methodName;
+        //     log.type__c = 'Error';
+        //     log.message__c = 'Line: ' + e.getLineNumber();
+        //     log.stack_trace__c = e.getStackTraceString();
+        //     insert log;
+        // } catch (Exception loggingException) {
+        //     System.debug('Error during error logging: ' + loggingException.getMessage());
+        // }
     }
-
+    
 }

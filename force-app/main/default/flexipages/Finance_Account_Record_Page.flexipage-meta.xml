@@ -87,6 +87,10 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Balance_Last_Updated_At__c</fieldItem>
                 <identifier>RecordBalance_Last_Updated_At__cField</identifier>
             </fieldInstance>
@@ -123,6 +127,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.OwnerId</fieldItem>
                 <identifier>RecordOwnerIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Balance_Last_Updated_At__c</fieldItem>
+                <identifier>RecordBalance_Last_Updated_At_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-46ca910e-7055-4237-b08a-4b19e8ff34c6</name>

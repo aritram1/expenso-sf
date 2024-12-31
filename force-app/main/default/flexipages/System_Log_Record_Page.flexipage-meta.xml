@@ -95,6 +95,12 @@
                 <identifier>RecordType_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Component_Name__c</fieldItem>
+                <identifier>RecordFlow_Path__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-ddce6856-c47a-4597-97b5-4f529d636391</name>
         <type>Facet</type>
     </flexiPageRegions>
