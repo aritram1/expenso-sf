@@ -1,6 +1,9 @@
 public with sharing class Util {
     
     public static String clipTo255char(String str){
+        if(str == null) {
+            return str;
+        }
         return str.length() <= 255 ? str : str.substring(0, 255);
     }
 

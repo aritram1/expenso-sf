@@ -50,8 +50,9 @@ global with sharing class SychronizeMessagesAPI {
             // Set a successful response
             res.statusCode = 200;
             res.responseBody = Blob.valueOf('Successfully published ' + eventsToPublish.size() + ' platform events.');
-        } catch (Exception e) {
-            FinPlanLogger.logError(className, 'sychronizeMessages', e);
+        } 
+        catch (Exception e) {
+            FinPlanLogger.logError(className, 'sychronizeMessages', e, null); // the last parameter is the entity Id, which is not applicable here, since it is outside the loop
             RestContext.response.statusCode = 500;
             RestContext.response.responseBody = Blob.valueOf('Error processing SMS records: ' + e.getMessage());
         }

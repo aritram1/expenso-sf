@@ -59,7 +59,7 @@ public with sharing class SMSProcessor {
 
         }
         catch(Exception e){
-            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return sms;
@@ -87,7 +87,7 @@ public with sharing class SMSProcessor {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankRupayCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankRupayCC', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return sms;
     }
@@ -324,7 +324,7 @@ public with sharing class SMSProcessor {
             }
             else if(sms.Content__c.startsWith('Sent Rs.')){
 
-                // Regex to extract the beneficiary name (PISTA HOUSE)
+                // Regex to extract the beneficiary name
                 Pattern nameRegex = Pattern.compile('To ([\\w\\s]+) On');
                 Matcher nameMatcher = nameRegex.matcher(sms.Content__c);
                 if (nameMatcher.find()) {
@@ -333,7 +333,7 @@ public with sharing class SMSProcessor {
                     System.debug('Extracted Name: ' + sms.Beneficiary_Name__c);
                 }
 
-                // Regex to extract the amount (150.00)
+                // Regex to extract the amount
                 Pattern amountRegex = Pattern.compile('Sent Rs\\.([\\d\\.]+)');
                 Matcher amountMatcher = amountRegex.matcher(sms.Content__c);
                 if (amountMatcher.find()) {
@@ -388,7 +388,7 @@ public with sharing class SMSProcessor {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return sms;
     }
@@ -477,7 +477,7 @@ public with sharing class SMSProcessor {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return sms;
     }
@@ -651,7 +651,7 @@ public with sharing class SMSProcessor {
             }
         }
         catch(Exception e){
-            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return sms;
     }
@@ -673,7 +673,7 @@ public with sharing class SMSProcessor {
                 }
             }
         } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankAmazonCC', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;
@@ -705,7 +705,7 @@ public with sharing class SMSProcessor {
                 smsOutput.SA_available_balance__c = smsOutput.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
             }
         } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForHDFCBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForHDFCBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;
@@ -734,7 +734,7 @@ public with sharing class SMSProcessor {
                 }
             }
         } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForSBIBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForSBIBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;
@@ -758,7 +758,7 @@ public with sharing class SMSProcessor {
             }
         }
         catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankCC', e);
+            FinPlanLogger.logError(CLASS_NAME, 'processForICICIBankCC', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;
@@ -798,7 +798,7 @@ public with sharing class SMSProcessor {
 
         } 
         catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForICICIBankSA', e);
+            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForICICIBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;

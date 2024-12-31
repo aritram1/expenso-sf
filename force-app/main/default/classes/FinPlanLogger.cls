@@ -40,17 +40,14 @@ public with sharing class FinPlanLogger {
 
 
     // Centralized error logging
-    public static void logError(String className, String methodName, Exception e) {
+    public static void logError(String className, String methodName, Exception e, SObject so) {
         try {
             System_Log__c log = new System_Log__c();
             log.component_name__c = className + '.' + methodName;
-            log.Related_To__c = 'Not assigned';
+            log.Related_To__c = (so != null && so.getSObjectType().getDescribe().fields.getMap().containsKey('Name')) ? (String)so.get('Name') : 'not available';
             log.type__c = 'Error';
             log.message__c = 'Error from Apex class :' + className;
-            
-            String stackTrace = e.getStackTraceString()?.length() > 255 ? e.getStackTraceString().substring(0, 255) : e.getStackTraceString();
-            log.stack_trace__c = stackTrace;
-
+            log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
             insert log;
         }
         catch (Exception ex) {

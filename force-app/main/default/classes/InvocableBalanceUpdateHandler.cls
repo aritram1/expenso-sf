@@ -48,7 +48,7 @@ public with sharing class InvocableBalanceUpdateHandler {
             }
 
         } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e);
+            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return outputList;
     }
