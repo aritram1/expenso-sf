@@ -61,7 +61,7 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
             result = BeneficiaryHandler.updateBeneficiary(result);
 
         } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e);
+            FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return result;
     }
