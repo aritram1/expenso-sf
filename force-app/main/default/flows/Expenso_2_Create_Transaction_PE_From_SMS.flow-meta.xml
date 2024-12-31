@@ -132,6 +132,27 @@
                 <elementReference>OutputFromAction_BeneficiaryAmount.Beneficiary__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>outputSMS.Beneficiary_Processed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>outputSMS.Amount_Processed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>outputSMS.Payment_Info_Processed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Generate_Transaction_Platform_Event</targetReference>
         </connector>
@@ -248,9 +269,19 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>formulaAmount</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(TEXT({!outputSMS.Amount__c}) , &apos;,&apos; , &apos;&apos; )</expression>
+    </formulas>
+    <formulas>
         <name>formulaDateTime_SMSReceivedAt</name>
         <dataType>DateTime</dataType>
         <expression>DATETIMEVALUE({!$Record.Received_At__c})</expression>
+    </formulas>
+    <formulas>
+        <name>stackTraceErrorMessage255Chars</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Flow.FaultMessage}, 255)</expression>
     </formulas>
     <interviewLabel>Expenso - 2. Create Transaction PE From SMS {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Expenso - 2. Create Transaction PE From SMS</label>
@@ -275,7 +306,7 @@
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
         <name>Generate_Financial_Account_Platform_Event</name>
-        <label>Generate Financial Account Platform Event</label>
+        <label>Generate Financial Account Platform Events</label>
         <locationX>50</locationX>
         <locationY>1295</locationY>
         <connector>
@@ -340,7 +371,7 @@
         <inputAssignments>
             <field>Stack_Trace__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -378,7 +409,7 @@
         <inputAssignments>
             <field>Stack_Trace__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -416,7 +447,7 @@
         <inputAssignments>
             <field>Stack_Trace__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -439,7 +470,7 @@
         <inputAssignments>
             <field>Amount__c</field>
             <value>
-                <elementReference>outputSMS.Amount__c</elementReference>
+                <elementReference>formulaAmount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

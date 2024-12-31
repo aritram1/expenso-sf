@@ -766,7 +766,6 @@ public with sharing class SMSProcessor {
 
     // Processes SMS for ICICI Bank Savings Account
     public static SMS__c processForICICIBankSA_BalanceUpdate(SMS__c sms) {
-        
         SMS__c smsOutput = new SMS__c();
 
         try { 

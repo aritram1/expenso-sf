@@ -366,6 +366,11 @@
 )</expression>
     </formulas>
     <formulas>
+        <name>stackTraceErrorMessage255Chars</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Flow.FaultMessage}, 255)</expression>
+    </formulas>
+    <formulas>
         <name>transactionDateFormula</name>
         <dataType>Date</dataType>
         <expression>DATEVALUE({!$Record.Received_At__c})</expression>
@@ -409,7 +414,7 @@
         <inputAssignments>
             <field>Message__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <stringValue>Error occurred while creating SMS from PE</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -421,51 +426,13 @@
         <inputAssignments>
             <field>Related_To__c</field>
             <value>
-                <elementReference>SMSRecord.External_Id__c</elementReference>
+                <elementReference>SMSRecord.Name</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Stack_Trace__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Type__c</field>
-            <value>
-                <stringValue>Error</stringValue>
-            </value>
-        </inputAssignments>
-        <object>System_Log_Platform_Event__e</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
-        <name>Generate_Log_1</name>
-        <label>Generate Log</label>
-        <locationX>314</locationX>
-        <locationY>818</locationY>
-        <inputAssignments>
-            <field>Message__c</field>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Related_Component__c</field>
-            <value>
-                <elementReference>FLOW_NAME</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Related_To__c</field>
-            <value>
-                <stringValue>{!Get_SMS.Id}</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Stack_Trace__c</field>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -525,7 +492,8 @@
         <locationX>50</locationX>
         <locationY>710</locationY>
         <faultConnector>
-            <targetReference>Generate_Log_1</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>Generate_Log</targetReference>
         </faultConnector>
         <inputReference>SMSRecord</inputReference>
     </recordUpdates>

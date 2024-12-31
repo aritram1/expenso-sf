@@ -13,13 +13,13 @@
 		<!-- flow classes -->
 		<members>InvocableBeneficiaryAmountUpdateHandler</members>
 		<members>InvocableBalanceUpdateHandler</members>
-		<members>SMSProcessor</members>
-		<members>BeneficiaryHandler</members>
 		<!-- API Classes -->
 		<members>SychronizeMessagesAPI</members>
-		<!-- To be Implemented -->
-		<members>SMSHandlerInvestment</members>
-		<members>SMSHandlerOthers</members>
+		<!-- Other classes -->
+		<members>SMSProcessor</members>
+		<members>BeneficiaryHandler</members>
+		<members>SMSHandlerInvestment</members>	<!-- To be Implemented -->
+		<members>SMSHandlerOthers</members>		<!-- To be Implemented -->
 		<name>ApexClass</name>
 	</types>
 	<types>
@@ -27,6 +27,7 @@
 		<members>Expenso_2_Create_Transaction_PE_From_SMS</members>
 		<members>Expenso_3_Create_Transaction_From_Transaction_PE</members>
 		<members>Expenso_4_Update_Financial_Account_Balance_from_Financial_Account_PE</members>
+		<members>Expenso_5_Create_System_Log_From_System_Log_PE</members>
 		<name>Flow</name>
 	</types>
 	<types>

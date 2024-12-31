@@ -4,5 +4,9 @@
 		<members>System_Log_Platform_Event__e</members>
 		<name>CustomObject</name>
 	</types>
+	<types>
+		<members>Expenso_5_Create_System_Log_From_System_Log_PE</members>
+		<name>Flow</name>
+	</types>
 	<version>62.0</version>
 </Package>

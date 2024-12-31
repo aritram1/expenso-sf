@@ -218,6 +218,11 @@
         <expression>Value({!$Record.SA_Balance__c})</expression>
         <scale>2</scale>
     </formulas>
+    <formulas>
+        <name>stackTraceErrorMessage255Chars</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Flow.FaultMessage}, 255)</expression>
+    </formulas>
     <interviewLabel>Expenso - 4. Update Financial Account Balance from Financial Account PE {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Expenso - 4. Update Financial Account Balance from Financial Account PE</label>
     <processMetadataValues>
@@ -247,7 +252,7 @@
         <inputAssignments>
             <field>Message__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -265,7 +270,7 @@
         <inputAssignments>
             <field>Stack_Trace__c</field>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>stackTraceErrorMessage255Chars</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
