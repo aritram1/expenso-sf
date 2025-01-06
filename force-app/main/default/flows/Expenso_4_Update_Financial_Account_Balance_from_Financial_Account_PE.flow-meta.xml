@@ -4,8 +4,8 @@
     <assignments>
         <name>Update_CC_Balance</name>
         <label>Update CC Balance</label>
-        <locationX>490</locationX>
-        <locationY>494</locationY>
+        <locationX>314</locationX>
+        <locationY>386</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.CC_Available_Limit__c</assignToReference>
             <operator>Assign</operator>
@@ -20,8 +20,8 @@
     <assignments>
         <name>Update_CC_Last_Paid_Amount_and_Date</name>
         <label>Update CC Last Paid Amount and Date</label>
-        <locationX>490</locationX>
-        <locationY>602</locationY>
+        <locationX>314</locationX>
+        <locationY>494</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.CC_Last_Paid_Amount__c</assignToReference>
             <operator>Assign</operator>
@@ -44,7 +44,7 @@
         <name>Update_Fin_Account_s_Last_Update_Time</name>
         <label>Update Fin Account&apos;s Last Update Time</label>
         <locationX>50</locationX>
-        <locationY>602</locationY>
+        <locationY>494</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.Balance_Last_Updated_At__c</assignToReference>
             <operator>Assign</operator>
@@ -59,8 +59,8 @@
     <assignments>
         <name>Update_Fin_Account_s_Last_Update_Time_1</name>
         <label>Update Fin Account&apos;s Last Update Time</label>
-        <locationX>490</locationX>
-        <locationY>710</locationY>
+        <locationX>314</locationX>
+        <locationY>602</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.Balance_Last_Updated_At__c</assignToReference>
             <operator>Assign</operator>
@@ -76,7 +76,7 @@
         <name>Update_SA_Balance</name>
         <label>Update SA Balance</label>
         <locationX>50</locationX>
-        <locationY>494</locationY>
+        <locationY>386</locationY>
         <assignmentItems>
             <assignToReference>financeAccountRecord.SA_Last_Balance__c</assignToReference>
             <operator>Assign</operator>
@@ -98,7 +98,7 @@
     <decisions>
         <name>Account_Type</name>
         <label>Account Type?</label>
-        <locationX>688</locationX>
+        <locationX>446</locationX>
         <locationY>278</locationY>
         <defaultConnectorLabel>Unknown</defaultConnectorLabel>
         <rules>
@@ -112,7 +112,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time</targetReference>
+                <targetReference>Update_SA_Balance</targetReference>
             </connector>
             <label>Savings</label>
         </rules>
@@ -127,7 +127,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>SMS_Received_Time_Fin_Account_s_Last_Update_Time_1</targetReference>
+                <targetReference>Update_CC_Balance</targetReference>
             </connector>
             <label>Credit</label>
         </rules>
@@ -142,56 +142,6 @@
                 </rightValue>
             </conditions>
             <label>Investment</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>SMS_Received_Time_Fin_Account_s_Last_Update_Time</name>
-        <label>SMS Received Time &gt; Fin Account&apos;s Last Update Time</label>
-        <locationX>182</locationX>
-        <locationY>386</locationY>
-        <defaultConnector>
-            <targetReference>Update_Financial_Account</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.SMS_Received_At__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <elementReference>financeAccountRecord.Balance_Last_Updated_At__c</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_SA_Balance</targetReference>
-            </connector>
-            <label>Yes</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>SMS_Received_Time_Fin_Account_s_Last_Update_Time_1</name>
-        <label>SMS Received Time &gt; Fin Account&apos;s Last Update Time</label>
-        <locationX>622</locationX>
-        <locationY>386</locationY>
-        <defaultConnector>
-            <targetReference>Update_Financial_Account</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes_1</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.SMS_Received_At__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <elementReference>financeAccountRecord.Balance_Last_Updated_At__c</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_CC_Balance</targetReference>
-            </connector>
-            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -247,8 +197,8 @@
     <recordCreates>
         <name>Generate_Log</name>
         <label>Generate Log</label>
-        <locationX>1458</locationX>
-        <locationY>1094</locationY>
+        <locationX>1106</locationX>
+        <locationY>902</locationY>
         <inputAssignments>
             <field>Message__c</field>
             <value>
@@ -285,7 +235,7 @@
     <recordLookups>
         <name>Get_Financial_Account</name>
         <label>Get Financial Account</label>
-        <locationX>688</locationX>
+        <locationX>446</locationX>
         <locationY>170</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -311,15 +261,39 @@
     <recordUpdates>
         <name>Update_Financial_Account</name>
         <label>Update Financial Account</label>
-        <locationX>688</locationX>
-        <locationY>986</locationY>
+        <locationX>446</locationX>
+        <locationY>794</locationY>
+        <connector>
+            <targetReference>Update_SMS_With_Info_that_Balance_is_Updated</targetReference>
+        </connector>
         <faultConnector>
             <targetReference>Generate_Log</targetReference>
         </faultConnector>
         <inputReference>financeAccountRecord</inputReference>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_SMS_With_Info_that_Balance_is_Updated</name>
+        <label>Update SMS With Info that Balance is Updated</label>
+        <locationX>446</locationX>
+        <locationY>902</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Received_At__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SMS_Received_At__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Account_Balance_Processed__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>SMS__c</object>
+    </recordUpdates>
     <start>
-        <locationX>562</locationX>
+        <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Financial_Account</targetReference>

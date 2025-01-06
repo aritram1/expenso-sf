@@ -180,7 +180,7 @@
         <inputAssignments>
             <field>Related_To__c</field>
             <value>
-                <elementReference>transactionId</elementReference>
+                <elementReference>$Record.External_Id__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

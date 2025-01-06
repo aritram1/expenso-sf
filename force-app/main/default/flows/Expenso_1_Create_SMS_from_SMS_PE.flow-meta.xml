@@ -42,14 +42,14 @@
             <assignToReference>SMSRecord.Type__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CreditOrDebitFormula</elementReference>
+                <elementReference>TypeFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>balanceUpdateFormula</elementReference>
+                <elementReference>balanceUpdateCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -63,7 +63,7 @@
             <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>createTransactionFormula</elementReference>
+                <elementReference>createTransactionCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -77,7 +77,7 @@
             <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>balanceUpdateFormula</elementReference>
+                <elementReference>balanceUpdateCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -91,7 +91,7 @@
             <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>createTransactionFormula</elementReference>
+                <elementReference>createTransactionCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -149,14 +149,14 @@
             <assignToReference>SMSRecord.Type__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CreditOrDebitFormula</elementReference>
+                <elementReference>TypeFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>balanceUpdateFormula</elementReference>
+                <elementReference>balanceUpdateCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -170,7 +170,7 @@
             <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>createTransactionFormula</elementReference>
+                <elementReference>createTransactionCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -184,7 +184,7 @@
             <assignToReference>SMSRecord.Balance_Update__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>balanceUpdateFormula</elementReference>
+                <elementReference>balanceUpdateCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -198,7 +198,7 @@
             <assignToReference>SMSRecord.Create_Transaction__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>createTransactionFormula</elementReference>
+                <elementReference>createTransactionCheckboxFormula</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -248,6 +248,13 @@
         </connector>
     </assignments>
     <constants>
+        <name>Const_BALANCE_UPDATE_REGEX</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>.*(balance|avl limit|avl bal|available bal|has been received on your icici bank credit card account).*</stringValue>
+        </value>
+    </constants>
+    <constants>
         <name>Const_CREDIT_REGEX</name>
         <dataType>String</dataType>
         <value>
@@ -262,17 +269,17 @@
         </value>
     </constants>
     <constants>
+        <name>Const_FLOW_NAME</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Expenso - 1. Create SMS from SMS PE</stringValue>
+        </value>
+    </constants>
+    <constants>
         <name>Const_INR_OR_RS_REGEX</name>
         <dataType>String</dataType>
         <value>
             <stringValue>rs\\.?|inr</stringValue>
-        </value>
-    </constants>
-    <constants>
-        <name>FLOW_NAME</name>
-        <dataType>String</dataType>
-        <value>
-            <stringValue>Expenso - 1. Create SMS from SMS PE</stringValue>
         </value>
     </constants>
     <decisions>
@@ -302,7 +309,7 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
-        <name>balanceUpdateFormula</name>
+        <name>balanceUpdateCheckboxFormula</name>
         <dataType>Boolean</dataType>
         <expression>OR(
     CONTAINS(LOWER({!$Record.Content__c}), &quot;balance&quot;),
@@ -313,22 +320,9 @@
 )</expression>
     </formulas>
     <formulas>
-        <name>createTransactionFormula</name>
+        <name>createTransactionCheckboxFormula</name>
         <dataType>Boolean</dataType>
-        <expression>OR({!CreditOrDebitFormula} == &apos;Credit&apos;, {!CreditOrDebitFormula} == &apos;Debit&apos;)</expression>
-    </formulas>
-    <formulas>
-        <name>CreditOrDebitFormula</name>
-        <dataType>String</dataType>
-        <expression>IF(
-    REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
-    &apos;Debit&apos;,
-    IF(
-        REGEX(LOWER({!$Record.Content__c}), {!Const_CREDIT_REGEX}),
-        &apos;Credit&apos;,
-        &apos;Promotional&apos;
-    )
-)</expression>
+        <expression>OR({!TypeFormula} == &apos;Credit&apos;, {!TypeFormula} == &apos;Debit&apos;)</expression>
     </formulas>
     <formulas>
         <description>Removes the special characters from the received at value and generates an all-number external id</description>
@@ -375,6 +369,23 @@
         <dataType>Date</dataType>
         <expression>DATEVALUE({!$Record.Received_At__c})</expression>
     </formulas>
+    <formulas>
+        <name>TypeFormula</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    REGEX(LOWER({!$Record.Content__c}), {!Const_DEBIT_REGEX}),
+    &apos;Debit&apos;,
+    IF(
+        REGEX(LOWER({!$Record.Content__c}), {!Const_CREDIT_REGEX}),
+        &apos;Credit&apos;,
+        IF(
+            REGEX(LOWER({!$Record.Content__c}), {!Const_BALANCE_UPDATE_REGEX}),
+            &apos;Balance Update&apos;,
+            &apos;Promotional&apos;
+        )
+    )
+)</expression>
+    </formulas>
     <interviewLabel>Expenso - 1. Create SMS from SMS PE {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Expenso - 1. Create SMS from SMS PE</label>
     <processMetadataValues>
@@ -420,7 +431,7 @@
         <inputAssignments>
             <field>Related_Component__c</field>
             <value>
-                <elementReference>FLOW_NAME</elementReference>
+                <elementReference>Const_FLOW_NAME</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

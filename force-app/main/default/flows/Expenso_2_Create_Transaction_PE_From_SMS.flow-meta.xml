@@ -327,13 +327,19 @@
         <inputAssignments>
             <field>CC_Last_Payment__c</field>
             <value>
-                <elementReference>outputSMS.Amount__c</elementReference>
+                <elementReference>formulaAmount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>SA_Balance__c</field>
             <value>
                 <elementReference>outputSMS.SA_Available_Balance__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SMS_External_Id__c</field>
+            <value>
+                <elementReference>$Record.External_Id__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
