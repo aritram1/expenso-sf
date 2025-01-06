@@ -1,6 +1,6 @@
 public with sharing class FinPlanLogger {
 
-    // static final String TAG = 'FinPlanLogger';
+    static final String TAG = 'FinPlanLogger';
     
     // // The following methods/overloaded methods serve the purpose of logging info/success/errors scenarios
     // public static void logError(Exception e){
@@ -40,6 +40,28 @@ public with sharing class FinPlanLogger {
 
 
     // Centralized error logging
+    // public static void logError(FinPlanException e){ // String className, String methodName, Exception e, SObject so) {
+    //     String className = e.className;
+    //     String methodName = e.methodName;
+    //     String objName = e.objName ?? 'not available';
+    //     try {
+    //         System_Log__c log = new System_Log__c();
+    //         log.component_name__c = className + '.' + methodName;
+    //         // log.Related_To__c = (so != null && so.getSObjectType().getDescribe().fields.getMap().containsKey('Name')) ? (String)so.get('Name') : 'not available';
+    //         log.Related_To__c = objName;
+    //         log.type__c = 'Error';
+    //         log.message__c = 'Error from Apex class :' + className;
+    //         log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
+    //         insert log;
+    //     }
+    //     catch (Exception ex) {
+    //         System.debug('Error during error logging: ' + ex.getMessage());
+    //         throw ex;
+    //     }
+    // }
+
+
+    // Centralized error logging
     public static void logError(String className, String methodName, Exception e, SObject so) {
         try {
             System_Log__c log = new System_Log__c();
@@ -48,6 +70,7 @@ public with sharing class FinPlanLogger {
             log.type__c = 'Error';
             log.message__c = 'Error from Apex class :' + className;
             log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
+            log.description__c = ((SMS__c)so).External_Id__c;
             insert log;
         }
         catch (Exception ex) {

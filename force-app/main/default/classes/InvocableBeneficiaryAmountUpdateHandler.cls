@@ -20,44 +20,49 @@ public with sharing class InvocableBeneficiaryAmountUpdateHandler {
                 String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
                 SMS__c processedSMS = new SMS__c();
 
-                if (accountName == 'HDFC SA') {
-                    processedSMS = SMSProcessor.processForHDFCBankSA(sms);
-                } else if (accountName == 'ICICI SA') {
-                    processedSMS = SMSProcessor.processForICICIBankSA(sms);
-                } else if (accountName == 'SBI SA') {
-                    processedSMS = SMSProcessor.processForSBIBankSA(sms);
-                } else if (accountName == 'ICICI CC') {
-                    processedSMS = SMSProcessor.processForICICIBankCC(sms);
-                } else if (accountName == 'ICICI AMAZON CC') {
-                    processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
-                } else if (accountName == 'HDFC Rupay CC') {
-                    processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
-                } else if (accountName == 'Amazon Wallet') {
-                    processedSMS = SMSProcessor.processForAmazonWallet(sms);
+                try{
+                    if (accountName == 'HDFC SA') {
+                        processedSMS = SMSProcessor.processForHDFCBankSA(sms);
+                    } else if (accountName == 'ICICI SA') {
+                        processedSMS = SMSProcessor.processForICICIBankSA(sms);
+                    } else if (accountName == 'SBI SA') {
+                        processedSMS = SMSProcessor.processForSBIBankSA(sms);
+                    } else if (accountName == 'ICICI CC') {
+                        processedSMS = SMSProcessor.processForICICIBankCC(sms);
+                    } else if (accountName == 'ICICI AMAZON CC') {
+                        processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
+                    } else if (accountName == 'HDFC Rupay CC') {
+                        processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
+                    } else if (accountName == 'Amazon Wallet') {
+                        processedSMS = SMSProcessor.processForAmazonWallet(sms);
+                    }
+                    // To be implemented, if required
+                    // else if(accountName == 'Kuvera'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Coin'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Zerodha'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Smallcase'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+
+                    // Fix the minor name differences for beneficiaries
+                    // This method does not have any DML, so we can use it within a loop
+                    processedSMS = BeneficiaryHandler.fixBeneficiaryName(processedSMS);
+
+                    result.add(processedSMS);
                 }
-                // To be implemented, if required
-                // else if(accountName == 'Kuvera'){
-                //     processedSMS = SMSProcessor.processFor***(sms);
-                // }
-                // else if(accountName == 'Coin'){
-                //     processedSMS = SMSProcessor.processFor***(sms);
-                // }
-                // else if(accountName == 'Zerodha'){
-                //     processedSMS = SMSProcessor.processFor***(sms);
-                // }
-                // else if(accountName == 'Smallcase'){
-                //     processedSMS = SMSProcessor.processFor***(sms);
-                // }
-
-                // Fix the minor name differences for beneficiaries
-                // This method does not have any DML, so we can use it within a loop
-                processedSMS = BeneficiaryHandler.fixBeneficiaryName(processedSMS);
-
-                result.add(processedSMS);
+                catch (Exception e) {
+                    FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, sms); // the last parameter is the entity Id, which is not available outside the loop
+                }
             }
 
             // Also update the beneficiary Name with beneficiary Id
-            // This method contains a DML so we have to use it outside the loop
+            // This method contains a DML so we may have to use it outside the loop
             result = BeneficiaryHandler.updateBeneficiary(result);
 
         } catch (Exception e) {

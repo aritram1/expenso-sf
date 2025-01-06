@@ -8,8 +8,7 @@ global with sharing class SychronizeMessagesAPI {
     global static void sychronizeMessages() {
         try {
             
-            // Delete the existing records
-            deleteExistingRecords();
+            deleteExistingRecords(); // delete the records for the relevant objects
 
             // Parse the incoming JSON body into a list of SMS__c records
             RestRequest req = RestContext.request;
@@ -27,7 +26,14 @@ global with sharing class SychronizeMessagesAPI {
 
             List<SMS_Platform_Event__e> eventsToPublish = new List<SMS_Platform_Event__e>();
 
-            for (SMS__c sms : smsRecords) {
+            // The list is wrongly sorted. reverse the list to sort it (by Received_At__c)
+            List<SMS__c> sortedSMSList = new List<SMS__c>();
+            for (Integer i = smsRecords.size()-1; i >= 0; i--){
+                sortedSMSList.add(smsRecords[i]);
+            }
+
+
+            for (SMS__c sms : sortedSMSList) {
                 // Map fields from SMS__c to SMS_Platform_Event__e
                 SMS_Platform_Event__e platformEvent = new SMS_Platform_Event__e(
                     Content__c = sms.Content__c,
@@ -41,6 +47,21 @@ global with sharing class SychronizeMessagesAPI {
                 // EventBus.publish(platformEvent); // firing the events from within the loop (done to maintain the order)
                 eventsToPublish.add(platformEvent);
             }
+
+            // for (int i=0; i<smsRecords.size(); i++){ // SMS__c sms : smsRecords) {
+            //     // Map fields from SMS__c to SMS_Platform_Event__e
+            //     SMS_Platform_Event__e platformEvent = new SMS_Platform_Event__e(
+            //         Content__c = sms.Content__c,
+            //         Original_Content__c = sms.Original_Content__c,
+            //         Sender__c = sms.Sender__c,
+            //         Received_At__c = sms.Received_At__c,
+            //         Device__c = sms.Device__c,
+            //         External_Id__c = sms.External_Id__c,
+            //         Created_From__c = 'Sync'
+            //     );
+            //     EventBus.publish(platformEvent); // firing the events from within the loop (done to maintain the order)
+            //     // eventsToPublish.add(platformEvent);
+            // }
 
             // Publish the platform events
             if (!eventsToPublish.isEmpty()) {
@@ -59,13 +80,17 @@ global with sharing class SychronizeMessagesAPI {
     }
 
 
+    /**
+     * Deletes existing records for specified objects.
+     * This method is called before synchronizing new SMS records to ensure no duplicate data.
+     */
     global static void deleteExistingRecords() {
-        
-        // List of object API names
+
+        // Delete the existing records for the following bojects
         List<String> objectApiNames = new List<String>{
-            'SMS__c',
-            'Transaction__c',
-            'Beneficiary__c',	
+            // 'SMS__c',
+            // 'Transaction__c',
+            // 'Beneficiary__c',	
             'FlowInterview',
             'System_Log__c'
         };

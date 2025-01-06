@@ -99,6 +99,10 @@ public with sharing class BeneficiaryHandler {
                 beneficiaryName = 'Uber';
             }
 
+            if(beneficiaryName.toUpperCase().contains('GEDDIT')){
+                beneficiaryName = 'Zepto';
+            }
+
             // Some scenarios where we require to check by using contain and not having a direct match in names
             if(beneficiaryName.toUpperCase().contains('NFS*')){ // NFS = National Financial Switch (NFS), A Leading ATM Network
                 beneficiaryName = 'ICICI ATM Withdrawal';

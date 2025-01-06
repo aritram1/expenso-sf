@@ -17,33 +17,44 @@ public with sharing class InvocableBalanceUpdateHandler {
             }
 
             for (SMS__c sms : smsList) {
-                String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
+                String accountNameInUpperCase = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
                 SMS__c smsOutput = new SMS__c();
 
-                if (accountName == 'HDFC SA') {
-                    smsOutput = SMSProcessor.processForHDFCBankSA_BalanceUpdate(sms);
-                } else if (accountName == 'ICICI SA') {
-                    smsOutput = SMSProcessor.processForICICIBankSA_BalanceUpdate(sms);
-                } else if (accountName == 'SBI SA') {
-                    smsOutput = SMSProcessor.processForSBIBankSA_BalanceUpdate(sms);
-                } else if (accountName == 'ICICI CC') {
-                    smsOutput = SMSProcessor.processForICICIBankCC_BalanceUpdate(sms);
-                } else if (accountName == 'ICICI AMAZON CC') {
-                    smsOutput = SMSProcessor.processForICICIBankAmazonCC_BalanceUpdate(sms);
+                try {
+                    switch on accountNameInUpperCase {
+                        when 'HDFC SA' {
+                            smsOutput = SMSProcessor.processForHDFCBankSA_BalanceUpdate(sms);
+                        }
+                        when 'ICICI SA' {
+                            smsOutput = SMSProcessor.processForICICIBankSA_BalanceUpdate(sms);
+                        }
+                        when 'SBI SA' {
+                            smsOutput = SMSProcessor.processForSBIBankSA_BalanceUpdate(sms);
+                        }
+                        when 'ICICI CC' {
+                            smsOutput = SMSProcessor.processForICICIBankCC_BalanceUpdate(sms);
+                        }
+                        when 'ICICI AMAZON CC' {
+                            smsOutput = SMSProcessor.processForICICIBankAmazonCC_BalanceUpdate(sms);
+                        }
+                        // To be implemented, if required
+                        // when 'KUVERA' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'COIN' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'ZERODHA' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'SMALLCASE' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                    }
                 }
-                // To be implemented, if required
-                // else if(accountName == 'Kuvera'){
-                //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                // }
-                // else if(accountName == 'Coin'){
-                //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                // }
-                // else if(accountName == 'Zerodha'){
-                //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                // }
-                // else if(accountName == 'Smallcase'){
-                //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                // }
+                catch(Exception e){
+                    FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, sms); 
+                }
                 outputList.add(smsOutput);
             }
 
