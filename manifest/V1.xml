@@ -83,6 +83,7 @@
 	</types>
 	<types>
 		<members>Expenso_Admin_PS</members>
+		<members>Password_Never_Expires_PS</members>
 		<name>PermissionSet</name>
 	</types>
 	<!-- ConnectedApp => Not to be sent via package.xml -->
