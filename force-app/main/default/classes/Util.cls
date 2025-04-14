@@ -1,4 +1,6 @@
 public with sharing class Util {
+
+    public static final String CLASS_NAME = 'Util';
     
     public static String clipTo255char(String str){
         if(str == null) {
@@ -85,6 +87,134 @@ public with sharing class Util {
             strUpperCase = strUpperCase.substring(1, strUpperCase.length());
         }
         return strUpperCase;
+    }
+
+    public static List<SMS__c> extractBeneficiaryAndAmountFromSMS(List<SMS__c> smsList) {
+
+        List<SMS__c> result = new List<SMS__c>();
+
+        try {
+            // Ensure the list is not null or empty
+            if (smsList == null || smsList.isEmpty()) {
+                return null;
+            }
+
+            Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
+
+            for (SMS__c sms : smsList) {
+                String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
+                SMS__c processedSMS = new SMS__c();
+
+                try{
+                    if (accountName == 'HDFC SA') {
+                        processedSMS = SMSProcessor.processForHDFCBankSA(sms);
+                    } else if (accountName == 'ICICI SA') {
+                        processedSMS = SMSProcessor.processForICICIBankSA(sms);
+                    } else if (accountName == 'SBI SA') {
+                        processedSMS = SMSProcessor.processForSBIBankSA(sms);
+                    } else if (accountName == 'ICICI CC') {
+                        processedSMS = SMSProcessor.processForICICIBankCC(sms);
+                    } else if (accountName == 'ICICI AMAZON CC') {
+                        processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
+                    } else if (accountName == 'HDFC Rupay CC') {
+                        processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
+                    } else if (accountName == 'Amazon Wallet') {
+                        processedSMS = SMSProcessor.processForAmazonWallet(sms);
+                    }
+                    // To be implemented, if required
+                    // else if(accountName == 'Kuvera'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Coin'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Zerodha'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+                    // else if(accountName == 'Smallcase'){
+                    //     processedSMS = SMSProcessor.processFor***(sms);
+                    // }
+
+                    // Fix the minor name differences for beneficiaries
+                    // This method does not have any DML, so we can use it within a loop
+                    processedSMS = BeneficiaryHandler.fixBeneficiaryName(processedSMS);
+
+                    result.add(processedSMS);
+                }
+                catch (Exception e) {
+                    FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, sms); // the last parameter is the entity Id, which is not available outside the loop
+                }
+            }
+
+            // Also update the beneficiary Name with beneficiary Id
+            // This method contains a DML so we may have to use it outside the loop
+            result = BeneficiaryHandler.updateBeneficiary(result);
+
+        } 
+        catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, null); // the last parameter is the entity Id, which is not available outside the loop
+        }
+        return result;
+    }
+
+    public static List<SMS__c> extractBalanceInfo(List<SMS__c> smsList) {
+
+        List<SMS__c> outputList = new List<SMS__c>();
+
+        try {
+            Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
+
+            // Ensure the list is not null or empty
+            if (smsList == null || smsList.isEmpty()) {
+                return null;
+            }
+
+            for (SMS__c sms : smsList) {
+                String accountNameInUpperCase = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
+                SMS__c smsOutput = new SMS__c();
+
+                try {
+                    switch on accountNameInUpperCase {
+                        when 'HDFC SA' {
+                            smsOutput = SMSProcessor.processForHDFCBankSA_BalanceUpdate(sms);
+                        }
+                        when 'ICICI SA' {
+                            smsOutput = SMSProcessor.processForICICIBankSA_BalanceUpdate(sms);
+                        }
+                        when 'SBI SA' {
+                            smsOutput = SMSProcessor.processForSBIBankSA_BalanceUpdate(sms);
+                        }
+                        when 'ICICI CC' {
+                            smsOutput = SMSProcessor.processForICICIBankCC_BalanceUpdate(sms);
+                        }
+                        when 'ICICI AMAZON CC' {
+                            smsOutput = SMSProcessor.processForICICIBankAmazonCC_BalanceUpdate(sms);
+                        }
+                        // To be implemented, if required
+                        // when 'KUVERA' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'COIN' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'ZERODHA' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                        // when 'SMALLCASE' {
+                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                        // }
+                    }
+                }
+                catch(Exception e){
+                    FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, sms); 
+                }
+                outputList.add(smsOutput);
+            }
+
+        } catch (Exception e) {
+            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, null); // the last parameter is the entity Id, which is not available outside the loop
+        }
+        return outputList;
     }
     
     // // Utility method : Clone a record of Transaction_Platform_Event__e
