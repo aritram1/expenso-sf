@@ -1,4 +1,4 @@
-public with sharing class Util {
+public without sharing class Util {
 
     public static final String CLASS_NAME = 'Util';
     
@@ -59,6 +59,7 @@ public with sharing class Util {
 
     // Get the list of accounts from the list of SMS__c records
     public static Map<String, Finance_Account__c> getAccounts(List<SMS__c> smsList) {
+        System.debug('getAccounts=>' + smsList);
         Map<String, Finance_Account__c> allAccountsMap = new Map<String, Finance_Account__c>();
         List<String> allAccountIds = new List<String>();
         for (SMS__c sms : smsList) {
@@ -99,12 +100,12 @@ public with sharing class Util {
                 return null;
             }
 
+            System.debug('extractBeneficiaryAndAmountFromSMS=>smsList: ' + smsList);
             Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
 
             for (SMS__c sms : smsList) {
                 String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
                 SMS__c processedSMS = new SMS__c();
-
                 try{
                     if (accountName == 'HDFC SA') {
                         processedSMS = SMSProcessor.processForHDFCBankSA(sms);
@@ -152,7 +153,7 @@ public with sharing class Util {
 
         } 
         catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, null); // the last parameter is the entity Id, which is not available outside the loop
+             FinPlanLogger.logError(CLASS_NAME, 'extractBeneficiaryAndAmountFromSMS', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
         return result;
     }

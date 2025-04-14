@@ -18,7 +18,8 @@ global with sharing class FinPlanGuestAPIController {
             }
             String requestBody = RestContext.request.requestBody.toString();
             smsRecords = (List<SMS__c>) JSON.deserialize(requestBody, List<SMS__c>.class);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             // Handle JSON parsing errors
             RestContext.response.statusCode = 400; // Bad Request
             RestContext.response.responseBody = Blob.valueOf('Invalid payload: ' + e.getMessage());
@@ -29,20 +30,17 @@ global with sharing class FinPlanGuestAPIController {
         try {
             if (!smsRecords.isEmpty()) {
 
-                // for (SMS__c sms : smsRecords) {
-                //     if (sms.Content__c != null) {
-                //         sms.Content__c = sms.Content__c.replace('\n', '');
-                //     }
-                // }
+                System.debug('Before all=>' + smsRecords);
 
                 // Call the first enrichment method
-                // smsRecords = InvocableBeneficiaryAmountUpdateHandler.extractBeneficiaryAndAmountFromSMS(smsRecords);
+                smsRecords = Util.extractBeneficiaryAndAmountFromSMS(smsRecords);
+                System.debug('after first smsRecords=>' + smsRecords);
 
                 // Call the second enrichment method
-                // smsRecords = InvocableBalanceUpdateHandler.extractBalanceInfo(smsRecords);
-
+                smsRecords = Util.extractBalanceInfo(smsRecords);
+                System.debug('after second smsRecords=>' + smsRecords);
                 // Insert the enriched SMS__c records into the database
-                insert smsRecords; 
+                // insert smsRecords;
 
                 RestContext.response.statusCode = 201; // Created
                 

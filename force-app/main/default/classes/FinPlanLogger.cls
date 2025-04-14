@@ -70,7 +70,7 @@ public with sharing class FinPlanLogger {
             log.type__c = 'Error';
             log.message__c = 'Error from Apex class :' + className;
             log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
-            log.description__c = ((SMS__c)so).External_Id__c;
+            log.description__c = 'External_Id__c : ' + ((SMS__c)so)?.External_Id__c;
             insert log;
         }
         catch (Exception ex) {

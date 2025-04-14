@@ -681,31 +681,45 @@ public with sharing class SMSProcessor {
 
     // Processes SMS for HDFC Bank Savings Account
     public static SMS__c processForHDFCBankSA_BalanceUpdate(SMS__c sms) {
-        SMS__c smsOutput = new SMS__c();
 
-        try {
-            if (sms.Content__c.contains('deposited')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('.Avl bal INR ')[1].split('. Cheque deposits')[0];
-            } else if (sms.Content__c.startsWith('Money Received')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: INR')[1];
-            } else if (sms.Content__c.contains('debited from HDFC Bank XX9560')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].replace(',', '');
-            } else if (sms.Content__c.startsWith('Money Transferred - ')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
-            } else if (sms.Content__c.contains('spent Rs')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
-            } else if (sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560')) {
-                smsOutput.SA_Available_Balance__c = sms.Content__c.split('INR ')[1].split('Cheques')[0];
-                smsOutput.SA_Available_Balance__c = Util.sanitizeNumber(smsOutput.SA_Available_Balance__c);
+        SMS__c smsOutput = sms;
+
+        boolean balaneUpdateRequired = 
+            sms.Content__c.toUpperCase().contains('BALANCE') ||  
+            sms.Content__c.toUpperCase().contains('BAL')
+            ;
+        
+        if(balaneUpdateRequired == true){
+            try {
+                if (sms.Content__c.contains('deposited')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('.Avl bal INR ')[1].split('. Cheque deposits')[0];
+                } 
+                else if (sms.Content__c.startsWith('Money Received')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: INR')[1];
+                } 
+                else if (sms.Content__c.contains('debited from HDFC Bank XX9560')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].replace(',', '');
+                } 
+                else if (sms.Content__c.startsWith('Money Transferred - ')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
+                } 
+                else if (sms.Content__c.contains('spent Rs')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
+                } 
+                else if (sms.Content__c.startsWith('Available Bal in HDFC Bank A/c XX9560')) {
+                    smsOutput.SA_Available_Balance__c = sms.Content__c.split('INR ')[1].split('Cheques')[0];
+                    smsOutput.SA_Available_Balance__c = Util.sanitizeNumber(smsOutput.SA_Available_Balance__c);
+                } 
+                else if(sms.Content__c.startswith('Alert!') && sms.Content__c.contains('spent Rs')){
+                    smsOutput.SA_Available_Balance__c = smsOutput.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
+                } 
+                else if(smsOutput.Content__c.startsWith('Money Transferred - ')){
+                    smsOutput.SA_available_balance__c = smsOutput.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
+                }
             } 
-            else if(sms.Content__c.startswith('Alert!') && sms.Content__c.contains('spent Rs')){
-                smsOutput.SA_Available_Balance__c = smsOutput.Content__c.split('Avl bal: ')[1].split('Not you?')[0].replace(',', '');
-            } 
-            else if(smsOutput.Content__c.startsWith('Money Transferred - ')){
-                smsOutput.SA_available_balance__c = smsOutput.Content__c.split('Avl bal:INR ')[1].split(' Not you')[0].replace(',', '');
+            catch (Exception e) {
+                FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForHDFCBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
             }
-        } catch (Exception e) {
-            FinPlanLogger.logError(CLASS_NAME, 'InvocableBalanceUpdateHandler.processForHDFCBankSA', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
 
         return smsOutput;
