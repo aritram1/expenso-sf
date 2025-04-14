@@ -1,9 +1,5 @@
 @RestResource(urlMapping='/api/guest/sms/sync')
 global with sharing class FinPlanGuestAPIController {
-    
-    // Constructor
-    public FinPlanGuestAPIController() {
-    }
 
     // POST method to handle incoming payload and create SMS__c records
     @HttpPost
@@ -32,18 +28,8 @@ global with sharing class FinPlanGuestAPIController {
 
                 System.debug('Before all=>' + smsRecords);
 
-                // Call the first enrichment method
-                smsRecords = Util.extractBeneficiaryAndAmountFromSMS(smsRecords);
-                System.debug('after first smsRecords=>' + smsRecords);
-
-                // Call the second enrichment method
-                smsRecords = Util.extractBalanceInfo(smsRecords);
-                System.debug('after second smsRecords=>' + smsRecords);
-                // Insert the enriched SMS__c records into the database
-                // insert smsRecords;
-
-                RestContext.response.statusCode = 201; // Created
-                
+                System.enqueueJob(new QueueableEnrichAndUpsertSMS(smsRecords));
+                RestContext.response.statusCode = 202; // Accepted
                 RestContext.response.responseBody = Blob.valueOf(JSON.serialize(smsRecords));
             } 
             else {

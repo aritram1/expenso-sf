@@ -15,11 +15,16 @@
 		<members>InvocableBalanceUpdateHandler</members>
 		<!-- API Classes -->
 		<members>SychronizeMessagesAPI</members>
-		<!-- Other classes -->
+		<!-- Guest API Classes -->
+		<members>FinPlanGuestAPIController</members>		
+		<!-- Async Classes -->
+		<members>QueueableEnrichAndUpsertSMS</members>
+		<!-- Other Classes -->
 		<members>SMSProcessor</members>
 		<members>BeneficiaryHandler</members>
-		<members>SMSHandlerInvestment</members>	<!-- To be Implemented -->
-		<members>SMSHandlerOthers</members>		<!-- To be Implemented -->
+		<!-- To be Implemented -->
+		<members>SMSHandlerInvestment</members>	
+		<members>SMSHandlerOthers</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

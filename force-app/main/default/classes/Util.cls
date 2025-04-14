@@ -1,4 +1,4 @@
-public without sharing class Util {
+public class Util {
 
     public static final String CLASS_NAME = 'Util';
     
@@ -277,4 +277,25 @@ public without sharing class Util {
     //     return smsList;
     // }
      
+
+	public static List<SMS__c> populateProcessedInfo(List<SMS__c> smsRecords){
+        for(SMS__c sms : smsRecords){
+            if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
+                sms.Account_Balance_Processed__c = true;
+            }
+            if(sms.Amount__c != null){
+                sms.Amount_Processed__c = true;
+            }
+            if(sms.Beneficiary__c != null){
+                sms.Beneficiary_Processed__c = true;
+            }
+            if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
+                sms.Payment_Info_Processed__c = true;
+            }
+            if(sms.External_Id__c == null || sms.Received_At__c == ''){
+                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
+            }
+        }
+        return smsRecords;
+	} 
 }
