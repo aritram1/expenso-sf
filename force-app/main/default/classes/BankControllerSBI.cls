@@ -2,10 +2,6 @@ public with sharing class BankControllerSBI {
 
     public static final String CLASS_NAME = 'BankControllerSBI';
 
-    public BankControllerSBI() {
-
-    }
-
     // Process SMS for SBI Savings Account
     public static SMS__c processForSBIBankSA(SMS__c inputSMS) {
         SMS__c sms = inputSMS.clone(false, true);

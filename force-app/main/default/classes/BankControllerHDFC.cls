@@ -2,10 +2,6 @@ public with sharing class BankControllerHDFC {
 
     public static final String CLASS_NAME = 'BankControllerHDFC';
 
-    public BankControllerHDFC() {
-
-    }
-
     // Process SMS for HDFC Savings Account
     public static SMS__c processForHDFCBankSA(SMS__c inputSMS) {
         SMS__c sms = inputSMS.clone(false, true);

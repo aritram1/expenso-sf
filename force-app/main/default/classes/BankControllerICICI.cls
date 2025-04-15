@@ -2,10 +2,6 @@ public with sharing class BankControllerICICI {
 
     public static final String CLASS_NAME = 'BankControllerICICI';
 
-    public BankControllerICICI() {
-
-    }
-
     // Process SMS for ICICI Savings Account
     public static SMS__c processForICICIBankSA(SMS__c inputSMS) {
         SMS__c sms = inputSMS.clone(false, true);
