@@ -25,11 +25,18 @@ global with sharing class GuestCreateOTPAPI {
                 String otp = Util.generateOTP(email);
                 
                 // Send the OTP to the provided email
-                Util.sendEmail(email, otp);
+                // NEW : 
+                // The email is being sent from a RT Flow on OTP__c
+                // So the following line is commented out
+                // Util.sendEmail(email, otp);
 
                 // Set a successful response
                 RestContext.response.statusCode = 201; // Created
-                RestContext.response.responseBody = Blob.valueOf('OTP sent successfully to ' + email);
+                Map<String, Object> responseBody = new Map<String, Object>();
+                responseBody.put('otp', otp.substring(otp.length() - 3)); // Last three characters of the OTP
+                responseBody.put('email', email);
+                responseBody.put('expiry', Datetime.now().addMinutes(5).format('yyyy-MM-dd\'T\'HH:mm:ss\'Z\''));
+                RestContext.response.responseBody = Blob.valueOf(JSON.serialize(responseBody));
             }
         } 
         catch (Exception e) {

@@ -1,5 +1,5 @@
 @RestResource(urlMapping='/api/login/otp/check')
-global with sharing class GuestCheckOTPAPI {
+global without sharing class GuestCheckOTPAPI {
 
     global final static String CLASS_NAME = 'GuestCheckOTPAPI';
 
@@ -28,7 +28,7 @@ global with sharing class GuestCheckOTPAPI {
                 if(matched){
                     // Set a successful response
                     RestContext.response.statusCode = 200; // Status : OK
-                    RestContext.response.responseBody = Blob.valueOf('OTP sent successfully to ' + providedEmail);
+                    RestContext.response.responseBody = Blob.valueOf('OTP Matched successfully.');
                 }
                 else {
                     RestContext.response.statusCode = 400; // Bad Request

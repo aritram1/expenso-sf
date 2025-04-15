@@ -33,6 +33,7 @@
 		<members>Expenso_3_Create_Transaction_From_Transaction_PE</members>
 		<members>Expenso_4_Update_Financial_Account_Balance_from_Financial_Account_PE</members>
 		<members>Expenso_5_Create_System_Log_From_System_Log_PE</members>
+		<members>Expenso_Send_OTP_From_Flow</members>
 		<name>Flow</name>
 	</types>
 	<types>

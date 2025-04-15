@@ -113,10 +113,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Expiration_Time__c</fieldItem>
-                <identifier>RecordExpiration_Time_cField</identifier>
+                <fieldItem>Record.IsValid__c</fieldItem>
+                <identifier>RecordIsValid__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-9d8d6b6e-80c9-44e9-a732-7b7dff4022f3</name>

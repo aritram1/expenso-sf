@@ -17,6 +17,18 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>GuestCheckOTPAPI</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>GuestCreateOTPAPI</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>GuestSyncMessageAPI</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>InvocableBalanceUpdateHandler</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -26,6 +38,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>InvocableSMSHandler</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>QueueableEnrichAndUpsertSMS</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>

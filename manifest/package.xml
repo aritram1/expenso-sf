@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>OTP_Record_Page</members>
-		<name>FlexiPage</name>
-	</types>
-	<types>
-		<members>OTP__c-OTP Layout</members>
-		<name>Layout</name>
-	</types>
-	<types>
-		<members>Guest_User_PS</members>
-		<name>PermissionSet</name>
+		
+		<members>Expenso_Send_OTP_From_Flow</members>
+		<name>Flow</name>
 	</types>
 	<version>62.0</version>
 </Package>
