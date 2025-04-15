@@ -271,7 +271,7 @@ public class Util {
             otpRecord.Email__c = providedEmail;
             otpRecord.OTP__c = String.valueOf(Math.round(Math.random() * 900000 + 100000));
             insert otpRecord;
-            otp = otpRecord.Id;
+            otp = otpRecord.OTP__c;
         }
         return otp;
     }
@@ -312,37 +312,37 @@ public class Util {
 
     // The email is being sent from flow
 
-    // /**
-    //  * Helper method to send an email
-    //  * @param email The recipient's email address
-    //  * @param otp The OTP to send
-    //  */
-    // // public static void sendEmail(String email, String otp, DateTime expirationTime) {
-    // public static void sendEmail(String email, String otp) {
-    //     System.debug('Inside the send email method');
-    //     System.debug('Email: ' + email);
-    //     System.debug('OTP: ' + otp);
-    //     try {
-    //         // Create the email body
-    //         // String emailBody = 'The OTP is ' + otp + ' and it is valid until ' + expirationTime.format('yyyy-MM-dd HH:mm:ss') + '.';
-    //         String emailBody = 'The OTP is ' + otp + ' and it is valid for next 2 minutes.'; 
+    /**
+     * Helper method to send an email
+     * @param email The recipient's email address
+     * @param otp The OTP to send
+     */
+    // public static void sendEmail(String email, String otp, DateTime expirationTime) {
+    public static void sendEmail(String email, String otp) {
+        System.debug('Inside the send email method');
+        System.debug('Email: ' + email);
+        System.debug('OTP: ' + otp);
+        try {
+            // Create the email body
+            // String emailBody = 'The OTP is ' + otp + ' and it is valid until ' + expirationTime.format('yyyy-MM-dd HH:mm:ss') + '.';
+            String emailBody = 'The OTP is ' + otp + ' and it is valid for next 5 minutes.'; 
 
-    //         // Create a single email message
-    //         Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
-    //         emailMessage.setToAddresses(new String[] { email });
-    //         emailMessage.setSubject('Your OTP Code');
-    //         emailMessage.setPlainTextBody(emailBody);
+            // Create a single email message
+            Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
+            emailMessage.setToAddresses(new String[] { email });
+            emailMessage.setSubject('Your OTP Code');
+            emailMessage.setPlainTextBody(emailBody);
 
-    //         // Send the email
-    //         Messaging.sendEmail(new Messaging.SingleEmailMessage[] { emailMessage });
+            // Send the email
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { emailMessage });
 
-    //         System.debug('Email sent successfully to ' + email + ' with OTP: ' + otp);
-    //     } 
-    //     catch (Exception e) {
-    //         System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
-    //         throw new FinPlanException('Failed to send email. Please try again later.');
-    //     }
-    // }
+            System.debug('Email sent successfully to ' + email + ' with OTP: ' + otp);
+        } 
+        catch (Exception e) {
+            System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
+            throw new FinPlanException('Failed to send email. Please try again later.');
+        }
+    }
 
     // // Utility method : Clone a record of Transaction_Platform_Event__e
     // public static Transaction_Platform_Event__e cloneTransactionPE(Transaction_Platform_Event__e source) {
