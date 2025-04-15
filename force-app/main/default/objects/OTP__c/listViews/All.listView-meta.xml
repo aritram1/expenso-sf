@@ -5,7 +5,7 @@
     <columns>Email__c</columns>
     <columns>Phone__c</columns>
     <columns>OTP__c</columns>
-    <columns>Expiration_Time__c</columns>
+    <columns>IsValid__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

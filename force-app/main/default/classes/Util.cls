@@ -285,29 +285,38 @@ public class Util {
      */
     public static boolean checkOTP(String providedEmail, String providedOTP){
 
-        boolean otpMatched = false;
+        boolean result = false;
 
-        if(String.isEmpty(providedEmail) || String.isEmpty(providedOTP)){
-            throw new FinPlanException('Email and OTP are required for verification');
-        }
-        
-        // Query the OTP__c object to get the OTP for the given email
-        List<OTP__c> otpRecords = [
-                                    SELECT Id, Email__c, Phone__c, OTP__c, IsValid__c 
-                                    FROM OTP__c 
-                                    WHERE Email__c = :providedEmail 
-                                    AND IsValid__c = true 
-                                    ORDER BY CreatedDate DESC //  DESC 
-                                    LIMIT 1];
-        
-        if (!otpRecords.isEmpty()) {
-            String otpPresent = otpRecords[0].OTP__c;
-            if(otpPresent == providedOTP){
-                otpMatched = true;
+        try{
+            if(String.isEmpty(providedEmail) || String.isEmpty(providedOTP)){
+                throw new FinPlanException('Email and OTP are required for verification');
+            }
+            
+            // Query the OTP__c object to get the OTP for the given email
+            List<OTP__c> otpRecords = [
+                                        SELECT Id, Email__c, Phone__c, OTP__c, IsValid__c, Used__c, Used_At__c
+                                        FROM OTP__c 
+                                        WHERE Email__c = :providedEmail 
+                                        AND IsValid__c = true 
+                                        ORDER BY CreatedDate DESC //  DESC 
+                                        LIMIT 1];
+            
+            if (!otpRecords.isEmpty()) {
+                String presentOTP = otpRecords[0].OTP__c;
+                if(presentOTP == providedOTP){
+                    otpRecords[0].Used__c = true;
+                    otpRecords[0].Used_At__c = Datetime.now();
+                    update otpRecords[0];
+                    result = true;
+                }
             }
         }
+        catch (Exception e) {
+            System.debug('Failed to check the otp: ' + e.getMessage());
+            throw new FinPlanException('Failed to check the OTP. Please try again later.');
+        }
 
-        return otpMatched;
+        return result;
     }
 
     // The email is being sent from flow
@@ -341,6 +350,32 @@ public class Util {
         catch (Exception e) {
             System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
             throw new FinPlanException('Failed to send email. Please try again later.');
+        }
+    }
+
+    public static boolean invalidateOTP(String email, String otp){
+        boolean otpInvalidated = false;
+        try {
+            // Query the OTP__c object to get the OTP for the given email
+            List<OTP__c> otpRecords = [
+                                        SELECT Id, Used__c, Used_At__c, OTP__c 
+                                        FROM OTP__c 
+                                        WHERE Email__c = :email 
+                                        AND OTP__c = :otp
+                                        ORDER BY CreatedDate DESC //  DESC 
+                                        LIMIT 1];
+            if (!otpRecords.isEmpty()) {
+                OTP__c otpRecord = otpRecords[0];
+                otpRecord.Used__c = true;
+                otpRecord.Used_At__c = Datetime.now();
+                update otpRecord;
+                otpInvalidated = true;
+            }
+            return otpInvalidated;
+        }
+        catch (Exception e) {
+            System.debug('Failed to invalidate the otp: ' + e.getMessage());
+            throw new FinPlanException('Failed to invalidate the OTP. Please try again later.');
         }
     }
 

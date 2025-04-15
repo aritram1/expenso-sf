@@ -5,6 +5,9 @@ global without sharing class GuestCheckOTPAPI {
 
     @HttpPost
     global static void checkOTP() {
+
+        RestContext.response.addHeader('Content-Type', 'application/json');
+
         try {
             // Parse the incoming request body
             String requestBody = RestContext.request.requestBody.toString();
@@ -28,11 +31,17 @@ global without sharing class GuestCheckOTPAPI {
                 if(matched){
                     // Set a successful response
                     RestContext.response.statusCode = 200; // Status : OK
-                    RestContext.response.responseBody = Blob.valueOf('OTP Matched successfully.');
+                    Map<String, Object> responseBody = new Map<String, Object>();
+                    responseBody.put('email', email);
+                    responseBody.put('matched', 'OTP Matched successfully');
+                    RestContext.response.responseBody = Blob.valueOf(JSON.serialize(responseBody));
                 }
                 else {
                     RestContext.response.statusCode = 400; // Bad Request
-                    RestContext.response.responseBody = Blob.valueOf('Invalid OTP provided.');
+                    Map<String, Object> responseBody = new Map<String, Object>();
+                    responseBody.put('email', email);
+                    responseBody.put('error', 'Invalid OTP');
+                    RestContext.response.responseBody = Blob.valueOf(JSON.serialize(responseBody));
                 }
             }
         } 
