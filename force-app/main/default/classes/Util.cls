@@ -108,19 +108,19 @@ public class Util {
                 SMS__c processedSMS = new SMS__c();
                 try{
                     if (accountName == 'HDFC SA') {
-                        processedSMS = SMSProcessor.processForHDFCBankSA(sms);
+                        processedSMS = BankControllerHDFC.processForHDFCBankSA(sms);
                     } else if (accountName == 'ICICI SA') {
-                        processedSMS = SMSProcessor.processForICICIBankSA(sms);
+                        processedSMS = BankControllerICICI.processForICICIBankSA(sms);
                     } else if (accountName == 'SBI SA') {
-                        processedSMS = SMSProcessor.processForSBIBankSA(sms);
+                        processedSMS = BankControllerSBI.processForSBIBankSA(sms);
                     } else if (accountName == 'ICICI CC') {
-                        processedSMS = SMSProcessor.processForICICIBankCC(sms);
+                        processedSMS = BankControllerICICI.processForICICIBankCC(sms);
                     } else if (accountName == 'ICICI AMAZON CC') {
-                        processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
+                        processedSMS = BankControllerICICI.processForICICIBankAmazonCC(sms);
                     } else if (accountName == 'HDFC Rupay CC') {
-                        processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
+                        processedSMS = BankControllerHDFC.processForHDFCBankRupayCC(sms);
                     } else if (accountName == 'Amazon Wallet') {
-                        processedSMS = SMSProcessor.processForAmazonWallet(sms);
+                        processedSMS = WalletControllerAmazonPay.processForAmazonWallet(sms);
                     }
                     // To be implemented, if required
                     // else if(accountName == 'Kuvera'){
@@ -177,19 +177,19 @@ public class Util {
                 try {
                     switch on accountNameInUpperCase {
                         when 'HDFC SA' {
-                            smsOutput = SMSProcessor.processForHDFCBankSA_BalanceUpdate(sms);
+                            smsOutput = BankControllerHDFC.processForHDFCBankSA_BalanceUpdate(sms);
                         }
                         when 'ICICI SA' {
-                            smsOutput = SMSProcessor.processForICICIBankSA_BalanceUpdate(sms);
+                            smsOutput = BankControllerICICI.processForICICIBankSA_BalanceUpdate(sms);
                         }
                         when 'SBI SA' {
-                            smsOutput = SMSProcessor.processForSBIBankSA_BalanceUpdate(sms);
+                            smsOutput = BankControllerSBI.processForSBIBankSA_BalanceUpdate(sms);
                         }
                         when 'ICICI CC' {
-                            smsOutput = SMSProcessor.processForICICIBankCC_BalanceUpdate(sms);
+                            smsOutput = BankControllerICICI.processForICICIBankCC_BalanceUpdate(sms);
                         }
                         when 'ICICI AMAZON CC' {
-                            smsOutput = SMSProcessor.processForICICIBankAmazonCC_BalanceUpdate(sms);
+                            smsOutput = BankControllerICICI.processForICICIBankAmazonCC_BalanceUpdate(sms);
                         }
                         // To be implemented, if required
                         // when 'KUVERA' {
