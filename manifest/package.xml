@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Expenso_Admin_PS</members>
+		<members>OTP_Record_Page</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>OTP__c-OTP Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
 		<members>Guest_User_PS</members>
-		<members>Password_Never_Expires_PS</members>
 		<name>PermissionSet</name>
 	</types>
 	<version>62.0</version>

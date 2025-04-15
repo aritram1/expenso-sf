@@ -4,5 +4,6 @@ public class FinPlanException extends Exception {
 
     public String className { get; set; }
     public String methodName { get; set; }
-    public String objName { get; set; }
+    public String objName { get; set; } 
+    
 }

@@ -298,4 +298,71 @@ public class Util {
         }
         return smsRecords;
 	} 
+
+    public static String generateOTP(String email){
+        // Generate a 6-digit numeric OTP
+        String otp = String.valueOf(Math.round(Math.random() * 900000 + 100000));
+
+        // Create an OTP__c record
+        OTP__c otpRecord = new OTP__c();
+        otpRecord.Email__c = email;
+        otpRecord.OTP__c = otp;
+        upsert otpRecord Email__c;
+
+        return otp;
+    }
+
+    public static boolean checkOTP(String providedEmail, String providedOTP){
+
+        boolean otpMatched = false;
+
+        if(String.isEmpty(providedEmail) || String.isEmpty(providedOTP)) return false;
+        
+        // Query the OTP__c object to get the OTP for the given email
+        List<OTP__c> otpRecords = [
+                                    SELECT Id, Email__c, Phone__c, OTP__c, Expiration_Time__c 
+                                    FROM OTP__c 
+                                    WHERE Email__c = :providedEmail 
+                                    AND Expiration_Time__c < :DateTime.now() 
+                                    LIMIT 1];
+        
+        if (!otpRecords.isEmpty()) {
+            String otpPresent = otpRecords[0].OTP__c;
+            if(otpPresent == providedOTP){
+                otpMatched = true;
+            }
+        }
+
+        return otpMatched;
+    }
+
+
+    /**
+     * Helper method to send an email
+     * @param email The recipient's email address
+     * @param otp The OTP to send
+     */
+    // public static void sendEmail(String email, String otp, DateTime expirationTime) {
+    public static void sendEmail(String email, String otp) {
+            try {
+            // Create the email body
+            // String emailBody = 'The OTP is ' + otp + ' and it is valid until ' + expirationTime.format('yyyy-MM-dd HH:mm:ss') + '.';
+            String emailBody = 'The OTP is ' + otp + ' and it is valid for next 2 minutes.'; 
+
+            // Create a single email message
+            Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
+            emailMessage.setToAddresses(new String[] { email });
+            emailMessage.setSubject('Your OTP Code');
+            emailMessage.setPlainTextBody(emailBody);
+
+            // Send the email
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { emailMessage });
+
+            System.debug('Email sent successfully to ' + email + ' with OTP: ' + otp);
+        } 
+        catch (Exception e) {
+            System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
+            throw new FinPlanException('Failed to send email. Please try again later.');
+        }
+    }
 }

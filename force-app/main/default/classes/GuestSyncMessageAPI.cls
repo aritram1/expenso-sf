@@ -1,5 +1,5 @@
 @RestResource(urlMapping='/api/guest/sms/sync')
-global with sharing class FinPlanGuestAPIController {
+global with sharing class GuestSyncMessageAPI {
 
     // POST method to handle incoming payload and create SMS__c records
     @HttpPost
