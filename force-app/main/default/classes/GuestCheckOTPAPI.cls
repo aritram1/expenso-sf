@@ -23,11 +23,11 @@ global with sharing class GuestCheckOTPAPI {
                 String providedOTP = (String) requestData.get('otp');
                 
                 // Check the OTP
-                boolean matched = Util.checkOTP(providedEmail, providedOTP) ? true : false;
+                boolean matched = Util.checkOTP(providedEmail, providedOTP);
                 
                 if(matched){
                     // Set a successful response
-                    RestContext.response.statusCode = 201; // Created
+                    RestContext.response.statusCode = 200; // Status : OK
                     RestContext.response.responseBody = Blob.valueOf('OTP sent successfully to ' + providedEmail);
                 }
                 else {

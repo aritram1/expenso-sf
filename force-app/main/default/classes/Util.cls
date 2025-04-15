@@ -218,6 +218,112 @@ public class Util {
         return outputList;
     }
     
+    /**
+     * Populates processed information for a list of SMS__c records.
+     * 
+     * @param smsRecords The list of SMS__c records to process.
+     * @return The updated list of SMS__c records with processed information.
+     */
+    public static List<SMS__c> populateProcessedInfo(List<SMS__c> smsRecords){
+        for(SMS__c sms : smsRecords){
+            if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
+                sms.Account_Balance_Processed__c = true;
+            }
+            if(sms.Amount__c != null){
+                sms.Amount_Processed__c = true;
+            }
+            if(sms.Beneficiary__c != null){
+                sms.Beneficiary_Processed__c = true;
+            }
+            if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
+                sms.Payment_Info_Processed__c = true;
+            }
+            if(sms.External_Id__c == null || sms.Received_At__c == ''){
+                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
+            }
+        }
+        return smsRecords;
+	} 
+    /**
+     * This method generates a 6-digit numeric OTP for the provided email address.
+     * 
+     * @param email The email address for which the OTP is being generated.
+     * @return The generated OTP as a String.
+     */
+    public static String generateOTP(String email){
+        // Generate a 6-digit numeric OTP
+        String otp = String.valueOf(Math.round(Math.random() * 900000 + 100000));
+
+        // Create an OTP__c record
+        OTP__c otpRecord = new OTP__c();
+        otpRecord.Email__c = email;
+        otpRecord.OTP__c = otp;
+        upsert otpRecord Email__c;
+
+        return otp;
+    }
+
+    /**
+     * Verifies if the provided OTP matches the expected OTP for the given email address.
+     *
+     * @param providedEmail The email address for which the OTP is being verified.
+     * @param providedOTP The OTP provided by the user for verification.
+     * @return A boolean value indicating whether the provided OTP is valid (true) or not (false).
+     */
+    public static boolean checkOTP(String providedEmail, String providedOTP){
+
+        boolean otpMatched = false;
+
+        if(String.isEmpty(providedEmail) || String.isEmpty(providedOTP)) return false;
+        
+        // Query the OTP__c object to get the OTP for the given email
+        List<OTP__c> otpRecords = [
+                                    SELECT Id, Email__c, Phone__c, OTP__c, Expiration_Time__c 
+                                    FROM OTP__c 
+                                    WHERE Email__c = :providedEmail 
+                                    AND Expiration_Time__c < :DateTime.now() 
+                                    LIMIT 1];
+        
+        if (!otpRecords.isEmpty()) {
+            String otpPresent = otpRecords[0].OTP__c;
+            if(otpPresent == providedOTP){
+                otpMatched = true;
+            }
+        }
+
+        return otpMatched;
+    }
+
+
+    /**
+     * Helper method to send an email
+     * @param email The recipient's email address
+     * @param otp The OTP to send
+     */
+    // public static void sendEmail(String email, String otp, DateTime expirationTime) {
+    public static void sendEmail(String email, String otp) {
+            try {
+            // Create the email body
+            // String emailBody = 'The OTP is ' + otp + ' and it is valid until ' + expirationTime.format('yyyy-MM-dd HH:mm:ss') + '.';
+            String emailBody = 'The OTP is ' + otp + ' and it is valid for next 2 minutes.'; 
+
+            // Create a single email message
+            Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
+            emailMessage.setToAddresses(new String[] { email });
+            emailMessage.setSubject('Your OTP Code');
+            emailMessage.setPlainTextBody(emailBody);
+
+            // Send the email
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { emailMessage });
+
+            System.debug('Email sent successfully to ' + email + ' with OTP: ' + otp);
+        } 
+        catch (Exception e) {
+            System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
+            throw new FinPlanException('Failed to send email. Please try again later.');
+        }
+    }
+
     // // Utility method : Clone a record of Transaction_Platform_Event__e
     // public static Transaction_Platform_Event__e cloneTransactionPE(Transaction_Platform_Event__e source) {
     //     // Create a new writable instance of the platform event
@@ -276,93 +382,4 @@ public class Util {
     //     }
     //     return smsList;
     // }
-     
-
-	public static List<SMS__c> populateProcessedInfo(List<SMS__c> smsRecords){
-        for(SMS__c sms : smsRecords){
-            if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
-                sms.Account_Balance_Processed__c = true;
-            }
-            if(sms.Amount__c != null){
-                sms.Amount_Processed__c = true;
-            }
-            if(sms.Beneficiary__c != null){
-                sms.Beneficiary_Processed__c = true;
-            }
-            if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
-                sms.Payment_Info_Processed__c = true;
-            }
-            if(sms.External_Id__c == null || sms.Received_At__c == ''){
-                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
-            }
-        }
-        return smsRecords;
-	} 
-
-    public static String generateOTP(String email){
-        // Generate a 6-digit numeric OTP
-        String otp = String.valueOf(Math.round(Math.random() * 900000 + 100000));
-
-        // Create an OTP__c record
-        OTP__c otpRecord = new OTP__c();
-        otpRecord.Email__c = email;
-        otpRecord.OTP__c = otp;
-        upsert otpRecord Email__c;
-
-        return otp;
-    }
-
-    public static boolean checkOTP(String providedEmail, String providedOTP){
-
-        boolean otpMatched = false;
-
-        if(String.isEmpty(providedEmail) || String.isEmpty(providedOTP)) return false;
-        
-        // Query the OTP__c object to get the OTP for the given email
-        List<OTP__c> otpRecords = [
-                                    SELECT Id, Email__c, Phone__c, OTP__c, Expiration_Time__c 
-                                    FROM OTP__c 
-                                    WHERE Email__c = :providedEmail 
-                                    AND Expiration_Time__c < :DateTime.now() 
-                                    LIMIT 1];
-        
-        if (!otpRecords.isEmpty()) {
-            String otpPresent = otpRecords[0].OTP__c;
-            if(otpPresent == providedOTP){
-                otpMatched = true;
-            }
-        }
-
-        return otpMatched;
-    }
-
-
-    /**
-     * Helper method to send an email
-     * @param email The recipient's email address
-     * @param otp The OTP to send
-     */
-    // public static void sendEmail(String email, String otp, DateTime expirationTime) {
-    public static void sendEmail(String email, String otp) {
-            try {
-            // Create the email body
-            // String emailBody = 'The OTP is ' + otp + ' and it is valid until ' + expirationTime.format('yyyy-MM-dd HH:mm:ss') + '.';
-            String emailBody = 'The OTP is ' + otp + ' and it is valid for next 2 minutes.'; 
-
-            // Create a single email message
-            Messaging.SingleEmailMessage emailMessage = new Messaging.SingleEmailMessage();
-            emailMessage.setToAddresses(new String[] { email });
-            emailMessage.setSubject('Your OTP Code');
-            emailMessage.setPlainTextBody(emailBody);
-
-            // Send the email
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { emailMessage });
-
-            System.debug('Email sent successfully to ' + email + ' with OTP: ' + otp);
-        } 
-        catch (Exception e) {
-            System.debug('Failed to send email to ' + email + ': ' + e.getMessage());
-            throw new FinPlanException('Failed to send email. Please try again later.');
-        }
-    }
 }
