@@ -1,11 +1,15 @@
 @RestResource(urlMapping='/api/guest/sms/sync')
-global with sharing class GuestSyncMessageAPI {
+global without sharing class GuestSyncMessageAPI {
 
     // POST method to handle incoming payload and create SMS__c records
     @HttpPost
     global static void syncSMSRecords() {
+        
         // Parse the incoming JSON payload into a list of SMS__c objects
         List<SMS__c> smsRecords;
+
+        RestContext.response.addHeader('Content-Type', 'application/json');
+
         try {
             if (RestContext.request.requestBody == null || String.isEmpty(RestContext.request.requestBody.toString())) {
                 RestContext.response.statusCode = 400; // Bad Request

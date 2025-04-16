@@ -13,16 +13,22 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
             System.debug('Before all=>' + smsRecords);
 
             // Call the first enrichment method
-            smsRecords = Util.extractBeneficiaryAndAmountFromSMS(smsRecords);
+            // Populate the Finance Account Id
+            Map<String, Finance_Account__c> mapAccounts = Util.getAllAccounts();
+            smsRecords = Util.populateFinanceAccountFromSMS(smsRecords, mapAccounts);
             System.debug('after first smsRecords=>' + smsRecords);
 
             // Call the second enrichment method
-            smsRecords = Util.extractBalanceInfo(smsRecords);
+            smsRecords = Util.extractBeneficiaryAndAmountFromSMS(smsRecords, mapAccounts);
             System.debug('after second smsRecords=>' + smsRecords);
-
+            
             // Call the third enrichment method
-            smsRecords = Util.populateProcessedInfo(smsRecords);
+            smsRecords = Util.extractBalanceInfo(smsRecords);
             System.debug('after third smsRecords=>' + smsRecords);
+
+            // Call the last method
+            smsRecords = Util.populateProcessedInfo(smsRecords);
+            System.debug('after last smsRecords=>' + smsRecords);
 
             // Upsert the enriched SMS__c records into the database
             upsert smsRecords External_Id__c;
