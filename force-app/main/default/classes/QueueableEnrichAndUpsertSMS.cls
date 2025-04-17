@@ -31,7 +31,8 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
             System.debug('after last smsRecords=>' + smsRecords);
 
             // Upsert the enriched SMS__c records into the database
-            upsert smsRecords External_Id__c;
+            // upsert smsRecords External_Id__c;
+            upsertRecords(smsRecords);
 
             System.debug('SMS records successfully enriched and inserted.');
 
@@ -42,5 +43,48 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
         catch (Exception e) {
             System.debug('Error processing records: ' + e.getStackTraceString());
         }
+    }
+
+    // Fallback method when upsert method is not working in Salesforce
+    public static void upsertRecords(List<SMS__c> smsList){
+        
+        if (smsList == null || smsList.isEmpty()) {
+            return;
+        }
+
+        // Query existing records based on External_Id__c
+        Map<String, SMS__c> existingRecordsMap = new Map<String, SMS__c>();
+        
+        List<String> externalIdList = new List<String>();
+        for(SMS__c sms : smsList){
+            externalIdList.add(sms.External_Id__c);
+        }
+        for (SMS__c existingRecord : [SELECT Id, External_Id__c FROM SMS__c WHERE External_Id__c IN :externalIdList]){
+            existingRecordsMap.put(existingRecord.External_Id__c, existingRecord);
+        }
+
+        // Separate records into insert and update lists
+        List<SMS__c> recordsToInsert = new List<SMS__c>();
+        List<SMS__c> recordsToUpdate = new List<SMS__c>();
+
+        for (SMS__c sms : smsList) {
+            if (existingRecordsMap.containsKey(sms.External_Id__c)) {
+                SMS__c existingRecord = existingRecordsMap.get(sms.External_Id__c);
+                sms.Id = existingRecord.Id; // Set the Id for update
+                recordsToUpdate.add(sms);
+            } 
+            else {
+                recordsToInsert.add(sms);
+            }
+        }
+
+        // Perform DML operations
+        if (!recordsToInsert.isEmpty()) {
+            insert recordsToInsert;
+        }
+        if (!recordsToUpdate.isEmpty()) {
+            update recordsToUpdate;
+        }
+
     }
 }

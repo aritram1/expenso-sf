@@ -2,6 +2,8 @@ public with sharing class BeneficiaryHandler {
 
 
     public static List<SMS__c> updateBeneficiary(List<SMS__c> inputList){
+
+        List<SMS__c> outputList = new List<SMS__c>();
         
         List<Beneficiary__c> insertBeneficiaryList = new List<Beneficiary__c>();
         
@@ -18,37 +20,40 @@ public with sharing class BeneficiaryHandler {
             allBeneficiariesMap.put(b.name, b); // b.name is in camel case
         }
 
-        // Populate Beneficiary__c info from Beneficiary_Name__c info
+        List<Beneficiary__c> newBeneficiaries = new List<Beneficiary__c>();
+
+        // Step 1 : Find the beneficiaries that are not present and add to a list
         for(SMS__c sms : inputList){
             if(String.isNotEmpty(sms.Beneficiary_name__c) && String.isNotBlank(sms.Beneficiary_name__c)){
-                
-                // convert to camel case to use for later
-                String beneficiaryNameCameCase = Util.toCamelCase(sms.Beneficiary_name__c);
-                
-                if(allBeneficiariesMap.containsKey(beneficiaryNameCameCase)){
-                    Beneficiary__c existing = allBeneficiariesMap.get(beneficiaryNameCameCase);
-                    sms.beneficiary__c = existing.Id;
-                }
-                else{
+                String beneficiaryNameCameCase = Util.toCamelCase(sms.Beneficiary_name__c); 
+                if(!allBeneficiariesMap.containsKey(beneficiaryNameCameCase)){
                     Beneficiary__c newBeneficiary = new Beneficiary__c();
                     newBeneficiary.Name = beneficiaryNameCameCase;
-                    
-                    insert newBeneficiary; // TB done later - [Optimization - 1 : ensure the dml is outside loop]
-                    insertBeneficiaryList.add(newBeneficiary);
-
-                    // Part 1 : 
-                    // Set the beneficiary Info at the sms level
-                    sms.beneficiary__c = newBeneficiary.Id;
-                    
-                    // Part 2 : 
-                    // Add the new beneficiary to the map `allBeneficiariesMap`, so the next sms can reuse latest data
-                    allBeneficiariesMap.put(beneficiaryNameCameCase, newBeneficiary);
-                    
+                    newBeneficiaries.add(newBeneficiary);
                 }
             }
         }
 
-        return inputList; // return the updated list
+        // Step 2 : Insert beneficiaries from the list
+        if (!newBeneficiaries.isEmpty()) {
+            
+            insert newBeneficiaries;
+            
+            // Add these new beneficiaries to the beneficiary map
+            for(Beneficiary__c b : newBeneficiaries){
+                allBeneficiariesMap.put(Util.toCamelCase(b.Name), b);
+            }
+        }
+
+        // Step 3 : Finally, update the Beneficiary Id from Beneficiary Name
+        for(SMS__c sms : inputList){
+            if(sms.Beneficiary_name__c == null){
+                sms.Beneficiary__c = allBeneficiariesMap.get(Util.toCamelCase(sms.Beneficiary_name__c)).Id;
+            }
+        }
+
+        // return the updated list
+        return inputList;
     }
 
     // This method fixes if there is any typo in beneficiary name or some abbreviations are missed

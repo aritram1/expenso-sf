@@ -16,16 +16,12 @@ public class Util {
     }
 
     public static SMS__c populateTransactionDate(SMS__c sms){
-        String rawDateString = sms.Received_At__c?.split(' ')[0];
-        if(rawDateString?.contains('-')){
-            Integer yyyy = Integer.valueOf(rawDateString.split('-')[0]);
-            Integer mm = Integer.valueOf(rawDateString.split('-')[1]);
-            Integer dd = Integer.valueOf(rawDateString.split('-')[2]);
+        String receivedAt = sms.Received_At__c?.replace('T', ' ')?.split(' ')[0];
+        if(receivedAt?.contains('-')){
+            Integer yyyy = Integer.valueOf(receivedAt.split('-')[0]);
+            Integer mm = Integer.valueOf(receivedAt.split('-')[1]);
+            Integer dd = Integer.valueOf(receivedAt.split('-')[2]);
             sms.Transaction_Date__c = Date.newInstance(yyyy, mm, dd);
-        }
-        else{ 
-            // Convert String -> Long -> DateTime -> Date
-            sms.Transaction_Date__c = Date.valueOf(DateTime.newInstance(Long.valueOf(rawDateString))); 
         }
         return sms;
     }
@@ -268,9 +264,8 @@ public class Util {
             if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
                 sms.Payment_Info_Processed__c = true;
             }
-            if(sms.External_Id__c == null || sms.Received_At__c == ''){
-                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
-            }
+            // Not required now : Since client is already sending the date in payload
+            // sms = Util.populateTransactionDate(sms);
         }
         return smsRecords;
 	}
@@ -417,9 +412,15 @@ public class Util {
      * @return The updated list of SMS__c records with finance account information.
      */
     public static List<SMS__c> populateFinanceAccountFromSMS(List<SMS__c> smsRecords, Map<String, Finance_Account__c> mapAccounts) {
+        
         for (SMS__c sms : smsRecords) {
             
+            if(sms.External_Id__c == null){
+                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
+            }
+            
             String content = sms.Content__c != null ? sms.Content__c.toLowerCase() : '';
+            
             System.debug('mapAccounts=>' + mapAccounts);
 
             if (Pattern.compile(SBI_SA_PATTERN).matcher(content).matches()) {

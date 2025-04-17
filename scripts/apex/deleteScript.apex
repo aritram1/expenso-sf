@@ -1,4 +1,3 @@
-
 // delete script    
 
 // List of object API names
