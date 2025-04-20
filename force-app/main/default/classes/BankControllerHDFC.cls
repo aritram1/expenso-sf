@@ -357,10 +357,10 @@ public with sharing class BankControllerHDFC {
 
             // debit 1
             if(sms.Content__c.contains('On HDFC Bank Card 2004')){
-                String amount =  contentArray[1].replace('Rs.', '').replace(' ', '');
+                String amount =  contentArray[1]?.replace('Rs.', '')?.replace(' ', '')?.replace(',', '');
                 sms.amount__c = Decimal.valueOf(amount ?? '0');
-                sms.beneficiary_name__c = sms.Content__c.split('At')[1].split('by')[0];
-                sms.Payment_Reference__c = sms.Content__c.toUpperCase().split('AT')[1].split('BY')[1].replace('UPI', '');
+                sms.beneficiary_name__c = sms.Content__c?.split('At')[1]?.split('by')?.get(0);
+                sms.Payment_Reference__c = sms.Content__c.toUpperCase()?.split('AT')[1]?.split('BY')[1]?.replace('UPI', '');
                 if(sms.Content__c.toUpperCase().contains('UPI')){
                     sms.Payment_Via__c = 'UPI';
                 }

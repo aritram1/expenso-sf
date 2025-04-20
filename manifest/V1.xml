@@ -15,12 +15,17 @@
 		<members>InvocableBalanceUpdateHandler</members>
 		<!-- API Classes -->
 		<members>SychronizeMessagesAPI</members>
+		<members>CreateMessagesAPI</members>
 		<!-- Guest API Classes -->
 		<members>GuestSyncMessageAPI</members>
 		<members>GuestCreateOTPAPI</members>
 		<members>GuestCheckOTPAPI</members>		
 		<!-- Async Classes -->
 		<members>QueueableEnrichAndUpsertSMS</members>
+		<members>QueueableExtractBalanceInfo</members>
+		<members>QueueableExtractBeneficiaryAndAmount</members>
+		<members>QueueablePopulateFinanceAccount</members>
+		<members>QueueablePopulateProcessedInfo</members>
 		<!-- Other Classes -->
 		<members>BeneficiaryHandler</members>	
 		<members>WalletControllerAmazonPay</members>

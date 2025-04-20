@@ -253,7 +253,7 @@ public with sharing class BankControllerICICI {
                     inrValue = inrMatcher.group(1); // Extract the INR value
                 }
 
-                String amount =  inrValue;
+                String amount =  inrValue.trim().replace(',', '');
                 sms.amount__c = Decimal.valueOf(amount ?? '0');
             }
 

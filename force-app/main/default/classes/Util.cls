@@ -168,7 +168,8 @@ public class Util {
 
             // Also update the beneficiary Name with beneficiary Id
             // This method contains a DML so we may have to use it outside the loop
-            result = BeneficiaryHandler.updateBeneficiary(result);
+            // to be checked later
+            // result = BeneficiaryHandler.updateBeneficiary(result);
 
         } 
         catch (Exception e) {
