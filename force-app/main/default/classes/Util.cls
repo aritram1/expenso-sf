@@ -275,6 +275,20 @@ public class Util {
 	}
 
     /**
+     * Populates process completion information for a list of SMS__c records.
+     * 
+     * @param smsRecords The list of SMS__c records to process.
+     * @return The updated list of SMS__c records with completion information.
+     */
+    public static List<SMS__c> populateProcessCompletionInfo(List<SMS__c> smsRecords){
+        for(SMS__c sms : smsRecords){
+            sms.Processing_Completed__c = true;
+            sms.Processing_Completed_At__c = Datetime.now();
+        }
+        return smsRecords;
+	}
+
+    /**
      * This method generates a 6-digit numeric OTP for the provided email address.
      * 
      * @param email The email address for which the OTP is being generated.

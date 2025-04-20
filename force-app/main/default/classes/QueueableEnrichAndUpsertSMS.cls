@@ -20,7 +20,7 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
         }
         catch (Exception e) {
             System.debug('Error processing records: ' + e.getStackTraceString());
-            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, null); // the last parameter is the entity Id, which is not available outside the loop
+            FinPlanLogger.logError(CLASS_NAME, 'execute', e, null); // the last parameter is the entity Id, which is not available outside the loop
         }
     }
 

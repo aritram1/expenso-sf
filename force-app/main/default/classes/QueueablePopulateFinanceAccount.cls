@@ -19,13 +19,14 @@ public without sharing class QueueablePopulateFinanceAccount implements Queueabl
 
             // Upsert the enriched SMS__c records into the database
             upsert smsRecords External_Id__c;
-            
-            // Chain the next Queueable
-            System.enqueueJob(new QueueableExtractBeneficiaryAndAmount(smsRecords));
         } 
         catch (Exception e) {
             System.debug('Error in QueueablePopulateFinanceAccount: ' + e.getStackTraceString());
-            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, null); // the last parameter is the entity Id, which is not available outside the loop
+            FinPlanLogger.logError(CLASS_NAME, 'execute', e, null); // the last parameter is the entity Id, which is not available outside the loop
+        }
+        finally{
+            // Chain the next Queueable
+            System.enqueueJob(new QueueableExtractBeneficiaryAndAmount(smsRecords));
         }
     }
 }

@@ -13,17 +13,18 @@ public without sharing class QueueablePopulateProcessedInfo implements Queueable
             System.debug('Before populateProcessedInfo: ' + smsRecords);
 
             // Populate Processed Info
-            smsRecords = Util.populateProcessedInfo(smsRecords);
-            System.debug('After populateProcessedInfo: ' + smsRecords);
+            smsRecords = Util.populateProcessCompletionInfo(smsRecords);
+            System.debug('After populateProcessCompletionInfo: ' + smsRecords);
 
             // Upsert the enriched SMS__c records into the database
             upsert smsRecords External_Id__c;
-
-            System.debug('SMS records successfully enriched and upserted.');
         } 
         catch (Exception e) {
             System.debug('Error in QueueablePopulateProcessedInfo: ' + e.getStackTraceString());
-            FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, null); // the last parameter is the entity Id, which is not available outside the loop
+            FinPlanLogger.logError(CLASS_NAME, 'execute', e, null); // the last parameter is the entity Id, which is not available outside the loop
+        }
+        finally{
+            System.debug('Inside finally block of process completion queueable');
         }
     }
 }
