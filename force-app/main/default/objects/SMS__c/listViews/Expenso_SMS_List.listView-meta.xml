@@ -4,7 +4,7 @@
     <columns>NAME</columns>
     <columns>Type__c</columns>
     <columns>Balance_Update__c</columns>
-    <columns>Create_Transaction__c</columns>
+    <columns>Create_Transaction__c</columns> 
     <columns>Amount__c</columns>
     <columns>CC_Available_Balance__c</columns>
     <columns>SA_Available_Balance__c</columns>

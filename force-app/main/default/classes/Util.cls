@@ -27,7 +27,7 @@ public class Util {
     }
 
     public static String toCamelCase(String inputString) {
-        if(inputString == null){
+        if(inputString == null || inputString == ''){
             return inputString;
         }
         else{
@@ -263,6 +263,9 @@ public class Util {
             }
             if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
                 sms.Payment_Info_Processed__c = true;
+            }
+            if(sms.Amount__c != null){
+                sms.Create_Transaction__c = true;
             }
             // Not required now : Since client is already sending the date in payload
             // sms = Util.populateTransactionDate(sms);

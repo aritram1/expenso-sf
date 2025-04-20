@@ -156,6 +156,16 @@
                 <identifier>RecordPayment_Info_Processed__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Create_Transaction__c</fieldItem>
+                <identifier>RecordCreate_Transaction_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -198,6 +208,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Account_Balance_Processed__c</fieldItem>
                 <identifier>RecordAccount_Balance_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Balance_Update__c</fieldItem>
+                <identifier>RecordBalance_Update_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-05c5d51f-27e2-4f4e-892b-964cec8aa3f4</name>
@@ -453,26 +473,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Type__c</fieldItem>
                 <identifier>RecordType_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Create_Transaction__c</fieldItem>
-                <identifier>RecordCreate_Transaction_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Balance_Update__c</fieldItem>
-                <identifier>RecordBalance_Update_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>

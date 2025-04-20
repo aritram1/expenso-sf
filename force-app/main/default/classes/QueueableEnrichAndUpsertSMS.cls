@@ -1,6 +1,9 @@
 public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, Database.AllowsCallouts {
 
     private List<SMS__c> smsRecords;
+    // Separate records into insert and update lists
+    List<SMS__c> recordsToInsert = new List<SMS__c>();
+    List<SMS__c> recordsToUpdate = new List<SMS__c>();
 
     // Constructor to accept the SMS records
     public QueueableEnrichAndUpsertSMS(List<SMS__c> smsRecords) {
@@ -26,13 +29,13 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
             smsRecords = Util.extractBalanceInfo(smsRecords);
             System.debug('after third smsRecords=>' + smsRecords);
 
-            // Call the last method
+            // Call the last enrichment method
             smsRecords = Util.populateProcessedInfo(smsRecords);
             System.debug('after last smsRecords=>' + smsRecords);
 
             // Upsert the enriched SMS__c records into the database
-            // upsert smsRecords External_Id__c;
-            upsertRecords(smsRecords);
+            upsert smsRecords External_Id__c;
+            // upsertSMSRecords(smsRecords);
 
             System.debug('SMS records successfully enriched and inserted.');
 
@@ -45,46 +48,42 @@ public without sharing class QueueableEnrichAndUpsertSMS implements Queueable, D
         }
     }
 
-    // Fallback method when upsert method is not working in Salesforce
-    public static void upsertRecords(List<SMS__c> smsList){
+    // // Fallback method when upsert method is not working in Salesforce
+    // public static void upsertRecords(List<SMS__c> smsList){
         
-        if (smsList == null || smsList.isEmpty()) {
-            return;
-        }
+    //     if (smsList == null || smsList.isEmpty()) {
+    //         return;
+    //     }
 
-        // Query existing records based on External_Id__c
-        Map<String, SMS__c> existingRecordsMap = new Map<String, SMS__c>();
+    //     // Query existing records based on External_Id__c
+    //     Map<String, SMS__c> existingRecordsMap = new Map<String, SMS__c>();
         
-        List<String> externalIdList = new List<String>();
-        for(SMS__c sms : smsList){
-            externalIdList.add(sms.External_Id__c);
-        }
-        for (SMS__c existingRecord : [SELECT Id, External_Id__c FROM SMS__c WHERE External_Id__c IN :externalIdList]){
-            existingRecordsMap.put(existingRecord.External_Id__c, existingRecord);
-        }
+    //     List<String> externalIdList = new List<String>();
+    //     for(SMS__c sms : smsList){
+    //         externalIdList.add(sms.External_Id__c);
+    //     }
+    //     for (SMS__c existingRecord : [SELECT Id, External_Id__c FROM SMS__c WHERE External_Id__c IN :externalIdList]){
+    //         existingRecordsMap.put(existingRecord.External_Id__c, existingRecord);
+    //     }
 
-        // Separate records into insert and update lists
-        List<SMS__c> recordsToInsert = new List<SMS__c>();
-        List<SMS__c> recordsToUpdate = new List<SMS__c>();
+    //     for (SMS__c sms : smsList) {
+    //         if (existingRecordsMap.containsKey(sms.External_Id__c)) {
+    //             SMS__c existingRecord = existingRecordsMap.get(sms.External_Id__c);
+    //             sms.Id = existingRecord.Id; // Set the Id for update
+    //             recordsToUpdate.add(sms);
+    //         } 
+    //         else {
+    //             recordsToInsert.add(sms);
+    //         }
+    //     }
 
-        for (SMS__c sms : smsList) {
-            if (existingRecordsMap.containsKey(sms.External_Id__c)) {
-                SMS__c existingRecord = existingRecordsMap.get(sms.External_Id__c);
-                sms.Id = existingRecord.Id; // Set the Id for update
-                recordsToUpdate.add(sms);
-            } 
-            else {
-                recordsToInsert.add(sms);
-            }
-        }
+    //     // Perform DML operations
+    //     if (!recordsToInsert.isEmpty()) {
+    //         insert recordsToInsert;
+    //     }
+    //     if (!recordsToUpdate.isEmpty()) {
+    //         update recordsToUpdate;
+    //     }
 
-        // Perform DML operations
-        if (!recordsToInsert.isEmpty()) {
-            insert recordsToInsert;
-        }
-        if (!recordsToUpdate.isEmpty()) {
-            update recordsToUpdate;
-        }
-
-    }
+    // }
 }
