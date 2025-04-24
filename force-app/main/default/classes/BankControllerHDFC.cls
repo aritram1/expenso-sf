@@ -365,6 +365,16 @@ public with sharing class BankControllerHDFC {
                     sms.Payment_Via__c = 'UPI';
                 }
             }
+            // debit 2
+            if(sms.Content__c.contains('On HDFC Bank Card x2004')){
+                String amount =  contentArray[1]?.replace('Rs.', '')?.replace(' ', '')?.replace(',', '');
+                sms.amount__c = Decimal.valueOf(amount ?? '0');
+                sms.beneficiary_name__c = Util.toCamelCase(sms.Content__c?.split('At')[1]?.split('on')?.get(0)?.trim());
+                sms.Payment_Reference__c = sms.Content__c.toUpperCase()?.split('AT')[1]?.split('BY')[1]?.replace('UPI', '');
+                if(sms.Content__c.toUpperCase().contains('UPI')){
+                    sms.Payment_Via__c = 'UPI';     
+                }
+            }
         }
         catch(Exception e){
             FinPlanLogger.logError(CLASS_NAME, 'processForHDFCBankRupayCC', e, null); // the last parameter is the entity Id, which is not available outside the loop

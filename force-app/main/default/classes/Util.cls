@@ -256,9 +256,6 @@ public class Util {
             if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
                 sms.Account_Balance_Processed__c = true;
             }
-            if(sms.Amount__c != null){
-                sms.Amount_Processed__c = true;
-            }
             if(sms.Beneficiary__c != null){
                 sms.Beneficiary_Processed__c = true;
             }
@@ -266,7 +263,11 @@ public class Util {
                 sms.Payment_Info_Processed__c = true;
             }
             if(sms.Amount__c != null){
+                sms.Amount_Processed__c = true;
                 sms.Create_Transaction__c = true;
+            }
+            if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
+                sms.Balance_Update__c = true;
             }
             // Not required now : Since client is already sending the date in payload
             // sms = Util.populateTransactionDate(sms);
