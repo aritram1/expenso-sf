@@ -41,8 +41,18 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Device__c</fieldItem>
-                <identifier>RecordDevice_cField2</identifier>
+                <fieldItem>Record.Transaction_Date__c</fieldItem>
+                <identifier>RecordTransaction_Date_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Finance_Account__c</fieldItem>
+                <identifier>RecordFinance_Account_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -61,18 +71,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Received_At__c</fieldItem>
-                <identifier>RecordReceived_At_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.OwnerId</fieldItem>
-                <identifier>RecordOwnerIdField</identifier>
+                <fieldItem>Record.Device__c</fieldItem>
+                <identifier>RecordDevice_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-8858b44f-a748-44be-9026-d74d1bacaf2c</name>
@@ -117,46 +117,13 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>force:relatedListContainer</componentName>
-                <identifier>force_relatedListContainer</identifier>
-            </componentInstance>
-        </itemInstances>
-        <mode>Replace</mode>
-        <name>relatedTabContent</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Name</fieldItem>
-                <identifier>RecordNameField3</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Sender__c</fieldItem>
-                <identifier>RecordSender_cField</identifier>
+                <fieldItem>Record.Content__c</fieldItem>
+                <identifier>RecordContent_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -175,14 +142,28 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Status__c</fieldItem>
-                <identifier>RecordStatus__cField</identifier>
+                <fieldItem>Record.Amount_Processed__c</fieldItem>
+                <identifier>RecordAmount_Processed__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Original_Content__c</fieldItem>
-                <identifier>RecordOriginal_Content__cField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Payment_Info_Processed__c</fieldItem>
+                <identifier>RecordPayment_Info_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Create_Transaction__c</fieldItem>
+                <identifier>RecordCreate_Transaction_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-9b4be569-1b2b-4e62-9fbf-51ceeaacbe8f</name>
@@ -195,8 +176,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Content__c</fieldItem>
-                <identifier>RecordContent_cField</identifier>
+                <fieldItem>Record.External_Id__c</fieldItem>
+                <identifier>RecordExternal_Id_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -215,8 +196,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Created_From__c</fieldItem>
-                <identifier>RecordCreated_From_cField</identifier>
+                <fieldItem>Record.Beneficiary_Processed__c</fieldItem>
+                <identifier>RecordBeneficiary_Processed__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -225,8 +206,18 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.External_Id__c</fieldItem>
-                <identifier>RecordExternal_Id_cField</identifier>
+                <fieldItem>Record.Account_Balance_Processed__c</fieldItem>
+                <identifier>RecordAccount_Balance_Processed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Balance_Update__c</fieldItem>
+                <identifier>RecordBalance_Update_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-05c5d51f-27e2-4f4e-892b-964cec8aa3f4</name>
@@ -267,6 +258,16 @@
                 <identifier>RecordCreatedByIdField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Beneficiary_Name__c</fieldItem>
+                <identifier>RecordBeneficiary_Name_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-0a86abeb-b862-474e-90b5-a0893c21b22f</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -279,6 +280,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.LastModifiedById</fieldItem>
                 <identifier>RecordLastModifiedByIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Original_Content__c</fieldItem>
+                <identifier>RecordOriginal_Content_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-eed93ed6-f93c-4e11-ab1d-cf8359010d35</name>
@@ -359,20 +370,6 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>body</name>
-                    <value>relatedTabContent</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Standard.Tab.relatedLists</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>relatedListsTab</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>active</name>
                     <value>true</value>
                 </componentInstanceProperties>
@@ -414,16 +411,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Amount_Value__c</fieldItem>
-                <identifier>RecordAmount_Value_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Finance_Account__c</fieldItem>
                 <identifier>RecordFinance_Account_cField</identifier>
             </fieldInstance>
@@ -434,8 +421,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Beneficiary__c</fieldItem>
-                <identifier>RecordBeneficiary_cField</identifier>
+                <fieldItem>Record.Payment_Via__c</fieldItem>
+                <identifier>RecordPayment_Via_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -444,8 +431,38 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Masked_Content__c</fieldItem>
-                <identifier>RecordMasked_Content_cField</identifier>
+                <fieldItem>Record.Payment_Reference__c</fieldItem>
+                <identifier>RecordPayment_Reference_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Transaction_Date__c</fieldItem>
+                <identifier>RecordTransaction_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Amount__c</fieldItem>
+                <identifier>RecordAmount_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Beneficiary__c</fieldItem>
+                <identifier>RecordBeneficiary__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -456,26 +473,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Type__c</fieldItem>
                 <identifier>RecordType_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Create_Transaction__c</fieldItem>
-                <identifier>RecordCreate_Transaction_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Balance_Update__c</fieldItem>
-                <identifier>RecordBalance_Update_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -516,6 +513,75 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>MassChangeOwner</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>New</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>1</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>SMS__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Transactions__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>CARD</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>NAME</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Amount__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Beneficiary__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Payment_Via__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Payment_Reference__c</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Transactions</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList</identifier>
+            </componentInstance>
+        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>

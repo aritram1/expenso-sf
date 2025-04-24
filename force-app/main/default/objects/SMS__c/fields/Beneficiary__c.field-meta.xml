@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Beneficiary__c</fullName>
-    <externalId>false</externalId>
+    <deleteConstraint>SetNull</deleteConstraint>
     <label>Beneficiary</label>
-    <length>255</length>
+    <referenceTo>Beneficiary__c</referenceTo>
+    <relationshipLabel>SMS</relationshipLabel>
+    <relationshipName>SMS</relationshipName>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>Text</type>
-    <unique>false</unique>
+    <type>Lookup</type>
 </CustomField>

@@ -85,6 +85,16 @@
                 <identifier>RecordAccount_Code_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Balance_Last_Updated_At__c</fieldItem>
+                <identifier>RecordBalance_Last_Updated_At__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-87e2ee0b-3b1a-47e4-b084-1f4127b93de4</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -117,6 +127,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.OwnerId</fieldItem>
                 <identifier>RecordOwnerIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.External_Id__c</fieldItem>
+                <identifier>RecordExternal_Id__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-46ca910e-7055-4237-b08a-4b19e8ff34c6</name>
@@ -666,10 +686,10 @@
                             <value>NAME</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Beneficiary__c.Display_Name__c</value>
+                            <value>Beneficiary__c.Type__c</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Beneficiary__c.Type__c</value>
+                            <value>Type__c</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Amount__c</value>
