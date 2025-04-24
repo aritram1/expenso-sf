@@ -15,16 +15,25 @@
 		<members>InvocableBalanceUpdateHandler</members>
 		<!-- API Classes -->
 		<members>SychronizeMessagesAPI</members>
+		<members>CreateMessagesAPI</members>
 		<!-- Guest API Classes -->
-		<members>GuestSyncMessageAPI</members>		
+		<members>GuestSyncMessageAPI</members>
+		<members>GuestCreateOTPAPI</members>
+		<members>GuestCheckOTPAPI</members>		
 		<!-- Async Classes -->
 		<members>QueueableEnrichAndUpsertSMS</members>
+		<members>QueueableExtractBalanceInfo</members>
+		<members>QueueableExtractBeneficiaryAndAmount</members>
+		<members>QueueablePopulateFinanceAccount</members>
+		<members>QueueablePopulateProcessedInfo</members>
 		<!-- Other Classes -->
-		<members>SMSProcessor</members>
-		<members>BeneficiaryHandler</members>
+		<members>BeneficiaryHandler</members>	
+		<members>WalletControllerAmazonPay</members>
+		<members>BankControllerHDFC</members>
+		<members>BankControllerICICI</members>
+		<members>BankControllerSBI</members>
 		<!-- To be Implemented -->
 		<members>SMSHandlerInvestment</members>	
-		<members>SMSHandlerOthers</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

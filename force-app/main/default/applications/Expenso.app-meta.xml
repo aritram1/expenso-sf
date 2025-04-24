@@ -11,6 +11,7 @@
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>true</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
     <label>Expenso</label>
     <navType>Console</navType>
     <tabs>standard-Account</tabs>
@@ -23,6 +24,7 @@
     <tabs>Investment__c</tabs>
     <tabs>Reminder__c</tabs>
     <tabs>System_Log__c</tabs>
+    <tabs>OTP__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>FiNest_UtilityBar</utilityBar>
     <workspaceConfig>
@@ -34,6 +36,9 @@
         </mappings>
         <mappings>
             <tab>Investment__c</tab>
+        </mappings>
+        <mappings>
+            <tab>OTP__c</tab>
         </mappings>
         <mappings>
             <tab>Reminder__c</tab>

@@ -65,12 +65,20 @@ public with sharing class FinPlanLogger {
     public static void logError(String className, String methodName, Exception e, SObject so) {
         try {
             System_Log__c log = new System_Log__c();
-            log.component_name__c = className + '.' + methodName;
-            log.Related_To__c = (so != null && so.getSObjectType().getDescribe().fields.getMap().containsKey('Name')) ? (String)so.get('Name') : 'not available';
-            log.type__c = 'Error';
-            log.message__c = 'Error from Apex class :' + className;
-            log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
-            log.description__c = 'External_Id__c : ' + ((SMS__c)so)?.External_Id__c;
+            if(String.isNotEmpty(className) && String.isNotEmpty(methodName)){
+                log.component_name__c = className + '.' + methodName;
+            }
+            if(e != null) {
+                log.type__c = 'Error';
+                log.stack_trace__c = Util.clipTo255char(e.getStackTraceString());
+                log.message__c = 'Error from Apex class :' + className;
+            }
+            if(so != null){
+                log.description__c = 'External_Id__c : ' + ((SMS__c)so)?.External_Id__c;
+                if(so.getSObjectType().getDescribe().fields.getMap().containsKey('Name')){
+                    log.Related_To__c = (String)so.get('Name');
+                }
+            }
             insert log;
         }
         catch (Exception ex) {

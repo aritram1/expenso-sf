@@ -1,7 +1,16 @@
-public with sharing class SMSHandlerOthers {
 
-
+public with sharing class WalletControllerAmazonPay {
     
+    public static final String CLASS_NAME = 'WalletControllerAmazonPay';
+    
+    public WalletControllerAmazonPay() {
+
+    }
+
+    public static SMS__c processForAmazonWallet(SMS__c inputSMS){
+        SMS__c sms = inputSMS.clone(false, true); // Util.cloneTransactionPE(inputSMS); 
+        return sms;
+    }
 
     // public static SMS__c processForOthers(SMS__c sms, Map<String, Finance_Account__c> allBankAccountsMap){
         
@@ -53,7 +62,4 @@ public with sharing class SMSHandlerOthers {
 
     //     return sms;
     // }
-
-        
-        
 }

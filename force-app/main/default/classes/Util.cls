@@ -1,6 +1,12 @@
 public class Util {
 
     public static final String CLASS_NAME = 'Util';
+    public static final String SBI_SA_PATTERN = '.*(6414|a/cx6414|xx6414).*';
+    public static final String ICICI_SA_PATTERN = '.*(xxx360|xx360|a/cx360).*';            
+    public static final String HDFC_SA_PATTERN = '.*(9560|x9560|\\*9560|xxxx9560|hdfc bank a/c|7164).*';
+    public static final String ICICI_CC_PATTERN = '.*(9006|x9006).*';
+    public static final String ICICI_AMAZON_CC_PATTERN = '.*(7005|xx7005).*';
+    public static final String HDFC_RUPAY_CC_PATTERN = '.*(2004|xx2004).*';
     
     public static String clipTo255char(String str){
         if(str == null) {
@@ -10,22 +16,18 @@ public class Util {
     }
 
     public static SMS__c populateTransactionDate(SMS__c sms){
-        String rawDateString = sms.Received_At__c?.split(' ')[0];
-        if(rawDateString?.contains('-')){
-            Integer yyyy = Integer.valueOf(rawDateString.split('-')[0]);
-            Integer mm = Integer.valueOf(rawDateString.split('-')[1]);
-            Integer dd = Integer.valueOf(rawDateString.split('-')[2]);
+        String receivedAt = sms.Received_At__c?.replace('T', ' ')?.split(' ')[0];
+        if(receivedAt?.contains('-')){
+            Integer yyyy = Integer.valueOf(receivedAt.split('-')[0]);
+            Integer mm = Integer.valueOf(receivedAt.split('-')[1]);
+            Integer dd = Integer.valueOf(receivedAt.split('-')[2]);
             sms.Transaction_Date__c = Date.newInstance(yyyy, mm, dd);
-        }
-        else{ 
-            // Convert String -> Long -> DateTime -> Date
-            sms.Transaction_Date__c = Date.valueOf(DateTime.newInstance(Long.valueOf(rawDateString))); 
         }
         return sms;
     }
 
     public static String toCamelCase(String inputString) {
-        if(inputString == null){
+        if(inputString == null || inputString == ''){
             return inputString;
         }
         else{
@@ -74,6 +76,16 @@ public class Util {
         return allAccountsMap;
     }
 
+    // Get the list of all accounts
+    public static Map<String, Finance_Account__c> getAllAccounts() {
+        Map<String, Finance_Account__c> allAccountsMap = new Map<String, Finance_Account__c>();
+        List<Finance_Account__c> allAccounts = [SELECT Id, External_Id__c FROM Finance_Account__c];
+        for (Finance_Account__c fa : allAccounts) {
+            allAccountsMap.put(fa.External_Id__c, fa);
+        }
+        return allAccountsMap;
+    }
+
     public static String sanitizeNumber(String str){
         String strUpperCase = str.toUpperCase().trim();
         strUpperCase = strUpperCase
@@ -90,37 +102,44 @@ public class Util {
         return strUpperCase;
     }
 
-    public static List<SMS__c> extractBeneficiaryAndAmountFromSMS(List<SMS__c> smsList) {
+    public static List<SMS__c> extractBeneficiaryAndAmountFromSMS(List<SMS__c> smsList, Map<String, Finance_Account__c> mapAccounts) {
+
+        System.debug('extractBeneficiaryAndAmountFromSMS=>smsList: ' + smsList);
 
         List<SMS__c> result = new List<SMS__c>();
 
         try {
             // Ensure the list is not null or empty
-            if (smsList == null || smsList.isEmpty()) {
+            if (smsList == null || smsList.isEmpty() || mapAccounts == null || mapAccounts.isEmpty()) {
                 return null;
             }
 
-            System.debug('extractBeneficiaryAndAmountFromSMS=>smsList: ' + smsList);
-            Map<String, Finance_Account__c> mapAccounts = Util.getAccounts(smsList);
-
             for (SMS__c sms : smsList) {
-                String accountName = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
                 SMS__c processedSMS = new SMS__c();
                 try{
-                    if (accountName == 'HDFC SA') {
-                        processedSMS = SMSProcessor.processForHDFCBankSA(sms);
-                    } else if (accountName == 'ICICI SA') {
-                        processedSMS = SMSProcessor.processForICICIBankSA(sms);
-                    } else if (accountName == 'SBI SA') {
-                        processedSMS = SMSProcessor.processForSBIBankSA(sms);
-                    } else if (accountName == 'ICICI CC') {
-                        processedSMS = SMSProcessor.processForICICIBankCC(sms);
-                    } else if (accountName == 'ICICI AMAZON CC') {
-                        processedSMS = SMSProcessor.processForICICIBankAmazonCC(sms);
-                    } else if (accountName == 'HDFC Rupay CC') {
-                        processedSMS = SMSProcessor.processForHDFCBankRupayCC(sms);
-                    } else if (accountName == 'Amazon Wallet') {
-                        processedSMS = SMSProcessor.processForAmazonWallet(sms);
+                    String content = sms.Content__c != null ? sms.Content__c.toLowerCase() : '';
+                    System.debug('mapAccounts=>' + mapAccounts);
+
+                    if (Pattern.compile(SBI_SA_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerSBI.processForSBIBankSA(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_SA_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerICICI.processForICICIBankSA(sms);
+                    } 
+                    else if (Pattern.compile(HDFC_SA_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerHDFC.processForHDFCBankSA(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_CC_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerICICI.processForICICIBankCC(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_AMAZON_CC_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerICICI.processForICICIBankAmazonCC(sms);
+                    } 
+                    else if (Pattern.compile(HDFC_RUPAY_CC_PATTERN).matcher(content).matches()) {
+                        processedSMS = BankControllerHDFC.processForHDFCBankRupayCC(sms);
+                    } 
+                    else {
+                        processedSMS = sms;
                     }
                     // To be implemented, if required
                     // else if(accountName == 'Kuvera'){
@@ -149,7 +168,8 @@ public class Util {
 
             // Also update the beneficiary Name with beneficiary Id
             // This method contains a DML so we may have to use it outside the loop
-            result = BeneficiaryHandler.updateBeneficiary(result);
+            // to be checked later
+            // result = BeneficiaryHandler.updateBeneficiary(result);
 
         } 
         catch (Exception e) {
@@ -171,40 +191,47 @@ public class Util {
             }
 
             for (SMS__c sms : smsList) {
-                String accountNameInUpperCase = mapAccounts.get(sms.Finance_Account__c).Name.toUpperCase();
+
+                String content = sms.Content__c != null ? sms.Content__c.toLowerCase() : '';
+                
                 SMS__c smsOutput = new SMS__c();
 
                 try {
-                    switch on accountNameInUpperCase {
-                        when 'HDFC SA' {
-                            smsOutput = SMSProcessor.processForHDFCBankSA_BalanceUpdate(sms);
-                        }
-                        when 'ICICI SA' {
-                            smsOutput = SMSProcessor.processForICICIBankSA_BalanceUpdate(sms);
-                        }
-                        when 'SBI SA' {
-                            smsOutput = SMSProcessor.processForSBIBankSA_BalanceUpdate(sms);
-                        }
-                        when 'ICICI CC' {
-                            smsOutput = SMSProcessor.processForICICIBankCC_BalanceUpdate(sms);
-                        }
-                        when 'ICICI AMAZON CC' {
-                            smsOutput = SMSProcessor.processForICICIBankAmazonCC_BalanceUpdate(sms);
-                        }
-                        // To be implemented, if required
-                        // when 'KUVERA' {
-                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                        // }
-                        // when 'COIN' {
-                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                        // }
-                        // when 'ZERODHA' {
-                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                        // }
-                        // when 'SMALLCASE' {
-                        //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
-                        // }
+
+                    if (Pattern.compile(SBI_SA_PATTERN).matcher(content).matches()) {
+                        smsOutput = BankControllerSBI.processForSBIBankSA_BalanceUpdate(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_SA_PATTERN).matcher(content).matches()) {
+                        smsOutput = BankControllerICICI.processForICICIBankSA_BalanceUpdate(sms);
+                    } 
+                    else if (Pattern.compile(HDFC_SA_PATTERN).matcher(content).matches()) {
+                        smsOutput = BankControllerHDFC.processForHDFCBankSA_BalanceUpdate(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_CC_PATTERN).matcher(content).matches()) {
+                        smsOutput = BankControllerICICI.processForICICIBankCC_BalanceUpdate(sms);
+                    } 
+                    else if (Pattern.compile(ICICI_AMAZON_CC_PATTERN).matcher(content).matches()) {
+                        smsOutput = BankControllerICICI.processForICICIBankAmazonCC_BalanceUpdate(sms);
+                    } 
+                    // else if (Pattern.compile(HDFC_RUPAY_CC_PATTERN).matcher(content).matches()) {
+                    //     // TB Implemented
+                    //     smsOutput = BankControllerHDFC.processForHDFCBankSA_BalanceUpdate(sms);
+                    // } 
+                    else {
+                        smsOutput = sms;
                     }
+                    // when 'KUVERA' {
+                    //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                    // }
+                    // when 'COIN' {
+                    //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                    // }
+                    // when 'ZERODHA' {
+                    //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                    // }
+                    // when 'SMALLCASE' {
+                    //     smsOutput = SMSProcessor.SMSProcessor.processFor***_BalanceUpdate(sms);
+                    // }
                 }
                 catch(Exception e){
                     FinPlanLogger.logError(CLASS_NAME, 'extractBalanceInfo', e, sms); 
@@ -229,21 +256,39 @@ public class Util {
             if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
                 sms.Account_Balance_Processed__c = true;
             }
-            if(sms.Amount__c != null){
-                sms.Amount_Processed__c = true;
-            }
             if(sms.Beneficiary__c != null){
                 sms.Beneficiary_Processed__c = true;
             }
             if(sms.Payment_Reference__c != null || sms.Payment_Via__c != null){
                 sms.Payment_Info_Processed__c = true;
             }
-            if(sms.External_Id__c == null || sms.Received_At__c == ''){
-                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
+            if(sms.Amount__c != null){
+                sms.Amount_Processed__c = true;
+                sms.Create_Transaction__c = true;
             }
+            if(sms.CC_Available_Balance__c != null || sms.SA_Available_Balance__c != null){
+                sms.Balance_Update__c = true;
+            }
+            // Not required now : Since client is already sending the date in payload
+            // sms = Util.populateTransactionDate(sms);
         }
         return smsRecords;
-	} 
+	}
+
+    /**
+     * Populates process completion information for a list of SMS__c records.
+     * 
+     * @param smsRecords The list of SMS__c records to process.
+     * @return The updated list of SMS__c records with completion information.
+     */
+    public static List<SMS__c> populateProcessCompletionInfo(List<SMS__c> smsRecords){
+        for(SMS__c sms : smsRecords){
+            sms.Processing_Completed__c = true;
+            sms.Processing_Completed_At__c = Datetime.now();
+        }
+        return smsRecords;
+	}
+
     /**
      * This method generates a 6-digit numeric OTP for the provided email address.
      * 
@@ -378,6 +423,55 @@ public class Util {
             throw new FinPlanException('Failed to invalidate the OTP. Please try again later.');
         }
     }
+
+    /**
+     * Populates Finance Account information for a list of SMS__c records.
+     * 
+     * @param smsRecords The list of SMS__c records to process.
+     * @return The updated list of SMS__c records with finance account information.
+     */
+    public static List<SMS__c> populateFinanceAccountFromSMS(List<SMS__c> smsRecords, Map<String, Finance_Account__c> mapAccounts) {
+        
+        for (SMS__c sms : smsRecords) {
+            
+            if(sms.External_Id__c == null){
+                sms.External_Id__c = sms.Received_At__c.replaceAll('[^0-9]', '');
+            }
+            
+            String content = sms.Content__c != null ? sms.Content__c.toLowerCase() : '';
+            
+            System.debug('mapAccounts=>' + mapAccounts);
+
+            if (Pattern.compile(SBI_SA_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('SBI-SA') != null ? mapAccounts.get('SBI-SA').Id : null;
+            } 
+            else if (Pattern.compile(ICICI_SA_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('ICICI-SA') != null ? mapAccounts.get('ICICI-SA').Id : null;
+            } 
+            else if (Pattern.compile(HDFC_SA_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('HDFC-SA') != null ? mapAccounts.get('HDFC-SA').Id : null;
+            } 
+            else if (Pattern.compile(ICICI_CC_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('ICICI-CC') != null ? mapAccounts.get('ICICI-CC').Id : null;
+            } 
+            else if (Pattern.compile(ICICI_AMAZON_CC_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('ICICI-AMAZON-CC') != null ? mapAccounts.get('ICICI-AMAZON-CC').Id : null;
+            } 
+            else if (Pattern.compile(HDFC_RUPAY_CC_PATTERN).matcher(content).matches()) {
+                sms.Finance_Account__c = mapAccounts.get('HDFC-RUPAY-CC') != null ? mapAccounts.get('HDFC-RUPAY-CC').Id : null;
+            } 
+            else {
+                sms.Finance_Account__c = null; // Unknown account
+            }
+            System.debug('Content=>' + content);
+            System.debug('Finance Account Id=>' + sms.Finance_Account__c);
+
+        }
+        return smsRecords;
+    }
+
+
+    
 
     // // Utility method : Clone a record of Transaction_Platform_Event__e
     // public static Transaction_Platform_Event__e cloneTransactionPE(Transaction_Platform_Event__e source) {

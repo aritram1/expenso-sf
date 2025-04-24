@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Beneficiary__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Beneficiary</label>
     <referenceTo>Beneficiary__c</referenceTo>
     <relationshipLabel>SMS</relationshipLabel>
